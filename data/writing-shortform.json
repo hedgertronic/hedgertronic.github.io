@@ -1,0 +1,109 @@
+[
+  {
+    "title": "Choosing the high variance reward function",
+    "text": "Had a great mid-season meeting with the Phillies player development staff that made me reflect on how many low-future-value minor leaguers (such as myself) optimize for the wrong reward function.\n\nMost players naturally favor a slightly positive expected value approach with very little variance or downside risk, prioritizing the status quo of job security and health through slow, incremental gains. While this strategy lowers the chance of getting immediately demoted, released, or injured, it often reduces the likelihood of achieving the ultimate goal: reaching the majors.\n\nBy definition, a low-FV prospect has a slim chance of making the show; a safe low-variance approach might prolong a minor league career but won't meaningfully increase the odds of becoming a big leaguer. Many of these players would be better served by embracing a high-variance approach that carries greater risk but also greater upside.\n\nDrastic changes like altering pitch usage/arm slots or aggressive velocity/bat speed training can be uncomfortable and risky but may represent the only path with enough upside for a low-FV prospect to make the majors.\n\nCounterintuitively, high-variance approaches may even have negative EV, meaning they're more likely to make a player worse than better. But if the true goal is to make the big leagues rather than merely survive in the minors, the bigger risk may be not taking one.\n\nIs it better to have a 90% chance of getting slightly better and staying healthy with a 0% shot at the majors? Or a 90% chance of getting worse or injured with a 5% chance of making the show?",
+    "date": "2025-07-05",
+    "url": "https://x.com/hedgertronic/status/1941610153154928872",
+    "image": "https://pbs.twimg.com/media/GvH8JO3WAAAEBAv?format=jpg&name=900x900",
+    "retweets": 20,
+    "likes": 171,
+    "bookmarks": 104
+  },
+  {
+    "title": "Skill periodization in player development",
+    "text": "My biggest takeaways from this week's motor learning book club at \n@DrivelineBB:\n\nFirst, it's important to establish that the skill of pitching is NOT throwing velocity, throwing command, or pitch shapes. The skill of pitching is getting outs (what @ericjagers calls \"being an out-getter\").\n\nBuilding the capacities of velocity, command, and stuff undeniably help us get outs (as they grant us additional affordances to attack hitters) but they are not the skill themselves. How many guys have you seen with outlier velo or stuff that can't put it all together and prevent runs?\n\nThere are important considerations when building these capacities. Only training them in-context (e.g. training velocity by only ever throwing a 5 oz ball off a mound to hitters) is overly-restrictive and reinforces existing movement solutions, but other approaches (e.g. max effort weighted ball pulldowns) are so removed from the game environment that it's hard to ensure transfer to the actual skill.\n\nHow do we bridge this gap? The answer lies in what @Coachgbaker refers to as \"skill periodization\".\n\nEarly in the off-season, when there is still a large amount of time before competition, we can assess an athlete and attack the lowest portion of their \"hierarchy of needs\" (shoutout @BentleY__ThomaS).\n\nOftentimes, this is very removed from the sport of baseball altogether (such as building strength or power adaptations in the weight room). Other times, capacities such as velocity, command, or stuff will be the limiting factor.\n\nIn the video linked in the original thread, @AlexJSarama explains that differential learning is a useful mechanism to allow athletes to explore outside of the current attractor states in their solution space.\n\nDifferential learning does this by removing the athlete from the context of competition (decoupling perception from action) and challenging them with large amounts of variability — long toss, pulldowns, and weighted balls are all implementations of this concept.\n\nHowever, as the season approaches, returning the athlete to game context using more representative task design (as explained by Alex in the video and @clayton_t22 in the original thread) is crucial for in-game transfer. Training peak throwing velocity without a target helps build capacity but it eventually needs to be applied in a representative setting to ensure it can be used to get outs.\n\nOverall, understanding skill periodization can help balance development with performance so you can keep the main thing the main thing:\n\n- Training peak velocity early in the off-season? Worrying about hitting a target will limit your ability to achieve high-end outputs (i.e. you can't throw 95 for a strike if you can't throw 95).\n\n- Throwing live ABs a week before Spring Training? Checking your pitch shapes on TrackMan every pitch will limit your ability to execute pitches and get outs.\n\n- Working on a new pitch early in the off-season? Throw it a bunch using various sized balls. Trying to execute that pitch better in-season? Don't throw 10 in a row until you \"find it\" — instead challenge your ability to get to that pitch instantly coming from another pitch.",
+    "date": "2025-06-09",
+    "url": "https://x.com/hedgertronic/status/1932171511982338381",
+    "image": "https://pbs.twimg.com/media/GtBx0P8WQAAgUXv?format=jpg&name=medium",
+    "retweets": 2,
+    "likes": 60,
+    "bookmarks": 39
+  },
+  {
+    "title": "A deep dive into the concept of the recovery day",
+    "text": "Recovery days are the tax you pay for a high-intensity day.\" -@ceetwo35 (paraphrased).\n\nPushing too hard on your light days is a recipe for chronic fatigue, decreased performance, and increased injury risk.\n\nHere's a quick guide on how to better approach these days:",
+    "date": "2025-04-05",
+    "url": "https://x.com/hedgertronic/status/1908638286379393499",
+    "image": "https://pbs.twimg.com/media/GnzYaBTawAAgk_q?format=jpg&name=medium",
+    "retweets": 8,
+    "likes": 77,
+    "bookmarks": 70
+  },
+  {
+    "title": "The relationship between pitch movement and release extension",
+    "text": "Got a great question earlier from @JakeStevenson38:\n\nIf two pitchers threw sweepers with the same horizontal break at the same velocity but with different release extensions, would there be a difference in how these pitches actually moved?\n\nThe answer is yes.\n\nA quick 🧵:",
+    "date": "2025-03-29",
+    "url": "https://x.com/hedgertronic/status/1906088796556505424",
+    "retweets": 5,
+    "likes": 62,
+    "bookmarks": 35
+  },
+  {
+    "title": "In-game biometrics (Part 2)",
+    "text": "BENEATH THE NUMBERS 2025-03-22\n\nA 🧵 on the biometrics of my two-inning appearance against the Blue Jays yesterday:",
+    "date": "2025-03-23",
+    "url": "https://x.com/hedgertronic/status/1903893942716043460",
+    "image": "https://pbs.twimg.com/media/Gmv9eGcbAAA4GVO?format=jpg&name=small",
+    "retweets": 15,
+    "likes": 262,
+    "bookmarks": 56
+  },
+  {
+    "title": "In-game biometrics (Part 1)",
+    "text": "Per @CaseyMulholland's request for more content like this, let's do a deep dive into the biometrics of my outing yesterday using WHOOP for heart rate/sleep data and PULSE for throwing data.\n\nA 🧵 of insights from my one inning in the minor league intrasquad:",
+    "date": "2025-03-10",
+    "url": "https://x.com/hedgertronic/status/1899204472917922055",
+    "image": "https://pbs.twimg.com/media/GltUbAZaEAE4zDz?format=jpg&name=small",
+    "retweets": 7,
+    "likes": 68,
+    "bookmarks": 33
+  },
+  {
+    "title": "Adjusting pitch accelerations based on initial ball trajectory",
+    "text": "A slight nuance:\n\nThe accelerations given by MLB (ax, ay, az) are biased by pitch location.\n\nTo make these values location-agnostic, we need to adjust the acceleration vector to be relative to the initial trajectory (i.e. the initial velocity vector vx0, vy0, vz0).\n\n🧵:",
+    "date": "2024-11-13",
+    "url": "https://x.com/hedgertronic/status/1856902334594650230",
+    "image": "https://pbs.twimg.com/media/GcUKdDxbgAA2oQe?format=png&name=small",
+    "retweets": 12,
+    "likes": 89,
+    "bookmarks": 97
+  },
+  {
+    "title": "An ERA variant I created to account for inherited/bequeathed runners",
+    "text": "Last week in the bullpen, @bensimon22 and I came up with a new ERA variant that accounts for inherited/bequeathed runners.\n\nIs it groundbreaking? Probably not. Is it better than FIP/other advanced metrics? Unlikely. Does it have a good name? Also no.\n\nAlas, a 🧵:",
+    "date": "2024-05-14",
+    "url": "https://x.com/hedgertronic/status/1790428977871614333",
+    "image": "https://pbs.twimg.com/media/GNjhtggacAEh8bP?format=jpg&name=medium",
+    "retweets": 26,
+    "likes": 269,
+    "bookmarks": 89
+  },
+  {
+    "title": "My perspective on pitching injuries in professional baseball",
+    "text": "In light of some prominent pitching injuries in the major leagues, I'd like to share my perspective as a minor league pitcher in my first season back after Tommy John surgery.\n\n🧵:",
+    "date": "2024-04-08",
+    "url": "https://x.com/hedgertronic/status/1777454751128637651",
+    "retweets": 54,
+    "likes": 242,
+    "bookmarks": 87
+  },
+  {
+    "title": "My framework for in-season workload management as a reliever",
+    "text": "One of the toughest aspects of being a relief pitcher is managing your throwing workloads without knowing ahead of time when you will pitch in-game.\n\nBelow, I will lay out the framework I use for doing this in-season with PULSE.\n\n🧵:",
+    "date": "2024-02-21",
+    "url": "https://x.com/hedgertronic/status/1760432039906738399",
+    "image": "https://pbs.twimg.com/media/GG5Pqy5bYAAKg_D?format=jpg&name=medium",
+    "retweets": 29,
+    "likes": 102,
+    "bookmarks": 76
+  },
+  {
+    "title": "The pitch design process for developing my rising slider",
+    "text": "The Quest For The Rising Slider 🛸\n\nA quick thread about:\n- Why I needed to develop a new slider\n- What the pitch design process at @DrivelineBB looked like\n- How it's going so far this season",
+    "date": "2022-06-09",
+    "url": "https://x.com/hedgertronic/status/1534961541115691008",
+    "retweets": 41,
+    "likes": 264,
+    "bookmarks": 38
+  }
+]

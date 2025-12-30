@@ -1,0 +1,20 @@
+{
+  "reading": {
+    "title": "Currently Reading",
+    "book": {
+      "title": "The Design of Everyday Things",
+      "author": "Donald A. Norman",
+      "cover": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1442460745i/840.jpg",
+      "url": "https://www.goodreads.com/book/show/840.The_Design_of_Everyday_Things"
+    }
+  },
+  "listening": {
+    "title": "On Repeat",
+    "album": {
+      "title": "Give Up",
+      "artist": "The Postal Service",
+      "cover": "https://i.scdn.co/image/ab67616d0000b273df6e579914fc309b0e0bd745",
+      "url": "https://open.spotify.com/album/1BSwkKATGVCMgNuN8ve7mz?si=vXW4zjc1TP6zbUYTRZ13QA"
+    }
+  }
+}

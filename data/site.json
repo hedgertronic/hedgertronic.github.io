@@ -1,0 +1,168 @@
+{
+  "profile": {
+    "name": "Josh Hejka",
+    "bio": "Free-agent professional pitcher. Former member of the Mets and Phillies organizations. Current R&D analyst at Driveline Baseball.",
+    "headshot": "images/headshot.jpg"
+  },
+  "socials": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/hedgertronic",
+      "label": "Twitter"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://www.linkedin.com/in/joshhejka/",
+      "label": "LinkedIn"
+    },
+    {
+      "platform": "substack",
+      "url": "https://substack.com/@hedgertronic",
+      "label": "Substack"
+    },
+    {
+      "platform": "github",
+      "url": "https://github.com/hedgertronic",
+      "label": "GitHub"
+    },
+    {
+      "platform": "email",
+      "url": "mailto:josh@joshhejka.com",
+      "label": "Email"
+    },
+    { "platform": "resume", "url": "resume.html", "label": "Resume" }
+  ],
+  "sections": [
+    {
+      "id": "field",
+      "title": "On the Field",
+      "subtitle": "Stats & video",
+      "description": "Pitcher in the New York Mets (2019–2024) and Philadelphia Phillies (2025) organizations with experience across all levels of the minor leagues. Served as minor league player representative after contributing to the historic MLBPA unionization effort in 2022.",
+      "icon": "baseball",
+      "altBg": true,
+      "type": "stats",
+      "statsFile": "docs/career_stats.csv",
+      "statsHighlights": ["ERA", "W-L", "G", "IP", "SO", "WHIP"],
+      "statsLinks": [
+        {
+          "name": "MiLB",
+          "url": "https://www.milb.com/player/josh-hejka-691196"
+        },
+        {
+          "name": "BBRef",
+          "url": "https://www.baseball-reference.com/register/player.fcgi?id=hejka-000jos"
+        },
+        {
+          "name": "FanGraphs",
+          "url": "https://www.fangraphs.com/players/joshua-hejka/sa3011152/stats/pitching"
+        }
+      ],
+      "trainingFile": "data/field-training.json"
+    },
+    {
+      "id": "writing",
+      "title": "On the Page",
+      "subtitle": "Articles & analysis",
+      "description": "Author of Sliding Risers, a blog exploring player development, motor learning, and pitching through a data-driven lens. Previously featured author in BallNine and Metsmerized. Frequent Twitter threader.",
+      "icon": "pen",
+      "altBg": false,
+      "type": "content",
+      "topicsLabel": "Writing about:",
+      "topics": [
+        "Motor Learning",
+        "Ecological Dynamics",
+        "Workload Management",
+        "Pitch Design",
+        "Player Development"
+      ],
+      "subsections": [
+        {
+          "title": "Long-Form",
+          "dataFile": "data/writing-longform.json",
+          "displayType": "content",
+          "viewAllUrl": "https://substack.com/@hedgertronic",
+          "viewAllLabel": "View Substack"
+        },
+        {
+          "title": "Short-Form",
+          "dataFile": "data/writing-shortform.json",
+          "displayType": "tweets",
+          "handle": "hedgertronic",
+          "viewAllUrl": "https://twitter.com/hedgertronic",
+          "viewAllLabel": "View Twitter"
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "title": "In the Lab",
+      "subtitle": "Research & code",
+      "description": "Researcher at Driveline Baseball working investigating topics such as pitch quality, biomechanics, and injury prevention. Has led or contributed to projects including state-of-the-art pitch and arsenal quality models, advanced pitch usage recommendation models, and a novel algorithm to aid the pitch design process. Additional contributor in software engineering iterating on an IMU-based wearable called PULSE that is used as a workload management tool by dozens of MLB organizations and college programs.",
+      "icon": "code",
+      "altBg": true,
+      "type": "content",
+      "topicsLabel": "Looking into:",
+      "topics": [
+        "Biomechanics",
+        "Machine Learning",
+        "Computer Vision",
+        "Signal Processing",
+        "Ball Flight Physics",
+        "Swift/iOS",
+        "Large Language Models"
+      ],
+      "subsections": [
+        {
+          "title": "Research",
+          "dataFile": "data/lab-research.json",
+          "displayType": "content"
+        },
+        {
+          "title": "Projects",
+          "dataFile": "data/lab-projects.json",
+          "displayType": "projects",
+          "viewAllUrl": "https://github.com/hedgertronic",
+          "viewAllLabel": "View GitHub"
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "title": "In the Media",
+      "subtitle": "Podcasts & interviews",
+      "description": "Co-host of the Driveline R&D Podcast, breaking down the modern game through a data-driven lens. Guest on The Layback Podcast and the Driveline Baseball Podcast. Featured on Mets Minors, BallNine, The New York Times, Sports Illustrated, and a player panel at the Wake Forest Player Development Seminar.",
+      "icon": "microphone",
+      "altBg": false,
+      "type": "content",
+      "subsections": [
+        {
+          "title": "Podcasts",
+          "dataFile": "data/media-podcasts.json",
+          "displayType": "content"
+        },
+        {
+          "title": "Press & Features",
+          "dataFile": "data/media-press.json",
+          "displayType": "content"
+        }
+      ]
+    },
+    {
+      "id": "offtheClock",
+      "title": "Off the Clock",
+      "subtitle": "Hobbies & interests",
+      "description": "",
+      "icon": "coffee",
+      "altBg": true,
+      "type": "personal",
+      "dataFile": "data/personal.json"
+    }
+  ],
+  "footer": {
+    "themes": [
+      { "id": "hopkins", "label": "Hopkins" },
+      { "id": "mets", "label": "Mets" },
+      { "id": "phillies", "label": "Phillies" }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "title": "whoop",
+    "description": "Tools for acquiring and analyzing WHOOP API data.",
+    "url": "https://github.com/hedgertronic/whoop",
+    "language": "Python",
+    "stars": 89,
+    "forks": 7
+  },
+  {
+    "title": "oura-ring",
+    "description": "Tools for acquiring and analyzing Oura API data.",
+    "url": "https://github.com/hedgertronic/whoop",
+    "language": "Python",
+    "stars": 72,
+    "forks": 11
+  }
+]

@@ -1,0 +1,37 @@
+name: Generate Resume PDF
+
+on:
+  push:
+    paths:
+      - 'data/resume.json'
+      - 'scripts/generate_resume_pdf.py'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install fpdf2
+
+      - name: Generate PDF
+        run: python scripts/generate_resume_pdf.py
+
+      - name: Commit updated PDF
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/resume.pdf
+          git diff --quiet --staged || git commit -m "Update resume PDF [skip ci]"
+          git push

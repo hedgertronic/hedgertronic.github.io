@@ -1,0 +1,132 @@
+{
+  "contact": {
+    "email": "josh@joshhejka.com",
+    "phone": "(734) 389-5713",
+    "twitter": "@hedgertronic",
+    "linkedin": "joshhejka"
+  },
+  "education": [
+    {
+      "institution": "Johns Hopkins University",
+      "degree": "BS in Computer Science",
+      "dates": "Aug 2015 - May 2019"
+    }
+  ],
+  "skills": {
+    "technical": [
+      "Python",
+      "SQL",
+      "Swift/iOS",
+      "C",
+      "React/React Native",
+      "HTML/CSS/JS",
+      "Git",
+      "Machine Learning",
+      "Computer Vision",
+      "Signal Processing",
+      "Large Language Models",
+      "Trackman",
+      "Rapsodo",
+      "Edgertronic",
+      "Trajekt"
+    ]
+  },
+  "experience": [
+    {
+      "company": "Driveline Baseball",
+      "title": "R&D Analyst",
+      "dates": "Nov 2022 - Present",
+      "location": "Seattle, WA; Tampa, FL",
+      "highlights": [
+        "Created state-of-the-art pitch quality models using machine learning [Python]",
+        "Led creation of advanced pitch type and location usage recommendations reports [Python]",
+        "Contributed to creation of arsenal quality models using novel machine learning methodology; team presented research at Sabersem 2024 [Python]",
+        "Contributed to creation of the most advanced pitch design tool in the industry; team presented research at Sabersem 2025 [Python]",
+        "Modernized physics engine for IMU-based wearable, improving accuracy and significantly decreasing error rate [C]",
+        "Co-host of the Driveline R&D Podcast, discussing player development, baseball analytics, and the latest research in sports science"
+      ]
+    },
+    {
+      "company": "New York Mets, Philadelphia Phillies",
+      "title": "Professional Baseball Player",
+      "dates": "Jun 2019 - Feb 2025 (NYM), Feb 2025 - Jun 2025 (PHI)",
+      "location": "Various: NY, NJ, PA, FL",
+      "highlights": [
+        "Built personal website to consolidate stats, videos, and information for MLB scouts and front offices, leading to playing contract",
+        "Career 3.58 ERA and 87 xERA- through levels up to Triple-A",
+        "Utilized wearables such as PULSE to optimize throwing workload and Oura/Whoop to optimize sleep and performance",
+        "Worked closely with pitching, analytics, and sports science departments to improve biomechanics, pitch arsenal, and pitch selection",
+        "Presented plans for organizational improvement in systems, analytics, pitching evaluation, and player development"
+      ]
+    },
+    {
+      "company": "New York Mets",
+      "title": "Baseball Systems/Analytics Intern",
+      "dates": "Oct 2021 - Feb 2022 (Systems), Oct 2022 - Feb 2023 (Analytics)",
+      "location": "New York, NY",
+      "highlights": [
+        "Maintained legacy stats portal [PHP]",
+        "Collaborated with team on project design, documentation, and implementation of future stats portal [React]",
+        "Led project design, implementation, and documentation of mobile app for pitchers [React Native]",
+        "Led project design, implementation, and documentation of pitch usage optimization tool using novel methodology [Python]"
+      ]
+    },
+    {
+      "company": "DiCorp",
+      "title": "Junior Software Engineer",
+      "dates": "Jun 2017 - Sep 2017, Sep 2019 - Mar 2020",
+      "location": "Forest Hill, MD",
+      "highlights": [
+        "Developed web applications and forms for trauma centers [JS]",
+        "Developed full-stack web application for nutritionist client [Flask, HTML, CSS, JS]",
+        "Created automation programs for internal development [Python]",
+        "Documented processes, SOPs, and code"
+      ]
+    },
+    {
+      "company": "Johns Hopkins Baseball",
+      "title": "Player, Assistant Pitching Coach",
+      "dates": "Aug 2015 - May 2019 (Player), Sep 2019 - Feb 2021 (Coach)",
+      "location": "Baltimore, MD",
+      "highlights": [
+        "Served as assistant pitching coach after record-setting playing career",
+        "Operated Rapsodo, Trackman, and Edgertronic camera on a daily basis",
+        "Updated and documented team pitching philosophy",
+        "Designed individual performance plans for 23 pitchers"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Solving Ball Flight Physics",
+      "description": "First-hand research using Trajekt, Trackman, and Rapsodo in conjunction to solve open questions  in ball flight physics about the lift/drag coefficients and non-Magnus acceleration. To be presented at SABR 2026.",
+      "technologies": ["Python", "Trackman", "Rapsodo", "Trajekt"],
+      "url": null
+    },
+    {
+      "name": "Pitch Design On Paper",
+      "description": "A major advancement in the pitch design process, predicting what pitch types a pitcher is capable of throwing and generating usage recommendations based on game state. Presented at Sabersem 2025.",
+      "technologies": ["Python", "Machine Learning"],
+      "url": null
+    },
+    {
+      "name": "Quantifying Arsenal Effects",
+      "description": "The industry's first arsenal quality models, created using novel machine learning methodology. An advancement over previous attempts at grading arsenal quality that only considered pitches in isolation. Presented at Sabersem 2024.",
+      "technologies": ["Python", "Machine Learning"],
+      "url": "https://www.youtube.com/watch?v=OdL6dafOArc"
+    },
+    {
+      "name": "NYM Analytics Project",
+      "description": "Pitch usage optimization model for pitchers. Generated individual reports using advanced mathematical modeling for recommendations.",
+      "technologies": ["Python", "Machine Learning"],
+      "url": null
+    },
+    {
+      "name": "NYM Systems Project",
+      "description": "Mobile app for pitchers. Connected with database to populate screens, accepted user input, and performed analysis on data with model.",
+      "technologies": ["React Native", "SQL"],
+      "url": null
+    }
+  ],
+  "pdfUrl": "docs/resume.pdf"
+}
