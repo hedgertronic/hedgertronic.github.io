@@ -30,7 +30,7 @@
       "url": "mailto:josh@joshhejka.com",
       "label": "Email"
     },
-    { "platform": "resume", "url": "resume.html", "label": "Resume" }
+    { "platform": "resume", "url": "/resume", "label": "Resume" }
   ],
   "sections": [
     {
