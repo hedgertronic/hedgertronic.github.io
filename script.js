@@ -79,7 +79,7 @@ function createIconElement(name) {
 let siteConfig = null;
 
 async function loadSiteConfig() {
-  const response = await fetch("data/site.json");
+  const response = await fetch("/data/site.json");
   siteConfig = await response.json();
   return siteConfig;
 }
@@ -273,7 +273,7 @@ async function renderSections(config) {
 }
 
 async function renderStatsSection(container, section, config) {
-  const csvResponse = await fetch(section.statsFile);
+  const csvResponse = await fetch("/" + section.statsFile);
   const csvText = await csvResponse.text();
   const statsData = parseCSV(csvText);
 
@@ -477,7 +477,7 @@ async function renderStatsSection(container, section, config) {
   // My Training subsection
   if (section.trainingFile) {
     try {
-      const trainingResponse = await fetch(section.trainingFile);
+      const trainingResponse = await fetch("/" + section.trainingFile);
       const trainingData = await trainingResponse.json();
 
       if (trainingData && trainingData.length > 0) {
@@ -659,7 +659,7 @@ async function renderContentSection(container, section, config) {
     containerDiv.appendChild(subsectionDiv);
 
     try {
-      const dataResponse = await fetch(subsection.dataFile);
+      const dataResponse = await fetch("/" + subsection.dataFile);
       const items = await dataResponse.json();
 
       if (subsection.displayType === "projects") {
@@ -699,7 +699,7 @@ async function renderPersonalSection(container, section, config) {
   containerDiv.appendChild(sectionHeader);
 
   try {
-    const dataResponse = await fetch(section.dataFile);
+    const dataResponse = await fetch("/" + section.dataFile);
     const data = await dataResponse.json();
 
     const personalGrid = createElement("div", { className: "personal-grid" });

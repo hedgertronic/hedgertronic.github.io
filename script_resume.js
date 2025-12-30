@@ -1,9 +1,9 @@
 async function initResume() {
     try {
-        const response = await fetch('data/resume.json');
+        const response = await fetch('/data/resume.json');
         const resume = await response.json();
 
-        const siteResponse = await fetch('data/site.json');
+        const siteResponse = await fetch('/data/site.json');
         const siteConfig = await siteResponse.json();
 
         renderResume(resume, siteConfig);
