@@ -1,3 +1,28 @@
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('/fonts/DMSans.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Instrument Serif';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/InstrumentSerif.woff2') format('woff2');
+}
+
 :root {
     --bg-primary: #0c0f1a;
     --bg-secondary: #131824;
