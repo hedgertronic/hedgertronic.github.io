@@ -1,5 +1,13 @@
 [
   {
+    "title": "hedgertronic.github.io",
+    "description": "This website!",
+    "url": "https://github.com/hedgertronic/hedgertronic.github.io",
+    "language": "JavaSript",
+    "stars": 0,
+    "forks": 0
+  },
+  {
     "title": "whoop",
     "description": "Tools for acquiring and analyzing WHOOP API data.",
     "url": "https://github.com/hedgertronic/whoop",
@@ -14,5 +22,13 @@
     "language": "Python",
     "stars": 72,
     "forks": 11
+  },
+  {
+    "title": "pulse-throw",
+    "description": "Tools for acquiring and analyzing Pulse API data.",
+    "url": "https://github.com/hedgertronic/pulse-throw",
+    "language": "Python",
+    "stars": 2,
+    "forks": 0
   }
 ]
