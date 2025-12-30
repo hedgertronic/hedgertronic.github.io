@@ -194,9 +194,8 @@ nav.container {
     font-family: var(--font-serif);
     font-size: 1.25rem;
     font-weight: 400;
-    font-style: italic;
-    letter-spacing: -0.01em;
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 100%);
+    letter-spacing: 0.02em;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-primary) 40%, var(--accent-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -370,8 +369,7 @@ nav.container {
     font-family: var(--font-serif);
     font-size: clamp(2.25rem, 5vw, 3.25rem);
     font-weight: 400;
-    font-style: italic;
-    letter-spacing: -0.02em;
+    letter-spacing: 0.02em;
     margin-bottom: 0.75rem;
     background: linear-gradient(
         135deg,
