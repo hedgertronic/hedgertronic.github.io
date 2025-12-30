@@ -97,7 +97,7 @@
       "id": "lab",
       "title": "In the Lab",
       "subtitle": "Research & code",
-      "description": "Researcher at Driveline Baseball working investigating topics such as pitch quality, biomechanics, and injury prevention. Has led or contributed to projects including state-of-the-art pitch and arsenal quality models, advanced pitch usage recommendation models, and a novel algorithm to aid the pitch design process. Additional contributor in software engineering iterating on an IMU-based wearable called PULSE that is used as a workload management tool by dozens of MLB organizations and college programs.",
+      "description": "Researcher at Driveline Baseball investigating topics such as pitch quality, biomechanics, and injury prevention. Has led or contributed to projects including state-of-the-art pitch and arsenal quality models, advanced pitch usage recommendation models, and a novel algorithm to aid the pitch design process. Additional contributor in software engineering iterating on an IMU-based wearable called PULSE that is used as a workload management tool by dozens of MLB organizations and college programs.",
       "icon": "code",
       "altBg": true,
       "type": "content",
