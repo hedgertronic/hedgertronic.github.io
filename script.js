@@ -1233,8 +1233,21 @@ function sortByDate(items) {
 function initThemeSwitcher() {
   const buttons = document.querySelectorAll(".theme-btn");
   const savedTheme = localStorage.getItem("theme") || "hopkins";
+  const themeColors = {
+    hopkins: "#0a0e1a",
+    mets: "#0a1428",
+    phillies: "#120a0c",
+  };
 
-  document.documentElement.setAttribute("data-theme", savedTheme);
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", themeColors[theme] || themeColors.hopkins);
+    }
+  }
+
+  applyTheme(savedTheme);
 
   buttons.forEach((btn) => {
     if (btn.dataset.theme === savedTheme) {
@@ -1243,7 +1256,7 @@ function initThemeSwitcher() {
 
     btn.addEventListener("click", () => {
       const theme = btn.dataset.theme;
-      document.documentElement.setAttribute("data-theme", theme);
+      applyTheme(theme);
       localStorage.setItem("theme", theme);
 
       buttons.forEach((b) => b.classList.remove("active"));
