@@ -83,17 +83,28 @@
     box-sizing: border-box;
 }
 
+html, body {
+    background-color: transparent;
+}
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
     font-family: var(--font-sans);
-    background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition: color 0.4s ease;
+}
+
+.page-background {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    z-index: -1;
+    transition: background-color 0.4s ease;
 }
 
 .grid-overlay {
