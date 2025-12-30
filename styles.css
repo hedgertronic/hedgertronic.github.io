@@ -1810,6 +1810,12 @@ nav.container {
     gap: 0.75rem;
 }
 
+.project-card h3 {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
 .project-meta {
     display: flex;
     align-items: center;
@@ -2657,9 +2663,9 @@ footer {
 }
 
 .resume-project-title {
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
 }
