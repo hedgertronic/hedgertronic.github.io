@@ -491,7 +491,7 @@ async function renderStatsSection(container, section, config) {
         trainingSubsection.appendChild(trainingHeader);
 
         const trainingGrid = createElement("div", { className: "training-grid" });
-        trainingData.forEach((item) => {
+        sortByDate(trainingData).forEach((item) => {
           if (item.type === "video") {
             // Wrap card in a link if URL provided
             const cardLink = item.url ? createElement("a", {
