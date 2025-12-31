@@ -858,9 +858,12 @@ function displayProjects(containerOrId, projects) {
     return;
   }
 
-  const sortedProjects = projects.sort(
-    (a, b) => (b.stars || 0) - (a.stars || 0),
-  );
+  const sortedProjects = projects.sort((a, b) => {
+    // Pinned items come first
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return (b.stars || 0) - (a.stars || 0);
+  });
 
   sortedProjects.forEach((project) => {
     container.appendChild(createProjectCard(project));
@@ -871,7 +874,7 @@ function displayProjects(containerOrId, projects) {
 
 function createProjectCard(project) {
   const card = document.createElement("a");
-  card.className = "content-card project-card";
+  card.className = project.pinned ? "content-card project-card pinned" : "content-card project-card";
   card.href = project.url;
   card.target = "_blank";
   card.rel = "noopener noreferrer";
@@ -995,7 +998,7 @@ function displayTweets(containerOrId, items, handle) {
 
 function createTweetCard(item, handle) {
   const card = document.createElement("a");
-  card.className = "tweet-card";
+  card.className = item.pinned ? "tweet-card pinned" : "tweet-card";
   card.href = item.url;
   card.target = "_blank";
   card.rel = "noopener noreferrer";
@@ -1083,7 +1086,7 @@ function createTweetCard(item, handle) {
 
 function createContentCard(item) {
   const card = document.createElement("a");
-  card.className = "content-card";
+  card.className = item.pinned ? "content-card pinned" : "content-card";
   card.href = item.url;
   card.target = "_blank";
   card.rel = "noopener noreferrer";
@@ -1222,6 +1225,10 @@ function formatDate(dateString) {
 
 function sortByDate(items) {
   return items.sort((a, b) => {
+    // Pinned items come first
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+
     const [yearA, monthA, dayA] = a.date.split("-");
     const [yearB, monthB, dayB] = b.date.split("-");
     return (
