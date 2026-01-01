@@ -1,3 +1,88 @@
+/**
+ * =============================================================================
+ * MAIN STYLESHEET
+ * =============================================================================
+ *
+ * TABLE OF CONTENTS
+ * -----------------
+ * 1. FONTS & VARIABLES ................... Line 82
+ *    - @font-face declarations
+ *    - CSS custom properties (colors, fonts, spacing)
+ *    - Theme variations (hopkins, mets, phillies)
+ *
+ * 2. RESET & BASE ........................ Line 190
+ *    - Box-sizing reset
+ *    - Body defaults
+ *    - Page background & grid overlay
+ *
+ * 3. LAYOUT .............................. Line 250
+ *    - Container
+ *    - Header & navigation
+ *
+ * 4. HERO SECTION ........................ Line 382
+ *    - Hero layout & animations
+ *    - Headshot & name
+ *    - Social links
+ *    - Hero navigation pills
+ *
+ * 5. BUTTONS & LINKS ..................... Line 725
+ *    - Button styles (.btn-*)
+ *    - Social link styles
+ *
+ * 6. CONTENT SECTIONS .................... Line 790
+ *    - Section headers & icons
+ *    - Section-specific colors
+ *    - Topics/tags
+ *
+ * 7. STATS SECTION ....................... Line 966
+ *    - Stats overview cards
+ *    - Stats table
+ *    - Level badges
+ *
+ * 8. TRAINING GRID ....................... Line 1202
+ *    - Training card layout
+ *    - Background images & overlays
+ *
+ * 9. TWEET CARDS ......................... Line 1382
+ *    - Tweet grid layout
+ *    - Tweet card styles
+ *
+ * 10. CONTENT CARDS ...................... Line 1669
+ *     - Subsection headers
+ *     - Content grid & carousel
+ *     - Card base styles
+ *     - Section-specific card colors
+ *     - Project cards
+ *     - Thumbnails
+ *
+ * 11. PERSONAL SECTION ................... Line 2045
+ *     - Personal grid
+ *     - Reading/listening cards
+ *
+ * 12. FOOTER ............................. Line 2181
+ *     - Footer layout
+ *     - Theme switcher
+ *
+ * 13. RESPONSIVE ......................... Line 2253
+ *     - Tablet breakpoint (1024px)
+ *     - Mobile breakpoint (799px)
+ *
+ * 14. UTILITIES .......................... Line 2537
+ *     - Selection styles
+ *     - Scrollbar customization
+ *
+ * 15. RESUME PAGE ........................ Line 2563
+ *     - Resume header
+ *     - Resume grid & sections
+ *     - Resume items & skills
+ *
+ * =============================================================================
+ */
+
+/* =============================================================================
+   1. FONTS & VARIABLES
+   ============================================================================= */
+
 /* Self-hosted fonts */
 @font-face {
     font-family: 'DM Sans';
@@ -102,6 +187,10 @@
     --border-hover: #5a3a45;
 }
 
+/* =============================================================================
+   2. RESET & BASE
+   ============================================================================= */
+
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -157,6 +246,10 @@ body {
     opacity: 0.025;
     pointer-events: none;
 }
+
+/* =============================================================================
+   3. LAYOUT
+   ============================================================================= */
 
 .container {
     max-width: var(--max-width);
@@ -285,6 +378,10 @@ nav.container {
     width: 18px;
     height: 18px;
 }
+
+/* =============================================================================
+   4. HERO SECTION
+   ============================================================================= */
 
 .hero {
     min-height: 100dvh;
@@ -625,6 +722,10 @@ nav.container {
 .hero-nav-item:nth-child(4):hover .hero-nav-arrow { color: var(--section-media); }
 .hero-nav-item:nth-child(5):hover .hero-nav-arrow { color: var(--section-offtheClock); }
 
+/* =============================================================================
+   5. BUTTONS & LINKS
+   ============================================================================= */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -685,6 +786,10 @@ nav.container {
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
+
+/* =============================================================================
+   6. CONTENT SECTIONS
+   ============================================================================= */
 
 .content-section {
     padding: 6rem 0;
@@ -790,73 +895,29 @@ nav.container {
     gap: 0.5rem;
 }
 
+/* Topic tags use section color (--section-color defined in section 10) */
 .section-topic-tag {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     padding: 0.35rem 0.75rem;
-    background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent);
-    color: var(--section-offtheClock);
-    border: 1px solid color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+    background: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 10%, transparent);
+    color: var(--section-color, var(--section-offtheClock));
+    border: 1px solid color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
     border-radius: 100px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: default;
 }
 
 .section-topic-tag:hover {
-    background: color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
-    border-color: color-mix(in srgb, var(--section-offtheClock) 40%, transparent);
+    background: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
+    border-color: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 40%, transparent);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
 }
 
-/* Section-specific topic colors */
-#writing .section-topic-tag {
-    background: color-mix(in srgb, var(--section-writing) 10%, transparent);
-    color: var(--section-writing);
-    border-color: color-mix(in srgb, var(--section-writing) 20%, transparent);
-}
-
-#writing .section-topic-tag:hover {
-    background: color-mix(in srgb, var(--section-writing) 20%, transparent);
-    border-color: color-mix(in srgb, var(--section-writing) 40%, transparent);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-writing) 20%, transparent);
-}
-
-#lab .section-topic-tag {
-    background: color-mix(in srgb, var(--section-lab) 10%, transparent);
-    color: var(--section-lab);
-    border-color: color-mix(in srgb, var(--section-lab) 20%, transparent);
-}
-
-#lab .section-topic-tag:hover {
-    background: color-mix(in srgb, var(--section-lab) 20%, transparent);
-    border-color: color-mix(in srgb, var(--section-lab) 40%, transparent);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-lab) 20%, transparent);
-}
-
-#field .section-topic-tag {
-    background: color-mix(in srgb, var(--section-field) 10%, transparent);
-    color: var(--section-field);
-    border-color: color-mix(in srgb, var(--section-field) 20%, transparent);
-}
-
-#field .section-topic-tag:hover {
-    background: color-mix(in srgb, var(--section-field) 20%, transparent);
-    border-color: color-mix(in srgb, var(--section-field) 40%, transparent);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-field) 20%, transparent);
-}
-
-#media .section-topic-tag {
-    background: color-mix(in srgb, var(--section-media) 10%, transparent);
-    color: var(--section-media);
-    border-color: color-mix(in srgb, var(--section-media) 20%, transparent);
-}
-
-#media .section-topic-tag:hover {
-    background: color-mix(in srgb, var(--section-media) 20%, transparent);
-    border-color: color-mix(in srgb, var(--section-media) 40%, transparent);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-media) 20%, transparent);
-}
+/* =============================================================================
+   7. STATS SECTION
+   ============================================================================= */
 
 .stats-links {
     display: flex;
@@ -1090,7 +1151,10 @@ nav.container {
     border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
-/* Training Grid */
+/* =============================================================================
+   8. TRAINING GRID
+   ============================================================================= */
+
 .training-grid {
     display: flex;
     gap: 1.25rem;
@@ -1267,7 +1331,10 @@ nav.container {
     }
 }
 
-/* Tweet Cards */
+/* =============================================================================
+   9. TWEET CARDS
+   ============================================================================= */
+
 .tweet-grid {
     display: flex;
     gap: 1.25rem;
@@ -1551,6 +1618,10 @@ nav.container {
     letter-spacing: 0.05em;
 }
 
+/* =============================================================================
+   10. CONTENT CARDS
+   ============================================================================= */
+
 .subsection {
     margin-bottom: 4rem;
 }
@@ -1593,17 +1664,9 @@ nav.container {
     background: var(--bg-card);
 }
 
-/* Section-specific view-all-link colors */
-#field .view-all-link { color: var(--section-field); }
-#field .view-all-link:hover { background: color-mix(in srgb, var(--section-field) 10%, transparent); }
-#writing .view-all-link { color: var(--section-writing); }
-#writing .view-all-link:hover { background: color-mix(in srgb, var(--section-writing) 10%, transparent); }
-#lab .view-all-link { color: var(--section-lab); }
-#lab .view-all-link:hover { background: color-mix(in srgb, var(--section-lab) 10%, transparent); }
-#media .view-all-link { color: var(--section-media); }
-#media .view-all-link:hover { background: color-mix(in srgb, var(--section-media) 10%, transparent); }
-#offtheClock .view-all-link { color: var(--section-offtheClock); }
-#offtheClock .view-all-link:hover { background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent); }
+/* View-all-links use section color */
+.content-section .view-all-link { color: var(--section-color); }
+.content-section .view-all-link:hover { background: color-mix(in srgb, var(--section-color) 10%, transparent); }
 
 .view-all-link::after {
     content: '\2192';
@@ -1689,25 +1752,26 @@ nav.container {
         0 0 30px color-mix(in srgb, var(--accent-primary) 12%, transparent);
 }
 
-#field .content-card::before { background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-field) 5%, transparent) 100%); }
-#field .content-card:hover { border-color: var(--section-field); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-field), 0 0 30px color-mix(in srgb, var(--section-field) 12%, transparent); }
-#field .content-card .date { color: var(--section-field); }
+/*
+ * Section-specific theming using --section-color custom property.
+ * Each section sets its own color, then generic rules apply it consistently.
+ * This reduces repetition from ~60 lines to ~15 lines.
+ */
+#field { --section-color: var(--section-field); }
+#writing { --section-color: var(--section-writing); }
+#lab { --section-color: var(--section-lab); }
+#media { --section-color: var(--section-media); }
+#offtheClock { --section-color: var(--section-offtheClock); }
 
-#writing .content-card::before { background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-writing) 5%, transparent) 100%); }
-#writing .content-card:hover { border-color: var(--section-writing); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-writing), 0 0 30px color-mix(in srgb, var(--section-writing) 12%, transparent); }
-#writing .content-card .date { color: var(--section-writing); }
-
-#lab .content-card::before { background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-lab) 5%, transparent) 100%); }
-#lab .content-card:hover { border-color: var(--section-lab); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-lab), 0 0 30px color-mix(in srgb, var(--section-lab) 12%, transparent); }
-#lab .content-card .date { color: var(--section-lab); }
-
-#media .content-card::before { background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-media) 5%, transparent) 100%); }
-#media .content-card:hover { border-color: var(--section-media); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-media), 0 0 30px color-mix(in srgb, var(--section-media) 12%, transparent); }
-#media .content-card .date { color: var(--section-media); }
-
-#offtheClock .content-card::before { background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-offtheClock) 5%, transparent) 100%); }
-#offtheClock .content-card:hover { border-color: var(--section-offtheClock); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-offtheClock), 0 0 30px color-mix(in srgb, var(--section-offtheClock) 12%, transparent); }
-#offtheClock .content-card .date { color: var(--section-offtheClock); }
+/* Content cards inherit section color */
+.content-section .content-card::before {
+    background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-color) 5%, transparent) 100%);
+}
+.content-section .content-card:hover {
+    border-color: var(--section-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-color), 0 0 30px color-mix(in srgb, var(--section-color) 12%, transparent);
+}
+.content-section .content-card .date { color: var(--section-color); }
 
 .content-card.featured-card {
     grid-column: 1 / -1;
@@ -1741,16 +1805,16 @@ nav.container {
     border-color: var(--border-hover);
 }
 
-#field .card-badge { color: var(--section-field); background: color-mix(in srgb, var(--section-field) 10%, transparent); border-color: color-mix(in srgb, var(--section-field) 25%, transparent); }
-#field .content-card:hover .card-badge { background: color-mix(in srgb, var(--section-field) 15%, transparent); border-color: color-mix(in srgb, var(--section-field) 40%, transparent); }
-#writing .card-badge { color: var(--section-writing); background: color-mix(in srgb, var(--section-writing) 10%, transparent); border-color: color-mix(in srgb, var(--section-writing) 25%, transparent); }
-#writing .content-card:hover .card-badge { background: color-mix(in srgb, var(--section-writing) 15%, transparent); border-color: color-mix(in srgb, var(--section-writing) 40%, transparent); }
-#lab .card-badge { color: var(--section-lab); background: color-mix(in srgb, var(--section-lab) 10%, transparent); border-color: color-mix(in srgb, var(--section-lab) 25%, transparent); }
-#lab .content-card:hover .card-badge { background: color-mix(in srgb, var(--section-lab) 15%, transparent); border-color: color-mix(in srgb, var(--section-lab) 40%, transparent); }
-#media .card-badge { color: var(--section-media); background: color-mix(in srgb, var(--section-media) 10%, transparent); border-color: color-mix(in srgb, var(--section-media) 25%, transparent); }
-#media .content-card:hover .card-badge { background: color-mix(in srgb, var(--section-media) 15%, transparent); border-color: color-mix(in srgb, var(--section-media) 40%, transparent); }
-#offtheClock .card-badge { color: var(--section-offtheClock); background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent); border-color: color-mix(in srgb, var(--section-offtheClock) 25%, transparent); }
-#offtheClock .content-card:hover .card-badge { background: color-mix(in srgb, var(--section-offtheClock) 15%, transparent); border-color: color-mix(in srgb, var(--section-offtheClock) 40%, transparent); }
+/* Card badges use section color (defined above) */
+.content-section .card-badge {
+    color: var(--section-color);
+    background: color-mix(in srgb, var(--section-color) 10%, transparent);
+    border-color: color-mix(in srgb, var(--section-color) 25%, transparent);
+}
+.content-section .content-card:hover .card-badge {
+    background: color-mix(in srgb, var(--section-color) 15%, transparent);
+    border-color: color-mix(in srgb, var(--section-color) 40%, transparent);
+}
 
 .content-card h3 {
     font-size: 1.2rem;
@@ -1923,6 +1987,10 @@ nav.container {
     text-align: center;
 }
 
+/* =============================================================================
+   11. PERSONAL SECTION
+   ============================================================================= */
+
 .personal-grid {
     display: flex;
     gap: 1.25rem;
@@ -2055,6 +2123,10 @@ a.personal-card:hover .personal-cover {
     box-shadow: 0 4px 12px color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
 }
 
+/* =============================================================================
+   12. FOOTER
+   ============================================================================= */
+
 footer {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
@@ -2122,6 +2194,10 @@ footer {
 .theme-btn.active::before {
     display: none;
 }
+
+/* =============================================================================
+   13. RESPONSIVE
+   ============================================================================= */
 
 @media (max-width: 1024px) {
     .hero-nav {
@@ -2403,6 +2479,10 @@ footer {
     }
 }
 
+/* =============================================================================
+   14. UTILITIES
+   ============================================================================= */
+
 ::selection {
     background: var(--accent-primary);
     color: var(--bg-primary);
@@ -2424,6 +2504,10 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-primary);
 }
+
+/* =============================================================================
+   15. RESUME PAGE
+   ============================================================================= */
 
 .resume-page {
     min-height: 100dvh;

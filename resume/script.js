@@ -1,3 +1,26 @@
+/**
+ * =============================================================================
+ * RESUME PAGE SCRIPT
+ * =============================================================================
+ *
+ * Handles rendering of the resume page from JSON data.
+ *
+ * DEPENDENCIES (from script.js):
+ * - createElement()      - DOM element factory
+ * - createIconElement()  - Icon span factory
+ * - renderFooter()       - Footer with theme switcher
+ * - initThemeSwitcher()  - Theme toggle functionality
+ *
+ * DATA SOURCES:
+ * - /data/resume.json    - Resume content (experience, education, skills)
+ * - /data/site.json      - Profile info and social links
+ *
+ * =============================================================================
+ */
+
+/**
+ * Initialize the resume page by loading data and rendering content.
+ */
 async function initResume() {
     try {
         const response = await fetch('/data/resume.json');
@@ -22,6 +45,13 @@ async function initResume() {
     }
 }
 
+/**
+ * Render resume content into the page.
+ * Creates hero section, experience, education, skills, and projects.
+ *
+ * @param {Object} resume - Resume data from resume.json
+ * @param {Object} siteConfig - Site config from site.json (for profile/socials)
+ */
 function renderResume(resume, siteConfig) {
     const container = document.getElementById('resume-content');
     if (!container) return;

@@ -1,3 +1,62 @@
+/**
+ * =============================================================================
+ * MAIN SITE SCRIPT
+ * =============================================================================
+ *
+ * TABLE OF CONTENTS
+ * -----------------
+ * 1. ICONS REGISTRY ...................... Line 56
+ *    - SVG icon definitions for UI elements
+ *
+ * 2. DOM UTILITIES ....................... Line 101
+ *    - createElement() - DOM element factory
+ *    - setTrustedHTML() - safe innerHTML wrapper
+ *    - createIconElement() - icon span factory
+ *
+ * 3. DATA LOADING ........................ Line 142
+ *    - loadSiteConfig() - fetch site.json
+ *    - parseCSV() - parse CSV data files
+ *
+ * 4. HEADER & HERO ....................... Line 170
+ *    - renderHeader() - sticky nav bar
+ *    - renderHero() - hero section with nav pills
+ *
+ * 5. SECTION RENDERING ................... Line 325
+ *    - renderSections() - main content sections
+ *    - renderStatsSection() - baseball stats
+ *    - renderContentSection() - articles/projects
+ *    - renderPersonalSection() - reading/listening
+ *    - renderFooter() - theme switcher
+ *
+ * 6. CARD RENDERING & DISPLAY ............ Line 909
+ *    - displayItems() - unified display function
+ *    - displayProjects/Content/Tweets() - wrappers
+ *    - createProjectCard() - GitHub project cards
+ *    - createTweetCard() - tweet embed cards
+ *    - createContentCard() - article/media cards
+ *
+ * 7. UI UTILITIES ........................ Line 1281
+ *    - initCarouselScrollDetection() - scroll shadows
+ *    - displayEmptyState() - no content message
+ *    - formatDate() - date formatting
+ *    - sortByDate() - chronological sort
+ *
+ * 8. INTERACTIVITY ....................... Line 1335
+ *    - initThemeSwitcher() - team color themes
+ *    - initScrollReveal() - section animations
+ *    - initNavigation() - smooth scroll & active state
+ *
+ * 9. INITIALIZATION ...................... Line 1457
+ *    - initSite() - main entry point
+ *    - DOMContentLoaded handler
+ *
+ * =============================================================================
+ */
+
+/* =============================================================================
+   1. ICONS REGISTRY
+   ============================================================================= */
+
 const ICONS = {
   baseball:
     '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M6.5 3.5c1.5 2 2 4.5 2 8.5s-.5 6.5-2 8.5"/><path d="M17.5 3.5c-1.5 2-2 4.5-2 8.5s.5 6.5 2 8.5"/><path d="M5 7.5L6 8M5.5 12H7M5 16.5L6 16"/><path d="M19 7.5L18 8M18.5 12H17M19 16.5L18 16"/></svg>',
@@ -39,6 +98,10 @@ const ICONS = {
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
 };
 
+/* =============================================================================
+   2. DOM UTILITIES
+   ============================================================================= */
+
 function createElement(tag, attributes = {}, children = []) {
   const el = document.createElement(tag);
   Object.entries(attributes).forEach(([key, value]) => {
@@ -76,6 +139,10 @@ function createIconElement(name) {
   return span;
 }
 
+/* =============================================================================
+   3. DATA LOADING
+   ============================================================================= */
+
 let siteConfig = null;
 
 async function loadSiteConfig() {
@@ -99,6 +166,10 @@ function parseCSV(text) {
   }
   return rows;
 }
+
+/* =============================================================================
+   4. HEADER & HERO
+   ============================================================================= */
 
 function renderHeader(config) {
   const header = document.querySelector("header");
@@ -250,6 +321,10 @@ function renderHero(config) {
   heroSection.textContent = "";
   heroSection.appendChild(container);
 }
+
+/* =============================================================================
+   5. SECTION RENDERING
+   ============================================================================= */
 
 async function renderSections(config) {
   const main = document.querySelector("main");
@@ -831,6 +906,10 @@ function renderFooter(config) {
   footer.appendChild(containerDiv);
 }
 
+/* =============================================================================
+   6. CARD RENDERING & DISPLAY
+   ============================================================================= */
+
 function displayError(containerOrId) {
   const container =
     typeof containerOrId === "string"
@@ -845,7 +924,19 @@ function displayError(containerOrId) {
   container.appendChild(errorMsg);
 }
 
-function displayProjects(containerOrId, projects) {
+/**
+ * Unified display function for all card types.
+ * Consolidates displayProjects, displayContent, and displayTweets.
+ *
+ * @param {string|Element} containerOrId - Container element or ID
+ * @param {Array} items - Items to display
+ * @param {Object} options - Display options
+ * @param {string} options.type - 'projects' | 'content' | 'tweets'
+ * @param {string} options.emptyMessage - Message when no items
+ * @param {string} options.handle - Twitter handle (for tweets only)
+ * @param {string} options.containerClass - Optional class to add to container
+ */
+function displayItems(containerOrId, items, options = {}) {
   const container =
     typeof containerOrId === "string"
       ? document.getElementById(containerOrId)
@@ -853,23 +944,54 @@ function displayProjects(containerOrId, projects) {
   if (!container) return;
   container.textContent = "";
 
-  if (!projects || projects.length === 0) {
-    displayEmptyState(container, "No projects to display yet.");
+  // Apply optional container class (e.g., tweet-grid)
+  if (options.containerClass) {
+    container.className = options.containerClass;
+  }
+
+  const emptyMessage = options.emptyMessage || "No items to display yet.";
+  if (!items || items.length === 0) {
+    displayEmptyState(container, emptyMessage);
     return;
   }
 
-  const sortedProjects = projects.sort((a, b) => {
-    // Pinned items come first
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return (b.stars || 0) - (a.stars || 0);
-  });
+  // Sort items based on type
+  let sortedItems;
+  if (options.type === "projects") {
+    sortedItems = items.sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return (b.stars || 0) - (a.stars || 0);
+    });
+  } else {
+    sortedItems = sortByDate(items);
+  }
 
-  sortedProjects.forEach((project) => {
-    container.appendChild(createProjectCard(project));
+  // Create and append cards based on type
+  sortedItems.forEach((item) => {
+    let card;
+    switch (options.type) {
+      case "projects":
+        card = createProjectCard(item);
+        break;
+      case "tweets":
+        card = createTweetCard(item, options.handle);
+        break;
+      default:
+        card = createContentCard(item);
+    }
+    container.appendChild(card);
   });
 
   initCarouselScrollDetection(container);
+}
+
+// Legacy wrapper functions for backwards compatibility
+function displayProjects(containerOrId, projects) {
+  displayItems(containerOrId, projects, {
+    type: "projects",
+    emptyMessage: "No projects to display yet."
+  });
 }
 
 function createProjectCard(project) {
@@ -950,50 +1072,19 @@ function createProjectCard(project) {
 }
 
 function displayContent(containerOrId, items) {
-  const container =
-    typeof containerOrId === "string"
-      ? document.getElementById(containerOrId)
-      : containerOrId;
-  if (!container) return;
-  container.textContent = "";
-
-  if (!items || items.length === 0) {
-    displayEmptyState(container, "No items to display yet.");
-    return;
-  }
-
-  const sortedItems = sortByDate(items);
-
-  sortedItems.forEach((item) => {
-    container.appendChild(createContentCard(item));
+  displayItems(containerOrId, items, {
+    type: "content",
+    emptyMessage: "No items to display yet."
   });
-
-  initCarouselScrollDetection(container);
 }
 
 function displayTweets(containerOrId, items, handle) {
-  const container =
-    typeof containerOrId === "string"
-      ? document.getElementById(containerOrId)
-      : containerOrId;
-  if (!container) return;
-  container.textContent = "";
-
-  // Use tweet-grid class instead of content-grid
-  container.className = "tweet-grid";
-
-  if (!items || items.length === 0) {
-    displayEmptyState(container, "No tweets to display yet.");
-    return;
-  }
-
-  const sortedItems = sortByDate(items);
-
-  sortedItems.forEach((item) => {
-    container.appendChild(createTweetCard(item, handle));
+  displayItems(containerOrId, items, {
+    type: "tweets",
+    emptyMessage: "No tweets to display yet.",
+    handle: handle,
+    containerClass: "tweet-grid"
   });
-
-  initCarouselScrollDetection(container);
 }
 
 function createTweetCard(item, handle) {
@@ -1187,6 +1278,10 @@ function createContentCard(item) {
   return card;
 }
 
+/* =============================================================================
+   7. UI UTILITIES
+   ============================================================================= */
+
 function initCarouselScrollDetection(carousel) {
   const wrapper = document.createElement("div");
   wrapper.className = "content-grid-wrapper";
@@ -1236,6 +1331,10 @@ function sortByDate(items) {
     );
   });
 }
+
+/* =============================================================================
+   8. INTERACTIVITY
+   ============================================================================= */
 
 function initThemeSwitcher() {
   const buttons = document.querySelectorAll(".theme-btn");
@@ -1354,6 +1453,10 @@ function initNavigation() {
   window.addEventListener("load", updateOnScroll);
   updateOnScroll();
 }
+
+/* =============================================================================
+   9. INITIALIZATION
+   ============================================================================= */
 
 async function initSite() {
   try {
