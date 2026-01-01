@@ -39,7 +39,6 @@
       "subtitle": "Stats & video",
       "description": "Pitcher in the New York Mets (2019–2024) and Philadelphia Phillies (2025) organizations with experience across all levels of the minor leagues. Served as minor league player representative after contributing to the historic MLBPA unionization effort in 2022.",
       "icon": "baseball",
-      "altBg": true,
       "type": "stats",
       "statsFile": "docs/career_stats.csv",
       "statsHighlights": ["ERA", "W-L", "G", "IP", "SO", "WHIP"],
@@ -60,46 +59,11 @@
       "trainingFile": "data/field-training.json"
     },
     {
-      "id": "writing",
-      "title": "On the Page",
-      "subtitle": "Articles & analysis",
-      "description": "Author of Sliding Risers, a blog exploring player development, motor learning, and pitching through a data-driven lens. Previously featured author in BallNine and Metsmerized. Frequent Twitter threader.",
-      "icon": "pen",
-      "altBg": false,
-      "type": "content",
-      "topicsLabel": "Writing about:",
-      "topics": [
-        "Motor Learning",
-        "Ecological Dynamics",
-        "Workload Management",
-        "Pitch Design",
-        "Player Development"
-      ],
-      "subsections": [
-        {
-          "title": "Long-Form",
-          "dataFile": "data/writing-longform.json",
-          "displayType": "content",
-          "viewAllUrl": "https://substack.com/@hedgertronic",
-          "viewAllLabel": "View Substack"
-        },
-        {
-          "title": "Short-Form",
-          "dataFile": "data/writing-shortform.json",
-          "displayType": "tweets",
-          "handle": "hedgertronic",
-          "viewAllUrl": "https://twitter.com/hedgertronic",
-          "viewAllLabel": "View Twitter"
-        }
-      ]
-    },
-    {
       "id": "lab",
       "title": "In the Lab",
       "subtitle": "Research & code",
       "description": "Researcher at Driveline Baseball investigating topics such as pitch quality, biomechanics, and injury prevention. Has led or contributed to projects including state-of-the-art pitch and arsenal quality models, advanced pitch usage recommendation models, and a novel algorithm to aid the pitch design process. Additional contributor in software engineering iterating on an IMU-based wearable called PULSE that is used as a workload management tool by dozens of MLB organizations and college programs.",
       "icon": "code",
-      "altBg": true,
       "type": "content",
       "topicsLabel": "Looking into:",
       "topics": [
@@ -127,12 +91,45 @@
       ]
     },
     {
+      "id": "writing",
+      "title": "On the Page",
+      "subtitle": "Articles & analysis",
+      "description": "Author of Sliding Risers, a blog exploring player development, motor learning, and pitching through a data-driven lens. Previously featured author in BallNine and Metsmerized. Frequent Twitter threader.",
+      "icon": "pen",
+      "type": "content",
+      "topicsLabel": "Writing about:",
+      "topics": [
+        "Motor Learning",
+        "Ecological Dynamics",
+        "Workload Management",
+        "Pitch Design",
+        "Player Development"
+      ],
+      "subsections": [
+        {
+          "title": "Long-Form",
+          "dataFile": "data/writing-longform.json",
+          "displayType": "content",
+          "viewAllUrl": "https://substack.com/@hedgertronic",
+          "viewAllLabel": "View Substack"
+        },
+        {
+          "title": "Short-Form",
+          "dataFile": "data/writing-shortform.json",
+          "displayType": "tweets",
+          "handle": "hedgertronic",
+          "viewAllUrl": "https://twitter.com/hedgertronic",
+          "viewAllLabel": "View Twitter"
+        }
+      ]
+    },
+
+    {
       "id": "media",
       "title": "In the Media",
       "subtitle": "Podcasts & interviews",
       "description": "Co-host of the Driveline R&D Podcast, breaking down the modern game through a data-driven lens. Guest on The Layback Podcast and the Driveline Baseball Podcast. Featured in Mets Minors, BallNine, The New York Times, Sports Illustrated, and a player panel at the Wake Forest Player Development Seminar.",
       "icon": "microphone",
-      "altBg": false,
       "type": "content",
       "subsections": [
         {
@@ -153,7 +150,6 @@
       "subtitle": "Hobbies & interests",
       "description": "",
       "icon": "coffee",
-      "altBg": true,
       "type": "personal",
       "dataFile": "data/personal.json"
     }

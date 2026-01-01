@@ -254,10 +254,10 @@ function renderHero(config) {
 async function renderSections(config) {
   const main = document.querySelector("main");
 
-  for (const section of config.sections) {
+  for (const [index, section] of config.sections.entries()) {
     const sectionEl = createElement("section", {
       id: section.id,
-      className: "content-section" + (section.altBg ? " alt-bg" : ""),
+      className: "content-section" + (index % 2 === 0 ? " alt-bg" : ""),
     });
 
     if (section.type === "stats") {
