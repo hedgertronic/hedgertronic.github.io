@@ -1351,6 +1351,8 @@ function initThemeSwitcher() {
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", themeColors[theme] || themeColors.hopkins);
     }
+    // iOS 26 Safari samples body background-color for toolbar tint (ignores theme-color meta)
+    document.body.style.backgroundColor = themeColors[theme] || themeColors.hopkins;
   }
 
   applyTheme(savedTheme);
