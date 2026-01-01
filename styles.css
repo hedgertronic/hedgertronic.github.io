@@ -1836,6 +1836,117 @@ nav.container {
     margin-bottom: 0.5rem;
 }
 
+.content-card .card-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Thumbnail wrapper for badge overlay positioning */
+.thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.thumbnail-wrapper .thumbnail {
+    width: 100%;
+    display: block;
+}
+
+/* Badge overlay on thumbnails */
+.card-badge-overlay {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 2;
+}
+
+/* Badge row for tweet/training cards */
+.card-badge-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Tweet and training cards need z-index for badge row to appear above overlays */
+.tweet-card .card-badge-row,
+.training-card .card-badge-row {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* Ensure badges in tweet cards have correct section color */
+.tweet-card .new-badge {
+    color: var(--section-writing);
+    background: color-mix(in srgb, var(--section-writing) 20%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 40%, transparent);
+}
+
+.tweet-card .pinned-badge {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--text-secondary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 35%, transparent);
+}
+
+.tweet-card:hover .new-badge {
+    background: color-mix(in srgb, var(--section-writing) 30%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 60%, transparent);
+}
+
+.tweet-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--text-secondary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 50%, transparent);
+}
+
+.training-card .card-badge-row {
+    padding: 0 1.25rem;
+}
+
+.new-badge,
+.pinned-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.new-badge {
+    color: var(--section-color, var(--accent-primary));
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 20%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 40%, transparent);
+}
+
+.pinned-badge {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--text-secondary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 35%, transparent);
+}
+
+.content-card:hover .new-badge,
+.tweet-card:hover .new-badge,
+.training-card:hover .new-badge {
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 30%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 60%, transparent);
+}
+
+.content-card:hover .pinned-badge,
+.tweet-card:hover .pinned-badge,
+.training-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--text-secondary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 50%, transparent);
+}
+
 .content-card .date {
     font-family: var(--font-mono);
     font-size: 0.8rem;

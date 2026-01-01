@@ -607,6 +607,24 @@ async function renderStatsSection(container, section, config) {
             }
             card.appendChild(header);
 
+            // Badge row for new/pinned items
+            const isNew = item.date && isWithinDays(item.date, 30);
+            if (isNew || item.pinned) {
+              const badgeRow = createElement("div", { className: "card-badge-row" });
+
+              if (item.pinned) {
+                const pinnedBadge = createElement("span", { className: "pinned-badge", textContent: "Pinned" });
+                badgeRow.appendChild(pinnedBadge);
+              }
+
+              if (isNew) {
+                const newBadge = createElement("span", { className: "new-badge", textContent: "New" });
+                badgeRow.appendChild(newBadge);
+              }
+
+              card.appendChild(badgeRow);
+            }
+
             // Content with truncated caption
             const cardContent = createElement("div", { className: "training-card-content" });
             if (item.caption) {
@@ -1112,6 +1130,28 @@ function createTweetCard(item, handle) {
 
   card.appendChild(header);
 
+  const isNew = isWithinDays(item.date, 30);
+  if (isNew || item.pinned) {
+    const badgeRow = document.createElement("div");
+    badgeRow.className = "card-badge-row";
+
+    if (item.pinned) {
+      const pinnedBadge = document.createElement("span");
+      pinnedBadge.className = "pinned-badge";
+      pinnedBadge.textContent = "Pinned";
+      badgeRow.appendChild(pinnedBadge);
+    }
+
+    if (isNew) {
+      const newBadge = document.createElement("span");
+      newBadge.className = "new-badge";
+      newBadge.textContent = "New";
+      badgeRow.appendChild(newBadge);
+    }
+
+    card.appendChild(badgeRow);
+  }
+
   // Tweet content
   const content = document.createElement("div");
   content.className = "tweet-content";
@@ -1182,23 +1222,74 @@ function createContentCard(item) {
   card.target = "_blank";
   card.rel = "noopener noreferrer";
 
+  const isNew = isWithinDays(item.date, 30);
+  const hasBadges = isNew || item.pinned;
+
   if (item.thumbnail) {
+    const thumbWrapper = document.createElement("div");
+    thumbWrapper.className = "thumbnail-wrapper";
+
     const thumb = document.createElement("img");
     thumb.className = "thumbnail";
     thumb.src = item.thumbnail;
     thumb.alt = item.title;
     thumb.loading = "lazy";
     thumb.referrerPolicy = "no-referrer";
-    card.appendChild(thumb);
+    thumbWrapper.appendChild(thumb);
+
+    if (hasBadges) {
+      const badgeContainer = document.createElement("div");
+      badgeContainer.className = "card-badge-overlay";
+
+      if (item.pinned) {
+        const pinnedBadge = document.createElement("span");
+        pinnedBadge.className = "pinned-badge";
+        pinnedBadge.textContent = "Pinned";
+        badgeContainer.appendChild(pinnedBadge);
+      }
+
+      if (isNew) {
+        const newBadge = document.createElement("span");
+        newBadge.className = "new-badge";
+        newBadge.textContent = "New";
+        badgeContainer.appendChild(newBadge);
+      }
+
+      thumbWrapper.appendChild(badgeContainer);
+    }
+
+    card.appendChild(thumbWrapper);
   }
 
   const metaRow = document.createElement("div");
   metaRow.className = "card-meta-row";
 
+  const metaLeft = document.createElement("div");
+  metaLeft.className = "card-meta-left";
+
   const date = document.createElement("span");
   date.className = "date";
   date.textContent = formatDate(item.date);
-  metaRow.appendChild(date);
+  metaLeft.appendChild(date);
+
+  // Show badges in meta row only if there's no thumbnail
+  if (!item.thumbnail && hasBadges) {
+    if (item.pinned) {
+      const pinnedBadge = document.createElement("span");
+      pinnedBadge.className = "pinned-badge";
+      pinnedBadge.textContent = "Pinned";
+      metaLeft.appendChild(pinnedBadge);
+    }
+
+    if (isNew) {
+      const newBadge = document.createElement("span");
+      newBadge.className = "new-badge";
+      newBadge.textContent = "New";
+      metaLeft.appendChild(newBadge);
+    }
+  }
+
+  metaRow.appendChild(metaLeft);
 
   if (item.source) {
     const source = document.createElement("span");
@@ -1316,6 +1407,15 @@ function formatDate(dateString) {
     month: "short",
     day: "numeric",
   });
+}
+
+function isWithinDays(dateString, days) {
+  const [year, month, day] = dateString.split("-");
+  const itemDate = new Date(year, month - 1, day);
+  const now = new Date();
+  const diffTime = now - itemDate;
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+  return diffDays <= days && diffDays >= 0;
 }
 
 function sortByDate(items) {
