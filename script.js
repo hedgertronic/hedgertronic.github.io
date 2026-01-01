@@ -1014,6 +1014,28 @@ function displayProjects(containerOrId, projects) {
   });
 }
 
+// GitHub language colors
+const LANGUAGE_COLORS = {
+  JavaScript: "#f1e05a",
+  Python: "#3572A5",
+  TypeScript: "#3178c6",
+  Swift: "#F05138",
+  Java: "#b07219",
+  "C++": "#f34b7d",
+  C: "#555555",
+  "C#": "#178600",
+  Ruby: "#701516",
+  Go: "#00ADD8",
+  Rust: "#dea584",
+  PHP: "#4F5D95",
+  HTML: "#e34c26",
+  CSS: "#563d7c",
+  Shell: "#89e051",
+  Kotlin: "#A97BFF",
+  R: "#198CE7",
+  Jupyter: "#DA5B0B",
+};
+
 function createProjectCard(project) {
   const card = document.createElement("a");
   card.className = project.pinned ? "content-card project-card pinned" : "content-card project-card";
@@ -1021,59 +1043,43 @@ function createProjectCard(project) {
   card.target = "_blank";
   card.rel = "noopener noreferrer";
 
+  // Title at top
   const title = document.createElement("h3");
   title.textContent = project.title;
   card.appendChild(title);
 
-  const metaRow = document.createElement("div");
-  metaRow.className = "project-meta";
+  // Badge row (pinned/new) - similar to tweet card
+  const isNew = project.date && isWithinDays(project.date, 30);
+  if (isNew || project.pinned) {
+    const badgeRow = document.createElement("div");
+    badgeRow.className = "card-badge-row";
 
-  if (project.language) {
-    const language = document.createElement("span");
-    language.className = "project-language";
-    language.textContent = project.language;
-    metaRow.appendChild(language);
+    if (project.pinned) {
+      const pinnedBadge = document.createElement("span");
+      pinnedBadge.className = "pinned-badge";
+      pinnedBadge.textContent = "Pinned";
+      badgeRow.appendChild(pinnedBadge);
+    }
+
+    if (isNew) {
+      const newBadge = document.createElement("span");
+      newBadge.className = "new-badge";
+      newBadge.textContent = "New";
+      badgeRow.appendChild(newBadge);
+    }
+
+    card.appendChild(badgeRow);
   }
 
-  if (project.stars !== undefined) {
-    const stars = document.createElement("span");
-    stars.className = "project-stat";
-
-    const starIcon = document.createElement("span");
-    starIcon.className = "icon";
-    starIcon.textContent = "\u2605"; // Unicode star character
-    stars.appendChild(starIcon);
-
-    const starCount = document.createElement("span");
-    starCount.textContent = " " + project.stars;
-    stars.appendChild(starCount);
-
-    metaRow.appendChild(stars);
-  }
-
-  if (project.forks !== undefined) {
-    const forks = document.createElement("span");
-    forks.className = "project-stat";
-
-    const forkIcon = document.createElement("span");
-    forkIcon.className = "icon";
-    forkIcon.textContent = "\u2442"; // Unicode fork character
-    forks.appendChild(forkIcon);
-
-    const forkCount = document.createElement("span");
-    forkCount.textContent = " " + project.forks;
-    forks.appendChild(forkCount);
-
-    metaRow.appendChild(forks);
-  }
-
-  card.appendChild(metaRow);
+  // Description (flex: 1 to fill space)
+  const content = document.createElement("div");
+  content.className = "project-content";
 
   if (project.description && project.description.trim()) {
     const desc = document.createElement("p");
     desc.className = "card-description";
     desc.textContent = project.description;
-    card.appendChild(desc);
+    content.appendChild(desc);
   }
 
   if (project.topics && project.topics.length > 0) {
@@ -1085,7 +1091,64 @@ function createProjectCard(project) {
       tag.textContent = topic;
       topics.appendChild(tag);
     });
-    card.appendChild(topics);
+    content.appendChild(topics);
+  }
+
+  card.appendChild(content);
+
+  // Stats row at bottom (language, stars, forks)
+  const hasStats = project.language || project.stars !== undefined || project.forks !== undefined;
+  if (hasStats) {
+    const statsRow = document.createElement("div");
+    statsRow.className = "project-stats";
+
+    if (project.language) {
+      const language = document.createElement("span");
+      language.className = "project-language";
+
+      const langColor = LANGUAGE_COLORS[project.language] || "#858585";
+      const langDot = document.createElement("span");
+      langDot.className = "language-dot";
+      langDot.style.backgroundColor = langColor;
+      language.appendChild(langDot);
+
+      language.appendChild(document.createTextNode(project.language));
+      statsRow.appendChild(language);
+    }
+
+    if (project.stars !== undefined) {
+      const stars = document.createElement("span");
+      stars.className = "project-stat";
+
+      const starIcon = document.createElement("span");
+      starIcon.className = "icon-wrapper";
+      setTrustedHTML(starIcon, '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>');
+      stars.appendChild(starIcon);
+
+      const starCount = document.createElement("span");
+      starCount.textContent = project.stars;
+      stars.appendChild(starCount);
+
+      statsRow.appendChild(stars);
+    }
+
+    if (project.forks !== undefined) {
+      const forks = document.createElement("span");
+      forks.className = "project-stat";
+
+      const forkIcon = document.createElement("span");
+      forkIcon.className = "icon-wrapper";
+      setTrustedHTML(forkIcon, '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/></svg>');
+      forks.appendChild(forkIcon);
+
+      const forkCount = document.createElement("span");
+      forkCount.textContent = project.forks;
+      forks.appendChild(forkCount);
+
+      statsRow.appendChild(forks);
+    }
+
+    card.appendChild(statsRow);
   }
 
   return card;
