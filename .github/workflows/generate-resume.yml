@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'data/resume.json'
-      - 'scripts/generate_resume_pdf.py'
+      - 'tools/generate_resume_pdf.py'
     branches:
       - main
   workflow_dispatch:
@@ -29,12 +29,12 @@ jobs:
         run: pip install fpdf2
 
       - name: Generate PDF
-        run: python scripts/generate_resume_pdf.py
+        run: python tools/generate_resume_pdf.py
 
       - name: Commit updated PDF
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/resume.pdf
+          git add assets/documents/resume.pdf
           git diff --quiet --staged || git commit -m "Update resume PDF [skip ci]"
           git push

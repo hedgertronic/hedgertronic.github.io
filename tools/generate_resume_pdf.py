@@ -19,7 +19,7 @@ MEDIUM_TEXT = (75, 85, 99)
 LIGHT_TEXT = (107, 114, 128)
 RULE_COLOR = (229, 231, 235)
 
-FONTS_DIR = PROJECT_ROOT / "fonts"
+FONTS_DIR = PROJECT_ROOT / "assets" / "fonts"
 
 
 def ensure_fonts():
@@ -250,8 +250,8 @@ def generate_pdf(resume: dict, output_path: str, use_custom_fonts: bool = True):
 def main():
     resume = load_resume()
 
-    docs_dir = PROJECT_ROOT / "docs"
-    docs_dir.mkdir(exist_ok=True)
+    docs_dir = PROJECT_ROOT / "assets" / "documents"
+    docs_dir.mkdir(parents=True, exist_ok=True)
 
     use_custom_fonts = ensure_fonts()
     generate_pdf(resume, str(docs_dir / "resume.pdf"), use_custom_fonts=use_custom_fonts)
