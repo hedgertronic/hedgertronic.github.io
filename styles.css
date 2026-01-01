@@ -885,6 +885,11 @@ nav.container {
     letter-spacing: 0.05em;
 }
 
+.stats-overview-label {
+    margin-top: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
 .section-topics-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1069,6 +1074,12 @@ nav.container {
     border-bottom: 1px solid var(--border-color);
 }
 
+.stats-table th:first-child,
+.stats-table td:first-child {
+    width: 4rem;
+    padding-right: 0.5rem;
+}
+
 .stats-table th {
     background: var(--bg-card);
     font-family: var(--font-mono);
@@ -1145,6 +1156,65 @@ nav.container {
     background: rgba(148, 163, 184, 0.15);
     color: #94a3b8;
     border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.level-ncaa {
+    background: rgba(220, 38, 38, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.level-summer {
+    background: rgba(251, 146, 60, 0.15);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.level-independent {
+    background: rgba(20, 184, 166, 0.15);
+    color: #14b8a6;
+    border: 1px solid rgba(20, 184, 166, 0.3);
+}
+
+/* Organization badges */
+.org-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.25s ease;
+}
+
+.org-mets {
+    background: rgba(255, 89, 16, 0.15);
+    color: #FF5910;
+    border: 1px solid rgba(255, 89, 16, 0.3);
+}
+
+.org-phillies {
+    background: rgba(232, 24, 40, 0.15);
+    color: #e81828;
+    border: 1px solid rgba(232, 24, 40, 0.3);
+}
+
+.org-hopkins {
+    background: rgba(104, 172, 229, 0.15);
+    color: #68ACE5;
+    border: 1px solid rgba(104, 172, 229, 0.3);
+}
+
+.org-westside {
+    background: rgba(30, 58, 95, 0.15);
+    color: #68829e;
+    border: 1px solid rgba(30, 58, 95, 0.3);
+}
+
+.org-baltimore {
+    background: rgba(0, 90, 156, 0.15);
+    color: #005a9c;
+    border: 1px solid rgba(0, 90, 156, 0.3);
 }
 
 /* =============================================================================
@@ -2338,6 +2408,12 @@ footer {
 /* =============================================================================
    13. RESPONSIVE
    ============================================================================= */
+
+@media (max-width: 1200px) {
+    .stat-card-large .stat-value {
+        font-size: 2rem;
+    }
+}
 
 @media (max-width: 1024px) {
     .hero-nav {

@@ -354,29 +354,63 @@ async function renderStatsSection(container, section, config) {
   const csvText = await csvResponse.text();
   const statsData = parseCSV(csvText);
 
-  const careerRow = statsData.find((row) => row.Season === "Minors Career");
+  // Find all career total rows
+  const careerRows = {
+    College: statsData.find((row) => row.Season === "College Career"),
+    Summer: statsData.find((row) => row.Season === "Summer Career"),
+    Independent: statsData.find((row) => row.Season === "Independent Career"),
+    Minors: statsData.find((row) => row.Season === "Minors Career"),
+  };
+
+  // Filter for season aggregate rows (includes "team" or "teams")
   const seasonRows = statsData.filter(
-    (row) => /^\d{4}$/.test(row.Season) && row.Team.includes("teams"),
+    (row) => /^\d{4}$/.test(row.Season) && /\d+\s*teams?$/i.test(row.Team),
   );
 
   const levelClasses = {
-    ROA: "level-roa",
-    "A(Short)": "level-a-short",
-    "A(S)": "level-a-short",
+    "Rk+": "level-roa",
+    "A-": "level-a-short",
     "A+": "level-a-plus",
     AA: "level-aa",
     AAA: "level-aaa",
+    NCAA: "level-ncaa",
+    Summer: "level-summer",
+    Independent: "level-independent",
   };
 
-  const seasonLevels = {};
+  const orgClasses = {
+    Mets: "org-mets",
+    Phillies: "org-phillies",
+    "Johns Hopkins": "org-hopkins",
+    Westside: "org-westside",
+    Baltimore: "org-baltimore",
+  };
+
+  // Map individual levels to their category
+  const levelToCategory = {
+    NCAA: "College",
+    Summer: "Summer",
+    Independent: "Independent",
+    "Rk+": "Minors",
+    "A-": "Minors",
+    "A+": "Minors",
+    AA: "Minors",
+    AAA: "Minors",
+  };
+
+  // Group levels by year AND category (e.g., "2019-Minors" -> ["Rk+", "A-"])
+  const seasonCategoryLevels = {};
   statsData.forEach((row) => {
-    if (/^\d{4}$/.test(row.Season) && !row.Team.includes("teams")) {
-      if (!seasonLevels[row.Season]) {
-        seasonLevels[row.Season] = [];
+    // Skip aggregate rows and career/level totals
+    if (/^\d{4}$/.test(row.Season) && !/\d+\s*teams?$/i.test(row.Team)) {
+      const category = levelToCategory[row.Level] || row.Level;
+      const key = `${row.Season}-${category}`;
+      if (!seasonCategoryLevels[key]) {
+        seasonCategoryLevels[key] = [];
       }
       const level = row.Level;
-      if (!seasonLevels[row.Season].includes(level)) {
-        seasonLevels[row.Season].push(level);
+      if (!seasonCategoryLevels[key].includes(level)) {
+        seasonCategoryLevels[key].push(level);
       }
     }
   });
@@ -390,13 +424,15 @@ async function renderStatsSection(container, section, config) {
     WHIP: "WHIP",
   };
 
+  // Use Minors career for highlight values (professional baseball stats)
+  const minorsCareer = careerRows.Minors;
   const highlightValues = {
-    ERA: careerRow?.ERA || "-",
-    "W-L": careerRow ? `${careerRow.W}-${careerRow.L}` : "-",
-    G: careerRow?.G || "-",
-    IP: careerRow?.IP || "-",
-    SO: careerRow?.SO || "-",
-    WHIP: careerRow?.WHIP || "-",
+    ERA: minorsCareer?.ERA || "-",
+    "W-L": minorsCareer ? `${minorsCareer.W}-${minorsCareer.L}` : "-",
+    G: minorsCareer?.G || "-",
+    IP: minorsCareer?.IP || "-",
+    SO: minorsCareer?.SO || "-",
+    WHIP: minorsCareer?.WHIP || "-",
   };
 
   const containerDiv = createElement("div", { className: "container" });
@@ -428,16 +464,14 @@ async function renderStatsSection(container, section, config) {
     );
   }
 
-  const subsection = createElement("div", { className: "subsection" });
-  const subsectionHeader = createElement("div", {
-    className: "subsection-header",
-  });
-  subsectionHeader.appendChild(
-    createElement("h3", { textContent: "Career Stats" }),
+  // MiLB overview label and stats cards
+  containerDiv.appendChild(
+    createElement("div", {
+      className: "section-topics-label stats-overview-label",
+      textContent: "MiLB Career Overview:",
+    }),
   );
-  subsection.appendChild(subsectionHeader);
 
-  // Stats overview - inside subsection, above table
   const statsOverview = createElement("div", { className: "stats-overview" });
   section.statsHighlights.forEach((stat) => {
     const card = createElement("div", { className: "stat-card-large" });
@@ -455,7 +489,16 @@ async function renderStatsSection(container, section, config) {
     );
     statsOverview.appendChild(card);
   });
-  subsection.appendChild(statsOverview);
+  containerDiv.appendChild(statsOverview);
+
+  const subsection = createElement("div", { className: "subsection" });
+  const subsectionHeader = createElement("div", {
+    className: "subsection-header",
+  });
+  subsectionHeader.appendChild(
+    createElement("h3", { textContent: "Career Stats" }),
+  );
+  subsection.appendChild(subsectionHeader);
 
   const tableWrapper = createElement("div", {
     className: "stats-table-wrapper",
@@ -464,22 +507,11 @@ async function renderStatsSection(container, section, config) {
 
   const thead = createElement("thead");
   const headerRow = createElement("tr");
-  [
-    "Year",
-    "Levels",
-    "W",
-    "L",
-    "ERA",
-    "G",
-    "SV",
-    "IP",
-    "SO",
-    "BB",
-    "WHIP",
-    "AVG",
-  ].forEach((header) => {
-    headerRow.appendChild(createElement("th", { textContent: header }));
-  });
+  ["Year", "Team", "Levels", "W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach(
+    (header) => {
+      headerRow.appendChild(createElement("th", { textContent: header }));
+    },
+  );
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
@@ -488,8 +520,22 @@ async function renderStatsSection(container, section, config) {
     const tr = createElement("tr");
     tr.appendChild(createElement("td", { textContent: row.Season }));
 
+    // Team badge
+    const teamCell = createElement("td");
+    if (row.Org && row.Org !== "-") {
+      const teamBadge = createElement("span", {
+        className: `org-badge ${orgClasses[row.Org] || ""}`,
+        textContent: row.Org,
+      });
+      teamCell.appendChild(teamBadge);
+    }
+    tr.appendChild(teamCell);
+
+    // Look up levels for this specific year AND category
+    const category = row.Level; // Aggregate rows have category as Level (e.g., "College", "Minors")
+    const levelKey = `${row.Season}-${category}`;
     const levelsCell = createElement("td");
-    (seasonLevels[row.Season] || []).forEach((level) => {
+    (seasonCategoryLevels[levelKey] || []).forEach((level) => {
       const badge = createElement("span", {
         className: `level-badge ${levelClasses[level] || ""}`,
         textContent: level,
@@ -499,32 +545,90 @@ async function renderStatsSection(container, section, config) {
     });
     tr.appendChild(levelsCell);
 
-    ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP", "AVG"].forEach(
-      (col) => {
-        tr.appendChild(createElement("td", { textContent: row[col] }));
-      },
-    );
+    ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
+      let value = row[col];
+      // Show 0 instead of - for saves
+      if (col === "SV" && (value === "-" || value === "")) {
+        value = "0";
+      }
+      tr.appendChild(createElement("td", { textContent: value }));
+    });
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
 
   const tfoot = createElement("tfoot");
-  const footerRow = createElement("tr");
-  const totalCell = createElement("td");
-  totalCell.appendChild(createElement("strong", { textContent: "Total" }));
-  footerRow.appendChild(totalCell);
-  footerRow.appendChild(createElement("td"));
 
-  ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP", "AVG"].forEach(
-    (col) => {
+  // Calculate year ranges and unique teams for each category
+  const categoryYears = {};
+  const categoryTeams = {};
+  seasonRows.forEach((row) => {
+    const category = row.Level;
+    const year = parseInt(row.Season, 10);
+    const team = row.Org;
+    if (!categoryYears[category]) {
+      categoryYears[category] = [];
+    }
+    if (!categoryTeams[category]) {
+      categoryTeams[category] = new Set();
+    }
+    categoryYears[category].push(year);
+    if (team && team !== "-") {
+      categoryTeams[category].add(team);
+    }
+  });
+
+  // Add a row for each career category that has data
+  const categoryOrder = ["College", "Summer", "Independent", "Minors"];
+  categoryOrder.forEach((category) => {
+    const careerRow = careerRows[category];
+    if (!careerRow) return;
+
+    // Format year range
+    const years = categoryYears[category] || [];
+    const minYear = Math.min(...years);
+    const maxYear = Math.max(...years);
+    const yearRange =
+      minYear === maxYear ? `${minYear}` : `${minYear}-${maxYear}`;
+
+    const footerRow = createElement("tr");
+
+    // Year range in Year column
+    const yearRangeCell = createElement("td");
+    yearRangeCell.appendChild(
+      createElement("strong", { textContent: yearRange }),
+    );
+    footerRow.appendChild(yearRangeCell);
+
+    // Team count in Team column
+    const teamCount = categoryTeams[category]?.size || 0;
+    const teamLabel = teamCount === 1 ? "1 team" : `${teamCount} teams`;
+    const teamCountCell = createElement("td");
+    teamCountCell.appendChild(
+      createElement("strong", { textContent: teamLabel }),
+    );
+    footerRow.appendChild(teamCountCell);
+
+    // Category in Levels column
+    const categoryCell = createElement("td");
+    categoryCell.appendChild(
+      createElement("strong", { textContent: category }),
+    );
+    footerRow.appendChild(categoryCell);
+
+    ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
+      let value = careerRow?.[col] || "-";
+      // Show 0 instead of - for saves
+      if (col === "SV" && (value === "-" || value === "")) {
+        value = "0";
+      }
       const cell = createElement("td");
-      cell.appendChild(
-        createElement("strong", { textContent: careerRow?.[col] || "-" }),
-      );
+      cell.appendChild(createElement("strong", { textContent: value }));
       footerRow.appendChild(cell);
-    },
-  );
-  tfoot.appendChild(footerRow);
+    });
+    tfoot.appendChild(footerRow);
+  });
+
   table.appendChild(tfoot);
 
   tableWrapper.appendChild(table);

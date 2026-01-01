@@ -1,0 +1,37 @@
+name: Process Career Stats
+
+on:
+  push:
+    paths:
+      - 'assets/documents/bbref_stats.csv'
+      - 'tools/process_stats.py'
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  process-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Process stats
+        run: python tools/process_stats.py
+
+      - name: Commit updated stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/documents/career_stats.csv
+          git diff --quiet --staged || git commit -m "Update career stats [skip ci]"
+          git push
