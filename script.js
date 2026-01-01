@@ -282,6 +282,8 @@ function renderHero(config) {
       href: `#${section.id}`,
       className: "hero-nav-item",
     });
+    navLink.dataset.section = section.id;
+    navLink.style.setProperty("--section-accent", section.accentColor);
 
     const iconDiv = createElement("div", { className: "hero-nav-icon" });
     iconDiv.appendChild(createIconElement(section.icon));

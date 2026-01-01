@@ -704,23 +704,19 @@ nav.container {
     transform: translateY(3px);
 }
 
-.hero-nav-item:nth-child(1) .hero-nav-icon { color: var(--section-field); background: color-mix(in srgb, var(--section-field) 12%, transparent); }
-.hero-nav-item:nth-child(2) .hero-nav-icon { color: var(--section-writing); background: color-mix(in srgb, var(--section-writing) 12%, transparent); }
-.hero-nav-item:nth-child(3) .hero-nav-icon { color: var(--section-lab); background: color-mix(in srgb, var(--section-lab) 12%, transparent); }
-.hero-nav-item:nth-child(4) .hero-nav-icon { color: var(--section-media); background: color-mix(in srgb, var(--section-media) 12%, transparent); }
-.hero-nav-item:nth-child(5) .hero-nav-icon { color: var(--section-offtheClock); background: color-mix(in srgb, var(--section-offtheClock) 12%, transparent); }
+.hero-nav-item .hero-nav-icon {
+    color: var(--section-accent);
+    background: color-mix(in srgb, var(--section-accent) 12%, transparent);
+}
 
-.hero-nav-item:nth-child(1):hover { border-color: var(--section-field); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-field); }
-.hero-nav-item:nth-child(2):hover { border-color: var(--section-writing); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-writing); }
-.hero-nav-item:nth-child(3):hover { border-color: var(--section-lab); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-lab); }
-.hero-nav-item:nth-child(4):hover { border-color: var(--section-media); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-media); }
-.hero-nav-item:nth-child(5):hover { border-color: var(--section-offtheClock); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-offtheClock); }
+.hero-nav-item:hover {
+    border-color: var(--section-accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--section-accent);
+}
 
-.hero-nav-item:nth-child(1):hover .hero-nav-arrow { color: var(--section-field); }
-.hero-nav-item:nth-child(2):hover .hero-nav-arrow { color: var(--section-writing); }
-.hero-nav-item:nth-child(3):hover .hero-nav-arrow { color: var(--section-lab); }
-.hero-nav-item:nth-child(4):hover .hero-nav-arrow { color: var(--section-media); }
-.hero-nav-item:nth-child(5):hover .hero-nav-arrow { color: var(--section-offtheClock); }
+.hero-nav-item:hover .hero-nav-arrow {
+    color: var(--section-accent);
+}
 
 /* =============================================================================
    5. BUTTONS & LINKS
