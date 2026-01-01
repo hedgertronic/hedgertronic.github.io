@@ -101,30 +101,35 @@
       "name": "Solving Ball Flight Physics",
       "description": "First-hand research using Trajekt, Trackman, and Rapsodo to solve open questions in ball flight physics about the lift/drag coefficients and non-Magnus acceleration. To be presented at SABR 2026.",
       "technologies": ["Python", "Trackman", "Rapsodo", "Trajekt"],
+      "date": "2025",
       "url": null
     },
     {
       "name": "Projecting Pitch Design",
       "description": "A major advancement in the pitch design process, predicting what pitch types a pitcher is capable of throwing and generating usage recommendations based on game state. Presented at Sabersem 2025.",
       "technologies": ["Python", "Machine Learning"],
-      "url": null
+      "date": "2025",
+      "url": "https://www.youtube.com/watch?v=HeBvjYrU_vk"
     },
     {
       "name": "Quantifying Arsenal Effects",
       "description": "The industry's first arsenal quality models, created using novel machine learning methodology. An advancement over previous attempts at grading arsenal quality that only considered pitches in isolation. Presented at Sabersem 2024.",
       "technologies": ["Python", "Machine Learning"],
+      "date": "2024",
       "url": "https://www.youtube.com/watch?v=OdL6dafOArc"
     },
     {
       "name": "NYM Analytics Project",
       "description": "Pitch usage optimization model for pitchers. Generated individual reports using advanced mathematical modeling for recommendations.",
       "technologies": ["Python", "Machine Learning"],
+      "date": "2023",
       "url": null
     },
     {
       "name": "NYM Systems Project",
       "description": "Mobile app for pitchers. Populated screens with data from database, accepted user input, and performed analysis on data with custom model.",
       "technologies": ["React Native", "SQL"],
+      "date": "2022",
       "url": null
     }
   ],

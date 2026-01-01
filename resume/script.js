@@ -149,19 +149,20 @@ function renderResume(resume, siteConfig) {
     projSection.appendChild(createElement('h2', { className: 'resume-section-title', textContent: 'Projects' }));
 
     resume.projects.forEach(proj => {
-        const projEl = createElement('div', { className: 'resume-item resume-project' });
-
-        const projHeader = createElement('div', { className: 'resume-project-header' });
-        if (proj.url) {
-            const projLink = createElement('a', {
+        // Make whole card a link if URL exists, otherwise use div
+        const projEl = proj.url
+            ? createElement('a', {
                 href: proj.url,
                 target: '_blank',
-                className: 'resume-project-title',
-                textContent: proj.name
-            });
-            projHeader.appendChild(projLink);
-        } else {
-            projHeader.appendChild(createElement('span', { className: 'resume-project-title', textContent: proj.name }));
+                rel: 'noopener noreferrer',
+                className: 'resume-item resume-project resume-project-link'
+            })
+            : createElement('div', { className: 'resume-item resume-project' });
+
+        const projHeader = createElement('div', { className: 'resume-project-header' });
+        projHeader.appendChild(createElement('span', { className: 'resume-project-title', textContent: proj.name }));
+        if (proj.date) {
+            projHeader.appendChild(createElement('span', { className: 'resume-project-date', textContent: proj.date }));
         }
         projEl.appendChild(projHeader);
 

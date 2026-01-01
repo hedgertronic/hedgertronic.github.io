@@ -2883,8 +2883,34 @@ footer {
     margin-bottom: 1rem;
 }
 
+.resume-project-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+}
+
+.resume-project-link:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.resume-project-link:hover .resume-project-title {
+    color: var(--accent-primary);
+}
+
 .resume-project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 0.5rem;
+}
+
+.resume-project-date {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
 .resume-project-title {
@@ -2892,11 +2918,7 @@ footer {
     font-size: 1rem;
     font-weight: 500;
     color: var(--text-primary);
-    text-decoration: none;
-}
-
-a.resume-project-title:hover {
-    color: var(--accent-primary);
+    transition: color 0.25s ease;
 }
 
 .resume-project-desc {
