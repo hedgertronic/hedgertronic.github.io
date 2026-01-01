@@ -5,7 +5,8 @@
     "url": "https://github.com/hedgertronic/hedgertronic.github.io",
     "language": "JavaScript",
     "stars": 0,
-    "forks": 0
+    "forks": 0,
+    "pinned": true
   },
   {
     "title": "whoop",
@@ -25,7 +26,7 @@
   },
   {
     "title": "pulse-throw",
-    "description": "Tools for acquiring and analyzing Pulse API data.",
+    "description": "Tools for acquiring and analyzing PULSE API data.",
     "url": "https://github.com/hedgertronic/pulse-throw",
     "language": "Python",
     "stars": 2,
