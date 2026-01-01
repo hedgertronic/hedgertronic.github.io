@@ -38,8 +38,8 @@
       "dates": "Nov 2022 - Present",
       "location": "Seattle, WA; Tampa, FL",
       "highlights": [
-        "Created state-of-the-art pitch quality models using machine learning [Python]",
-        "Led creation of advanced pitch type and location usage recommendations for major league clients [Python]",
+        "Created state-of-the-art pitch quality metrics using gradient-boosted machine learning models [Python]",
+        "Created advanced pitch type and location usage recommendation models for major league clients [Python]",
         "Contributed to creation of arsenal quality models using novel machine learning methodology; team presented research at Sabersem 2024 [Python]",
         "Contributed to creation of the most advanced pitch design tool in the industry; team presented research at Sabersem 2025 [Python]",
         "Modernized physics engine for IMU-based wearable, improving accuracy and significantly decreasing error rate [C]",
@@ -99,12 +99,12 @@
   "projects": [
     {
       "name": "Solving Ball Flight Physics",
-      "description": "First-hand research using Trajekt, Trackman, and Rapsodo in conjunction to solve open questions  in ball flight physics about the lift/drag coefficients and non-Magnus acceleration. To be presented at SABR 2026.",
+      "description": "First-hand research using Trajekt, Trackman, and Rapsodo to solve open questions in ball flight physics about the lift/drag coefficients and non-Magnus acceleration. To be presented at SABR 2026.",
       "technologies": ["Python", "Trackman", "Rapsodo", "Trajekt"],
       "url": null
     },
     {
-      "name": "Pitch Design On Paper",
+      "name": "Projecting Pitch Design",
       "description": "A major advancement in the pitch design process, predicting what pitch types a pitcher is capable of throwing and generating usage recommendations based on game state. Presented at Sabersem 2025.",
       "technologies": ["Python", "Machine Learning"],
       "url": null
@@ -123,7 +123,7 @@
     },
     {
       "name": "NYM Systems Project",
-      "description": "Mobile app for pitchers. Connected with database to populate screens, accepted user input, and performed analysis on data with model.",
+      "description": "Mobile app for pitchers. Populated screens with data from database, accepted user input, and performed analysis on data with custom model.",
       "technologies": ["React Native", "SQL"],
       "url": null
     }
