@@ -22,7 +22,7 @@ A static portfolio website showcasing my career highlights across baseball, rese
 
 Automate data fetching to reduce manual updates:
 
-- **MiLB API**: Pull career and season stats automatically
-- **Twitter/X API**: Sync likes, retweets, and bookmarks for content curation
-- **GitHub API**: Fetch repo stats and descriptions dynamically
-- **Instagram API**: Pull cover images for media section automatically
+- **MiLB API** — Pull career and season stats automatically
+- **Twitter/X API** — Sync likes, retweets, and bookmarks for content curation
+- **GitHub API** — Fetch repo stats and descriptions dynamically
+- **Instagram API** — Pull cover images for media section automatically
