@@ -1,0 +1,48 @@
+name: Generate OG Image
+
+on:
+  push:
+    paths:
+      - 'data/site.json'
+      - 'assets/images/headshot/**'
+    branches:
+      - main
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Generate OG image
+        run: python tools/generate_og_image.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet assets/images/og/og-image.png; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/images/og/og-image.png
+          git commit -m "Update OG image [skip ci]"
+          git push
