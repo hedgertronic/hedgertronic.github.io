@@ -89,7 +89,7 @@
     font-style: normal;
     font-weight: 400 700;
     font-display: swap;
-    src: url('/fonts/DMSans.woff2') format('woff2');
+    src: url('/assets/fonts/DMSans.woff2') format('woff2');
 }
 
 @font-face {
@@ -97,7 +97,7 @@
     font-style: normal;
     font-weight: 400 500;
     font-display: swap;
-    src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+    src: url('/assets/fonts/JetBrainsMono.woff2') format('woff2');
 }
 
 @font-face {
@@ -105,7 +105,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('/fonts/InstrumentSerif.woff2') format('woff2');
+    src: url('/assets/fonts/InstrumentSerif.woff2') format('woff2');
 }
 
 :root {

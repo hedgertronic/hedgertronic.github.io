@@ -1,7 +1,7 @@
 [
   {
     "type": "video",
-    "poster": "images/field-training/variability.jpg",
+    "poster": "assets/images/field-training/variability.jpg",
     "url": "https://www.instagram.com/p/DOjJyYZieLv/",
     "credit": {
       "handle": "crider_performance",
@@ -12,7 +12,7 @@
   },
   {
     "type": "video",
-    "poster": "images/field-training/spikeball.jpg",
+    "poster": "assets/images/field-training/spikeball.jpg",
     "url": "https://www.instagram.com/p/DS8iKv2kfWW/",
     "credit": {
       "handle": "hedgertronic",

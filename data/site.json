@@ -2,7 +2,7 @@
   "profile": {
     "name": "Josh Hejka",
     "bio": "Free-agent professional pitcher. Former member of the Mets and Phillies organizations. Current R&D analyst at Driveline Baseball.",
-    "headshot": "/images/headshot/headshot.jpg"
+    "headshot": "/assets/images/headshot/headshot.jpg"
   },
   "socials": [
     {
@@ -41,7 +41,7 @@
       "description": "Pitcher in the New York Mets (2019–2024) and Philadelphia Phillies (2025) organizations with experience across all levels of the minor leagues. Served as minor league player representative after contributing to the historic MLBPA unionization effort in 2022.",
       "icon": "baseball",
       "type": "stats",
-      "statsFile": "docs/career_stats.csv",
+      "statsFile": "assets/documents/career_stats.csv",
       "statsHighlights": ["ERA", "W-L", "G", "IP", "SO", "WHIP"],
       "statsLinks": [
         {
