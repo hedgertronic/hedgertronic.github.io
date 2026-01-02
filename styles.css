@@ -389,6 +389,8 @@ nav.container {
     flex-direction: column;
     justify-content: center;
     padding: 5rem 0 4rem;
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+    padding-top: calc(5rem - env(safe-area-inset-bottom, 0px) * 0.5);
     position: relative;
     overflow: hidden;
 }
@@ -2603,7 +2605,8 @@ footer {
     }
 
     .hero {
-        padding: 4rem 0 3rem;
+        padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+        padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
     }
 
     .hero::before,
