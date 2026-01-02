@@ -76,6 +76,9 @@
  *     - Resume grid & sections
  *     - Resume items & skills
  *
+ * 16. TOUCH DEVICE FIXES ................. Line 3198
+ *     - Reset sticky hover states for touch devices
+ *
  * =============================================================================
  */
 
@@ -3192,5 +3195,379 @@ footer {
     .resume-item-header {
         flex-direction: column;
         gap: 0.25rem;
+    }
+}
+
+/* =============================================================================
+   16. TOUCH DEVICE FIXES
+   =============================================================================
+   Prevents "sticky" hover states on touch devices where :hover persists
+   after tapping until another element is touched.
+
+   Using (hover: none) targets devices where the primary pointing device
+   cannot hover. This is precise and avoids affecting laptops with
+   touchscreens when users are primarily using a mouse/trackpad.
+   ============================================================================= */
+
+@media (hover: none) {
+    /* -------------------------------------------------------------------------
+       General Focus Reset
+       ------------------------------------------------------------------------- */
+    /* Remove focus outlines on touch - focus states are less meaningful
+       and create "sticky" highlights when returning from new tabs */
+    .content-card:focus,
+    .tweet-card:focus,
+    .training-card-link:focus,
+    a.personal-card:focus,
+    .stats-link:focus,
+    .hero-nav-item:focus,
+    .hero-intro .social-links a:focus,
+    .view-all-link:focus,
+    .resume-project-link:focus {
+        outline: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Navigation
+       ------------------------------------------------------------------------- */
+    .nav-links a:hover {
+        color: var(--text-secondary);
+        background: transparent;
+    }
+
+    .nav-links a:hover::after {
+        width: 0;
+    }
+
+    /* Keep active state visible */
+    .nav-links a.active:hover {
+        color: var(--accent-primary);
+    }
+
+    .nav-links a.active:hover::after {
+        width: 60%;
+    }
+
+    /* -------------------------------------------------------------------------
+       Logo
+       ------------------------------------------------------------------------- */
+    .logo:hover .logo-headshot {
+        border-color: var(--border-color);
+    }
+
+    /* -------------------------------------------------------------------------
+       Hero Section
+       ------------------------------------------------------------------------- */
+    .hero-headshot:hover {
+        border-color: var(--border-color);
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.5),
+            0 0 0 4px var(--bg-primary),
+            inset 0 0 20px rgba(0, 0, 0, 0.2);
+        transform: none;
+    }
+
+    .hero-intro .social-links a:hover,
+    .hero-intro .social-links a:focus {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .hero-intro .social-links a:hover::before,
+    .hero-intro .social-links a:focus::before {
+        opacity: 0;
+    }
+
+    .hero-intro .social-links a.resume-cta:hover,
+    .hero-intro .social-links a.resume-cta:focus {
+        background: rgba(37, 99, 235, 0.15);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .hero-nav-item:hover,
+    .hero-nav-item:focus {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .hero-nav-item:hover::before,
+    .hero-nav-item:focus::before {
+        opacity: 0;
+    }
+
+    .hero-nav-item:hover .hero-nav-icon,
+    .hero-nav-item:focus .hero-nav-icon {
+        background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+        transform: none;
+    }
+
+    .hero-nav-item:hover .hero-nav-subtitle,
+    .hero-nav-item:focus .hero-nav-subtitle {
+        color: var(--text-muted);
+    }
+
+    .hero-nav-item:hover .hero-nav-arrow,
+    .hero-nav-item:focus .hero-nav-arrow {
+        color: var(--text-muted);
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Buttons & Links
+       ------------------------------------------------------------------------- */
+    .btn-primary:hover {
+        box-shadow: none;
+        transform: none;
+    }
+
+    .btn-secondary:hover {
+        background: var(--bg-card);
+        border-color: var(--border-color);
+    }
+
+    .social-links a:hover {
+        color: var(--text-muted);
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .view-all-link:hover,
+    .view-all-link:focus,
+    .content-section .view-all-link:hover,
+    .content-section .view-all-link:focus {
+        gap: 0.35rem;
+        color: var(--section-color, var(--text-secondary));
+        background: transparent;
+    }
+
+    .view-all-link:hover::after,
+    .view-all-link:focus::after {
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Section Headers & Tags
+       ------------------------------------------------------------------------- */
+    .section-header:hover .section-icon {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .section-topic-tag:hover {
+        background: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 10%, transparent);
+        border-color: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
+        box-shadow: none;
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Stats Section
+       ------------------------------------------------------------------------- */
+    .stats-link:hover,
+    .stats-link:focus {
+        border-color: var(--border-color);
+        color: var(--text-secondary);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .stats-link:hover::before,
+    .stats-link:focus::before {
+        opacity: 0;
+    }
+
+    .stats-link:hover svg,
+    .stats-link:focus svg {
+        opacity: 0.6;
+        color: inherit;
+        transform: none;
+    }
+
+    .stats-category-btn:hover {
+        border-color: var(--border-color);
+        background: var(--bg-card);
+    }
+
+    .stats-category-btn:hover .stats-category-name {
+        color: var(--text-muted);
+    }
+
+    .stats-category-btn:hover .stats-category-years {
+        opacity: 0.7;
+    }
+
+    /* Keep active state for category buttons */
+    .stats-category-btn.active:hover {
+        background: color-mix(in srgb, var(--section-field) 15%, var(--bg-card));
+        border-color: var(--section-field);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--section-field) 20%, transparent);
+    }
+
+    .stats-category-btn.active:hover .stats-category-name {
+        color: var(--section-field);
+    }
+
+    .stats-category-btn.active:hover .stats-category-years {
+        color: var(--section-field);
+        opacity: 0.8;
+    }
+
+    .stat-card-large:hover {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .stat-card-large:hover::before {
+        opacity: 0;
+    }
+
+    .stat-card-large:hover .stat-value {
+        transform: none;
+    }
+
+    .stats-table tbody tr:hover {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .stats-table tbody tr:hover .level-badge,
+    .stats-table tbody tr:hover .league-badge {
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Training Cards
+       ------------------------------------------------------------------------- */
+    .training-card:hover,
+    .training-card:focus,
+    .training-card-link:hover .training-card,
+    .training-card-link:focus .training-card {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+        outline: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Tweet Cards
+       ------------------------------------------------------------------------- */
+    .tweet-card:hover,
+    .tweet-card:focus {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+        outline: none;
+    }
+
+    .tweet-card:hover::before,
+    .tweet-card:focus::before {
+        opacity: 0;
+    }
+
+    /* -------------------------------------------------------------------------
+       Content Cards
+       ------------------------------------------------------------------------- */
+    .content-card:hover,
+    .content-card:focus,
+    .content-section .content-card:hover,
+    .content-section .content-card:focus {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+        outline: none;
+    }
+
+    .content-card:hover::before,
+    .content-card:focus::before {
+        opacity: 0;
+    }
+
+    .content-card:hover .card-badge,
+    .content-card:focus .card-badge,
+    .content-section .content-card:hover .card-badge,
+    .content-section .content-card:focus .card-badge {
+        background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 10%, transparent);
+        border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 25%, transparent);
+    }
+
+    .content-card:hover .thumbnail,
+    .content-card:focus .thumbnail {
+        transform: none;
+        filter: brightness(0.95) saturate(1.05);
+    }
+
+    .section-feature:hover .feature-image img {
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Personal Cards
+       ------------------------------------------------------------------------- */
+    a.personal-card:hover,
+    a.personal-card:focus {
+        border-color: var(--border-color);
+        box-shadow: none;
+        transform: none;
+        outline: none;
+    }
+
+    a.personal-card:hover::before,
+    a.personal-card:focus::before {
+        opacity: 0;
+    }
+
+    a.personal-card:hover .personal-cover,
+    a.personal-card:focus .personal-cover {
+        transform: none;
+        filter: brightness(0.95) saturate(1.05);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .learning-tag:hover {
+        background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent);
+        border-color: color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+        box-shadow: none;
+        transform: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       Footer Theme Buttons
+       ------------------------------------------------------------------------- */
+    .theme-btn:hover {
+        border-color: var(--border-color);
+        color: var(--text-secondary);
+        transform: none;
+    }
+
+    .theme-btn:hover::before {
+        opacity: 0;
+    }
+
+    /* Keep active state for theme buttons */
+    .theme-btn.active:hover {
+        background: var(--accent-primary);
+        border-color: var(--accent-primary);
+        color: var(--bg-primary);
+    }
+
+    /* -------------------------------------------------------------------------
+       Resume Page
+       ------------------------------------------------------------------------- */
+    .resume-project-link:hover,
+    .resume-project-link:focus {
+        border-color: inherit;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .resume-project-link:hover .resume-project-title,
+    .resume-project-link:focus .resume-project-title {
+        color: var(--text-primary);
     }
 }
