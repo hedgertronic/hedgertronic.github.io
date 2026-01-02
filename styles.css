@@ -1134,11 +1134,11 @@ nav.container {
 
 /* Fixed column widths for consistency across categories */
 .stats-table th:nth-child(1),
-.stats-table td:nth-child(1) { width: 50px; }  /* Year */
+.stats-table td:nth-child(1) { width: 40px; }  /* Year */
 .stats-table th:nth-child(2),
 .stats-table td:nth-child(2) { width: 200px; } /* Org/Team */
 .stats-table th:nth-child(3),
-.stats-table td:nth-child(3) { width: 120px; } /* Levels/League - wider for multiple badges */
+.stats-table td:nth-child(3) { width: 140px; } /* Levels/League - wider for multiple badges */
 .stats-table th:nth-child(n+4),
 .stats-table td:nth-child(n+4) { width: 50px; } /* Stat columns */
 
@@ -2708,7 +2708,6 @@ footer {
 
     .stats-category-btn {
         padding: 0.4rem 0.6rem;
-        flex: 1;
     }
 
     .stats-category-name {
@@ -2717,6 +2716,16 @@ footer {
 
     .stats-category-years {
         font-size: 0.6rem;
+    }
+
+    .stats-links {
+        gap: 0.5rem;
+    }
+
+    .stats-link {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+        gap: 0.35rem;
     }
 
     .stats-overview {
@@ -2739,6 +2748,12 @@ footer {
     .stats-table {
         min-width: 800px;
     }
+
+    .stats-table th:nth-child(2),
+    .stats-table td:nth-child(2) { width: 170px; }
+
+    .stats-table th:nth-child(3),
+    .stats-table td:nth-child(3) { width: 120px; }
 
     .stats-table th,
     .stats-table td {

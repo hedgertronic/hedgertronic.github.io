@@ -573,7 +573,7 @@ async function renderStatsSection(container, section, config) {
 
   const thead = createElement("thead");
   const headerRow = createElement("tr");
-  const headers = ["Year", "Organization", "Levels", "W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"];
+  const headers = ["Year", "Organization", "Levels", "W", "L", "ERA", "G", "SV", "IP", "H", "SO", "BB", "WHIP"];
   headers.forEach((header) => {
     const th = createElement("th", { textContent: header });
     if (header === "Organization") th.dataset.column = "team";
@@ -630,7 +630,7 @@ async function renderStatsSection(container, section, config) {
     }
     tr.appendChild(levelsCell);
 
-    ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
+    ["W", "L", "ERA", "G", "SV", "IP", "H", "SO", "BB", "WHIP"].forEach((col) => {
       let value = row[col];
       // Show 0 instead of - for saves
       if (col === "SV" && (value === "-" || value === "")) {
@@ -662,7 +662,7 @@ async function renderStatsSection(container, section, config) {
     footerRow.appendChild(createElement("td"));
     footerRow.appendChild(createElement("td"));
 
-    ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
+    ["W", "L", "ERA", "G", "SV", "IP", "H", "SO", "BB", "WHIP"].forEach((col) => {
       let value = careerRow?.[col] || "-";
       // Show 0 instead of - for saves
       if (col === "SV" && (value === "-" || value === "")) {
