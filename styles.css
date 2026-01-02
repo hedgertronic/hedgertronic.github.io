@@ -885,11 +885,6 @@ nav.container {
     letter-spacing: 0.05em;
 }
 
-.stats-overview-label {
-    margin-top: 0.5rem;
-    margin-bottom: 0.6rem;
-}
-
 .section-topics-tags {
     display: flex;
     flex-wrap: wrap;
@@ -968,13 +963,14 @@ nav.container {
 
 .stats-link svg {
     opacity: 0.6;
-    transition: all 0.3s ease;
     position: relative;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .stats-link:hover svg {
     opacity: 1;
     transform: translateX(2px);
+    color: var(--section-field);
 }
 
 .icon-wrapper {
@@ -987,11 +983,78 @@ nav.container {
     display: block;
 }
 
+/* Stats Category Selector */
+.stats-category-selector {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stats-category-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.5rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stats-category-name {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.stats-category-years {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.stats-category-btn:hover {
+    border-color: var(--section-field);
+    background: color-mix(in srgb, var(--section-field) 8%, var(--bg-card));
+}
+
+.stats-category-btn:hover .stats-category-name {
+    color: var(--text-primary);
+}
+
+.stats-category-btn:hover .stats-category-years {
+    opacity: 1;
+}
+
+.stats-category-btn.active {
+    background: color-mix(in srgb, var(--section-field) 15%, var(--bg-card));
+    border-color: var(--section-field);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--section-field) 20%, transparent);
+}
+
+.stats-category-btn.active .stats-category-name {
+    color: var(--section-field);
+}
+
+.stats-category-btn.active .stats-category-years {
+    color: var(--section-field);
+    opacity: 0.8;
+}
+
 .stats-overview {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .stat-card-large {
@@ -1065,7 +1128,19 @@ nav.container {
     border-collapse: collapse;
     font-size: 0.9rem;
     white-space: nowrap;
+    table-layout: fixed;
+    min-width: 850px;
 }
+
+/* Fixed column widths for consistency across categories */
+.stats-table th:nth-child(1),
+.stats-table td:nth-child(1) { width: 50px; }  /* Year */
+.stats-table th:nth-child(2),
+.stats-table td:nth-child(2) { width: 200px; } /* Org/Team */
+.stats-table th:nth-child(3),
+.stats-table td:nth-child(3) { width: 120px; } /* Levels/League - wider for multiple badges */
+.stats-table th:nth-child(n+4),
+.stats-table td:nth-child(n+4) { width: 50px; } /* Stat columns */
 
 .stats-table th,
 .stats-table td {
@@ -1171,6 +1246,39 @@ nav.container {
 }
 
 .level-independent {
+    background: rgba(20, 184, 166, 0.15);
+    color: #14b8a6;
+    border: 1px solid rgba(20, 184, 166, 0.3);
+}
+
+/* League badges (for non-Minors categories) */
+.league-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.25s ease;
+}
+
+.stats-table tbody tr:hover .league-badge {
+    transform: scale(1.05);
+}
+
+.league-ncaa {
+    background: rgba(220, 38, 38, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.league-summer {
+    background: rgba(251, 146, 60, 0.15);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.league-independent {
     background: rgba(20, 184, 166, 0.15);
     color: #14b8a6;
     border: 1px solid rgba(20, 184, 166, 0.3);
@@ -2593,6 +2701,24 @@ footer {
         gap: 0.75rem;
     }
 
+    .stats-category-selector {
+        flex-wrap: nowrap;
+        gap: 0.35rem;
+    }
+
+    .stats-category-btn {
+        padding: 0.4rem 0.6rem;
+        flex: 1;
+    }
+
+    .stats-category-name {
+        font-size: 0.7rem;
+    }
+
+    .stats-category-years {
+        font-size: 0.6rem;
+    }
+
     .stats-overview {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
@@ -2610,14 +2736,29 @@ footer {
         font-size: 0.7rem;
     }
 
+    .stats-table {
+        min-width: 800px;
+    }
+
     .stats-table th,
     .stats-table td {
-        padding: 0.65rem 0.75rem;
-        font-size: 0.8rem;
+        padding: 0.5rem 0.4rem;
+        font-size: 0.75rem;
     }
 
     .stats-table th {
         font-size: 0.65rem;
+    }
+
+    .level-badge,
+    .league-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.3rem;
+    }
+
+    .org-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.3rem;
     }
 
     .section-feature {

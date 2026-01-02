@@ -386,6 +386,14 @@ async function renderStatsSection(container, section, config) {
     Baltimore: "org-baltimore",
   };
 
+  const orgDisplayNames = {
+    Mets: "New York Mets",
+    Phillies: "Philadelphia Phillies",
+    "Johns Hopkins": "Johns Hopkins Blue Jays",
+    Westside: "Westside Woolly Mammoths",
+    Baltimore: "Baltimore Dodgers",
+  };
+
   // Map individual levels to their category
   const levelToCategory = {
     NCAA: "College",
@@ -464,33 +472,6 @@ async function renderStatsSection(container, section, config) {
     );
   }
 
-  // MiLB overview label and stats cards
-  containerDiv.appendChild(
-    createElement("div", {
-      className: "section-topics-label stats-overview-label",
-      textContent: "MiLB Career Overview:",
-    }),
-  );
-
-  const statsOverview = createElement("div", { className: "stats-overview" });
-  section.statsHighlights.forEach((stat) => {
-    const card = createElement("div", { className: "stat-card-large" });
-    card.appendChild(
-      createElement("div", {
-        className: "stat-value",
-        textContent: highlightValues[stat],
-      }),
-    );
-    card.appendChild(
-      createElement("div", {
-        className: "stat-label",
-        textContent: highlightLabels[stat],
-      }),
-    );
-    statsOverview.appendChild(card);
-  });
-  containerDiv.appendChild(statsOverview);
-
   const subsection = createElement("div", { className: "subsection" });
   const subsectionHeader = createElement("div", {
     className: "subsection-header",
@@ -500,49 +481,153 @@ async function renderStatsSection(container, section, config) {
   );
   subsection.appendChild(subsectionHeader);
 
+  // Calculate year ranges for each category
+  const categoryYears = {};
+  seasonRows.forEach((row) => {
+    const category = row.Level;
+    const year = parseInt(row.Season, 10);
+    if (!categoryYears[category]) {
+      categoryYears[category] = [];
+    }
+    categoryYears[category].push(year);
+  });
+
+  const getCategoryYearRange = (category) => {
+    const years = categoryYears[category] || [];
+    if (years.length === 0) return "";
+    const minYear = Math.min(...years);
+    const maxYear = Math.max(...years);
+    if (minYear === maxYear) return `${minYear}`;
+    const maxYearShort = String(maxYear).slice(-2);
+    return `${minYear}-${maxYearShort}`;
+  };
+
+  // Category selector (ordered by first appearance, but Minors is default selection)
+  const categorySelector = createElement("div", { className: "stats-category-selector" });
+  const categoryOrder = ["College", "Summer", "Independent", "Minors"];
+  categoryOrder.forEach((category) => {
+    const btn = createElement("button", {
+      className: `stats-category-btn${category === "Minors" ? " active" : ""}`,
+    });
+    btn.dataset.category = category;
+
+    const nameSpan = createElement("span", {
+      className: "stats-category-name",
+      textContent: category,
+    });
+    const yearsSpan = createElement("span", {
+      className: "stats-category-years",
+      textContent: getCategoryYearRange(category),
+    });
+    btn.appendChild(nameSpan);
+    btn.appendChild(yearsSpan);
+    categorySelector.appendChild(btn);
+  });
+  subsection.appendChild(categorySelector);
+
+  // Helper to get highlight values for a category
+  const getHighlightValues = (category) => {
+    const careerRow = careerRows[category];
+    return {
+      ERA: careerRow?.ERA || "-",
+      "W-L": careerRow ? `${careerRow.W}-${careerRow.L}` : "-",
+      G: careerRow?.G || "-",
+      IP: careerRow?.IP || "-",
+      SO: careerRow?.SO || "-",
+      WHIP: careerRow?.WHIP || "-",
+    };
+  };
+
+  // Overview cards (initially showing Minors)
+  const statsOverview = createElement("div", { className: "stats-overview" });
+  const initialHighlights = getHighlightValues("Minors");
+  section.statsHighlights.forEach((stat) => {
+    const card = createElement("div", { className: "stat-card-large" });
+    const statValue = createElement("div", {
+      className: "stat-value",
+      textContent: initialHighlights[stat],
+    });
+    statValue.dataset.stat = stat;
+    card.appendChild(statValue);
+    card.appendChild(
+      createElement("div", {
+        className: "stat-label",
+        textContent: highlightLabels[stat],
+      }),
+    );
+    statsOverview.appendChild(card);
+  });
+  subsection.appendChild(statsOverview);
+
   const tableWrapper = createElement("div", {
     className: "stats-table-wrapper",
   });
   const table = createElement("table", { className: "stats-table" });
 
+  // League info for non-Minors categories
+  const categoryLeagues = {
+    College: { name: "NCAA D3", className: "league-ncaa" },
+    Summer: { name: "Cal Ripken", className: "league-summer" },
+    Independent: { name: "USPBL", className: "league-independent" },
+  };
+
   const thead = createElement("thead");
   const headerRow = createElement("tr");
-  ["Year", "Team", "Levels", "W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach(
-    (header) => {
-      headerRow.appendChild(createElement("th", { textContent: header }));
-    },
-  );
+  const headers = ["Year", "Organization", "Levels", "W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"];
+  headers.forEach((header) => {
+    const th = createElement("th", { textContent: header });
+    if (header === "Organization") th.dataset.column = "team";
+    if (header === "Levels") th.dataset.column = "levels";
+    headerRow.appendChild(th);
+  });
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
   const tbody = createElement("tbody");
   seasonRows.forEach((row) => {
     const tr = createElement("tr");
+    const category = row.Level; // Aggregate rows have category as Level (e.g., "College", "Minors")
+    tr.dataset.category = category;
+    // Initially hide non-Minors rows
+    if (category !== "Minors") {
+      tr.style.display = "none";
+    }
     tr.appendChild(createElement("td", { textContent: row.Season }));
 
-    // Team badge
+    // Team/Org badge
     const teamCell = createElement("td");
     if (row.Org && row.Org !== "-") {
+      const displayName = orgDisplayNames[row.Org] || row.Org;
       const teamBadge = createElement("span", {
         className: `org-badge ${orgClasses[row.Org] || ""}`,
-        textContent: row.Org,
+        textContent: displayName,
       });
       teamCell.appendChild(teamBadge);
     }
     tr.appendChild(teamCell);
 
-    // Look up levels for this specific year AND category
-    const category = row.Level; // Aggregate rows have category as Level (e.g., "College", "Minors")
-    const levelKey = `${row.Season}-${category}`;
+    // Levels/League cell - for Minors show level badges, for others show league badge
     const levelsCell = createElement("td");
-    (seasonCategoryLevels[levelKey] || []).forEach((level) => {
-      const badge = createElement("span", {
-        className: `level-badge ${levelClasses[level] || ""}`,
-        textContent: level,
+    if (category === "Minors") {
+      const levelKey = `${row.Season}-${category}`;
+      (seasonCategoryLevels[levelKey] || []).forEach((level) => {
+        const badge = createElement("span", {
+          className: `level-badge ${levelClasses[level] || ""}`,
+          textContent: level,
+        });
+        levelsCell.appendChild(badge);
+        levelsCell.appendChild(document.createTextNode(" "));
       });
-      levelsCell.appendChild(badge);
-      levelsCell.appendChild(document.createTextNode(" "));
-    });
+    } else {
+      const leagueInfo = categoryLeagues[category];
+      if (leagueInfo) {
+        const leagueBadge = createElement("span", {
+          className: `league-badge ${leagueInfo.className}`,
+          textContent: leagueInfo.name,
+        });
+        levelsCell.appendChild(leagueBadge);
+      }
+    }
     tr.appendChild(levelsCell);
 
     ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
@@ -559,62 +644,23 @@ async function renderStatsSection(container, section, config) {
 
   const tfoot = createElement("tfoot");
 
-  // Calculate year ranges and unique teams for each category
-  const categoryYears = {};
-  const categoryTeams = {};
-  seasonRows.forEach((row) => {
-    const category = row.Level;
-    const year = parseInt(row.Season, 10);
-    const team = row.Org;
-    if (!categoryYears[category]) {
-      categoryYears[category] = [];
-    }
-    if (!categoryTeams[category]) {
-      categoryTeams[category] = new Set();
-    }
-    categoryYears[category].push(year);
-    if (team && team !== "-") {
-      categoryTeams[category].add(team);
-    }
-  });
-
-  // Add a row for each career category that has data
-  const categoryOrder = ["College", "Summer", "Independent", "Minors"];
-  categoryOrder.forEach((category) => {
+  // Add a totals row for each career category
+  const footerCategoryOrder = ["College", "Summer", "Independent", "Minors"];
+  footerCategoryOrder.forEach((category) => {
     const careerRow = careerRows[category];
     if (!careerRow) return;
 
-    // Format year range
-    const years = categoryYears[category] || [];
-    const minYear = Math.min(...years);
-    const maxYear = Math.max(...years);
-    const yearRange =
-      minYear === maxYear ? `${minYear}` : `${minYear}-${maxYear}`;
-
     const footerRow = createElement("tr");
+    footerRow.dataset.category = category;
+    // Initially hide non-Minors rows
+    if (category !== "Minors") {
+      footerRow.style.display = "none";
+    }
 
-    // Year range in Year column
-    const yearRangeCell = createElement("td");
-    yearRangeCell.appendChild(
-      createElement("strong", { textContent: yearRange }),
-    );
-    footerRow.appendChild(yearRangeCell);
-
-    // Team count in Team column
-    const teamCount = categoryTeams[category]?.size || 0;
-    const teamLabel = teamCount === 1 ? "1 team" : `${teamCount} teams`;
-    const teamCountCell = createElement("td");
-    teamCountCell.appendChild(
-      createElement("strong", { textContent: teamLabel }),
-    );
-    footerRow.appendChild(teamCountCell);
-
-    // Category in Levels column
-    const categoryCell = createElement("td");
-    categoryCell.appendChild(
-      createElement("strong", { textContent: category }),
-    );
-    footerRow.appendChild(categoryCell);
+    // Empty cells for Year, Team/Org, Levels/League columns
+    footerRow.appendChild(createElement("td"));
+    footerRow.appendChild(createElement("td"));
+    footerRow.appendChild(createElement("td"));
 
     ["W", "L", "ERA", "G", "SV", "IP", "SO", "BB", "WHIP"].forEach((col) => {
       let value = careerRow?.[col] || "-";
@@ -633,6 +679,47 @@ async function renderStatsSection(container, section, config) {
 
   tableWrapper.appendChild(table);
   subsection.appendChild(tableWrapper);
+
+  // Category selector event handler
+  categorySelector.addEventListener("click", (e) => {
+    const btn = e.target.closest(".stats-category-btn");
+    if (!btn) return;
+
+    const selectedCategory = btn.dataset.category;
+
+    // Update active button
+    categorySelector.querySelectorAll(".stats-category-btn").forEach((b) => {
+      b.classList.toggle("active", b === btn);
+    });
+
+    // Update header labels based on category
+    const teamHeader = thead.querySelector('th[data-column="team"]');
+    const levelsHeader = thead.querySelector('th[data-column="levels"]');
+    if (teamHeader) {
+      teamHeader.textContent = selectedCategory === "Minors" ? "Organization" : "Team";
+    }
+    if (levelsHeader) {
+      levelsHeader.textContent = selectedCategory === "Minors" ? "Levels" : "League";
+    }
+
+    // Update overview card values
+    const newHighlights = getHighlightValues(selectedCategory);
+    statsOverview.querySelectorAll(".stat-value").forEach((el) => {
+      const stat = el.dataset.stat;
+      el.textContent = newHighlights[stat];
+    });
+
+    // Filter table body rows
+    tbody.querySelectorAll("tr").forEach((row) => {
+      row.style.display = row.dataset.category === selectedCategory ? "" : "none";
+    });
+
+    // Filter table footer rows
+    tfoot.querySelectorAll("tr").forEach((row) => {
+      row.style.display = row.dataset.category === selectedCategory ? "" : "none";
+    });
+  });
+
   containerDiv.appendChild(subsection);
 
   // Stats links - below the table
