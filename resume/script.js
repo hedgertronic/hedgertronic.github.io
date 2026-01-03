@@ -27,7 +27,8 @@ async function initResume() {
         const resume = await response.json();
 
         const siteResponse = await fetch('/data/site.json');
-        const siteConfig = await siteResponse.json();
+        // Set global siteConfig so initThemeSwitcher can update headshots
+        siteConfig = await siteResponse.json();
 
         renderResume(resume, siteConfig);
         renderFooter(siteConfig);
@@ -61,7 +62,7 @@ function renderResume(resume, siteConfig) {
     const heroIntro = createElement('div', { className: 'hero-intro resume-hero-intro' });
 
     heroIntro.appendChild(createElement('img', {
-        src: siteConfig.profile.headshot,
+        src: getThemedHeadshot(siteConfig),
         alt: siteConfig.profile.name,
         className: 'hero-headshot'
     }));

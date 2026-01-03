@@ -171,6 +171,14 @@ function parseCSV(text) {
    4. HEADER & HERO
    ============================================================================= */
 
+function getThemedHeadshot(config) {
+  const theme = localStorage.getItem("theme") || "driveline";
+  if (config.profile.headshots && config.profile.headshots[theme]) {
+    return config.profile.headshots[theme];
+  }
+  return config.profile.headshot;
+}
+
 function renderHeader(config) {
   const header = document.querySelector("header");
   if (!header) return;
@@ -179,7 +187,7 @@ function renderHeader(config) {
 
   const logo = createElement("a", { href: "#top", className: "logo" });
   const logoImg = createElement("img", {
-    src: config.profile.headshot,
+    src: getThemedHeadshot(config),
     alt: config.profile.name,
     className: "logo-headshot",
   });
@@ -236,7 +244,7 @@ function renderHero(config) {
   const heroIntro = createElement("div", { className: "hero-intro" });
   heroIntro.appendChild(
     createElement("img", {
-      src: config.profile.headshot,
+      src: getThemedHeadshot(config),
       alt: config.profile.name,
       className: "hero-headshot",
     }),
@@ -1098,18 +1106,20 @@ function renderFooter(config) {
   themeSwitcher.appendChild(
     createElement("span", {
       className: "theme-label",
-      textContent: "Team colors:",
+      textContent: "Team colors",
     }),
   );
 
+  const buttonContainer = createElement("div", { className: "theme-switcher-buttons" });
   config.footer.themes.forEach((theme) => {
     const btn = createElement("button", {
       className: "theme-btn",
       textContent: theme.label,
     });
     btn.dataset.theme = theme.id;
-    themeSwitcher.appendChild(btn);
+    buttonContainer.appendChild(btn);
   });
+  themeSwitcher.appendChild(buttonContainer);
   footerContent.appendChild(themeSwitcher);
 
   containerDiv.appendChild(footerContent);
@@ -1694,8 +1704,9 @@ function sortByDate(items) {
 
 function initThemeSwitcher() {
   const buttons = document.querySelectorAll(".theme-btn");
-  const savedTheme = localStorage.getItem("theme") || "hopkins";
+  const savedTheme = localStorage.getItem("theme") || "driveline";
   const themeColors = {
+    driveline: "#0a0a0a",
     hopkins: "#0a0e1a",
     mets: "#0a1428",
     phillies: "#120a0c",
@@ -1709,6 +1720,14 @@ function initThemeSwitcher() {
     }
     // iOS 26 Safari samples body background-color for toolbar tint (ignores theme-color meta)
     document.body.style.backgroundColor = themeColors[theme] || themeColors.hopkins;
+
+    // Update headshots based on theme
+    if (siteConfig && siteConfig.profile.headshots) {
+      const headshot = siteConfig.profile.headshots[theme] || siteConfig.profile.headshot;
+      document.querySelectorAll(".hero-headshot, .logo-headshot").forEach((img) => {
+        img.src = headshot;
+      });
+    }
   }
 
   applyTheme(savedTheme);

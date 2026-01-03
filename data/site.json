@@ -2,7 +2,13 @@
   "profile": {
     "name": "Josh Hejka",
     "bio": "Free-agent professional pitcher. Former member of the Mets and Phillies organizations. Current R&D analyst at Driveline Baseball.",
-    "headshot": "/assets/images/headshot/headshot.jpg"
+    "headshot": "/assets/images/headshot/headshot-dl.jpg",
+    "headshots": {
+      "driveline": "/assets/images/headshot/headshot-dl.jpg",
+      "hopkins": "/assets/images/headshot/headshot-hopkins.png",
+      "mets": "/assets/images/headshot/headshot-mets.jpg",
+      "phillies": "/assets/images/headshot/headshot-phillies.jpg"
+    }
   },
   "socials": [
     {
@@ -161,6 +167,7 @@
   ],
   "footer": {
     "themes": [
+      { "id": "driveline", "label": "Driveline" },
       { "id": "hopkins", "label": "Hopkins" },
       { "id": "mets", "label": "Mets" },
       { "id": "phillies", "label": "Phillies" }
