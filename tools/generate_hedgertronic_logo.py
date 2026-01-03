@@ -117,10 +117,10 @@ def generate_hedgertronic_logo(output_dir: Path, bg_color: str = "#FFA300", body
 
         # "hedgertronic" text at bottom (centered)
         try:
-            # Try to use Inter
-            ttf_path = Path(__file__).parent.parent / "assets/fonts/Inter-Regular.ttf"
+            # Try to use DM Sans
+            ttf_path = Path(__file__).parent.parent / "assets/fonts/DMSans.ttf"
             if ttf_path.exists():
-                font = ImageFont.truetype(str(ttf_path), 36)
+                font = ImageFont.truetype(str(ttf_path), 42)
             else:
                 # Fallback to system sans
                 font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
@@ -130,8 +130,9 @@ def generate_hedgertronic_logo(output_dir: Path, bg_color: str = "#FFA300", body
         text = "hedgertronic"
         bbox = draw.textbbox((0, 0), text, font=font)
         text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
         text_x = (size - text_width) // 2  # Centered
-        text_y = size - margin - 55
+        text_y = size - margin - text_height - 20  # Position near bottom, inside rounded rect
         draw.text((text_x, text_y), text, font=font, fill=(*body_rgb, 255))
 
     print(f"Created hedgertronic logo ({size}x{size})")

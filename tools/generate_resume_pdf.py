@@ -3,8 +3,6 @@
 
 import json
 import urllib.request
-import zipfile
-import io
 from pathlib import Path
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
@@ -23,43 +21,24 @@ FONTS_DIR = PROJECT_ROOT / "assets" / "fonts"
 
 
 def ensure_fonts():
-    """Download Inter font if not present."""
-    inter_regular = FONTS_DIR / "Inter-Regular.ttf"
-    inter_bold = FONTS_DIR / "Inter-Bold.ttf"
-    inter_italic = FONTS_DIR / "Inter-Italic.ttf"
+    """Download DM Sans font if not present."""
+    dm_sans = FONTS_DIR / "DMSans.ttf"
 
-    if inter_regular.exists() and inter_bold.exists():
+    if dm_sans.exists():
         return True
 
-    print("Downloading Inter font...")
+    print("Downloading DM Sans font...")
     FONTS_DIR.mkdir(exist_ok=True)
 
-    # Download Inter from Google Fonts
-    url = "https://github.com/google/fonts/raw/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf"
+    # Download DM Sans variable font from Google Fonts
+    url = "https://github.com/googlefonts/dm-fonts/raw/main/Sans/variable/DMSans%5Bopsz%2Cwght%5D.ttf"
 
     try:
-        # Download variable font
-        urllib.request.urlretrieve(url, FONTS_DIR / "Inter-Variable.ttf")
-
-        # For static fonts, download from releases
-        static_url = "https://github.com/rsms/inter/releases/download/v4.0/Inter-4.0.zip"
-        with urllib.request.urlopen(static_url) as response:
-            zip_data = io.BytesIO(response.read())
-            with zipfile.ZipFile(zip_data) as zf:
-                for name in zf.namelist():
-                    if "Inter-Regular.ttf" in name:
-                        with open(inter_regular, "wb") as f:
-                            f.write(zf.read(name))
-                    elif "Inter-Bold.ttf" in name:
-                        with open(inter_bold, "wb") as f:
-                            f.write(zf.read(name))
-                    elif "Inter-Italic.ttf" in name:
-                        with open(inter_italic, "wb") as f:
-                            f.write(zf.read(name))
-        print("Fonts downloaded successfully.")
+        urllib.request.urlretrieve(url, dm_sans)
+        print("Font downloaded successfully.")
         return True
     except Exception as e:
-        print(f"Could not download fonts: {e}")
+        print(f"Could not download font: {e}")
         print("Falling back to Helvetica.")
         return False
 
@@ -72,10 +51,10 @@ class ResumePDF(FPDF):
         self.use_custom_fonts = use_custom_fonts
 
         if use_custom_fonts:
-            self.add_font("Inter", "", str(FONTS_DIR / "Inter-Regular.ttf"))
-            self.add_font("Inter", "B", str(FONTS_DIR / "Inter-Bold.ttf"))
-            self.add_font("Inter", "I", str(FONTS_DIR / "Inter-Italic.ttf"))
-            self.font_family = "Inter"
+            self.add_font("DMSans", "", str(FONTS_DIR / "DMSans.ttf"))
+            self.add_font("DMSans", "B", str(FONTS_DIR / "DMSans.ttf"))
+            self.add_font("DMSans", "I", str(FONTS_DIR / "DMSans.ttf"))
+            self.font_family = "DMSans"
         else:
             self.font_family = "Helvetica"
 
