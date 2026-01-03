@@ -5,6 +5,7 @@ on:
     paths:
       - 'data/site.json'
       - 'assets/images/headshot/**'
+      - 'tools/og-template.html'
     branches:
       - main
 
