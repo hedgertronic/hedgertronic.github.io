@@ -1,6 +1,7 @@
 name: Generate OG Image
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'data/site.json'
