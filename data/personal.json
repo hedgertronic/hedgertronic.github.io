@@ -16,5 +16,22 @@
       "cover": "https://i.scdn.co/image/ab67616d0000b273df6e579914fc309b0e0bd745",
       "url": "https://open.spotify.com/album/1BSwkKATGVCMgNuN8ve7mz?si=vXW4zjc1TP6zbUYTRZ13QA"
     }
+  },
+  "chess": {
+    "title": "Over the Board",
+    "links": {
+      "uscf": {
+        "label": "USCF",
+        "url": "https://ratings.uschess.org/player/30927133",
+        "rating": 1224,
+        "ratingType": "Regular"
+      },
+      "chesscom": {
+        "label": "Chess.com",
+        "url": "https://www.chess.com/member/hedgertronic",
+        "rating": 1486,
+        "ratingType": "Rapid"
+      }
+    }
   }
 }

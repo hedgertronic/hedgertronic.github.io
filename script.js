@@ -1086,6 +1086,67 @@ async function renderPersonalSection(container, section, config) {
       personalGrid.appendChild(listeningCard);
     }
 
+    if (data.chess) {
+      const chessCard = createElement("div", {
+        className: "personal-card personal-card-multi",
+      });
+
+      const cardIcon = createElement("div", {
+        className: "personal-card-icon",
+      });
+      cardIcon.appendChild(createIconElement("chess"));
+      chessCard.appendChild(cardIcon);
+
+      chessCard.appendChild(
+        createElement("h3", {
+          className: "personal-card-title",
+          textContent: data.chess.title,
+        }),
+      );
+
+      const linksContainer = createElement("div", {
+        className: "personal-card-links",
+      });
+
+      Object.values(data.chess.links).forEach((linkData) => {
+        const link = createElement("a", {
+          href: linkData.url,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          className: "personal-card-link",
+        });
+
+        link.appendChild(
+          createElement("span", {
+            className: "personal-link-label",
+            textContent: linkData.label,
+          }),
+        );
+
+        const ratingContainer = createElement("span", {
+          className: "personal-link-rating-container",
+        });
+        ratingContainer.appendChild(
+          createElement("span", {
+            className: "personal-link-type",
+            textContent: linkData.ratingType,
+          }),
+        );
+        ratingContainer.appendChild(
+          createElement("span", {
+            className: "personal-link-rating",
+            textContent: linkData.rating,
+          }),
+        );
+        link.appendChild(ratingContainer);
+
+        linksContainer.appendChild(link);
+      });
+
+      chessCard.appendChild(linksContainer);
+      personalGrid.appendChild(chessCard);
+    }
+
     containerDiv.appendChild(personalGrid);
   } catch (error) {
     displayError(containerDiv);
