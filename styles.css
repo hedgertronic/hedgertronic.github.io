@@ -3244,7 +3244,8 @@ footer {
     .hero-nav-item:focus,
     .hero-intro .social-links a:focus,
     .view-all-link:focus,
-    .resume-project-link:focus {
+    .resume-project-link:focus,
+    .download-btn:focus {
         outline: none;
     }
 
@@ -3580,9 +3581,19 @@ footer {
     /* -------------------------------------------------------------------------
        Resume Page
        ------------------------------------------------------------------------- */
+    .resume-header .logo:hover .logo-text {
+        opacity: 1;
+    }
+
+    .download-btn:hover:not(:disabled) {
+        opacity: 1;
+        transform: none;
+    }
+
     .resume-project-link:hover,
     .resume-project-link:focus {
-        border-color: inherit;
+        border-color: var(--border-color);
+        background: var(--bg-secondary);
         box-shadow: none;
         transform: none;
     }
