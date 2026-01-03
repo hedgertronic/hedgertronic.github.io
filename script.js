@@ -766,7 +766,7 @@ async function renderStatsSection(container, section, config) {
         );
         trainingSubsection.appendChild(trainingHeader);
 
-        const trainingGrid = createElement("div", { className: "training-grid" });
+        const trainingGrid = createElement("div", { className: "content-grid" });
         sortByDate(trainingData).forEach((item) => {
           if (item.type === "video") {
             // Wrap card in a link if URL provided
@@ -948,7 +948,10 @@ async function renderContentSection(container, section, config) {
     }
     subsectionDiv.appendChild(subsectionHeader);
 
-    const contentGrid = createElement("div", { className: "content-grid" });
+    const gridClassName = subsection.displayType === "projects"
+      ? "content-grid content-grid--projects"
+      : "content-grid";
+    const contentGrid = createElement("div", { className: gridClassName });
     subsectionDiv.appendChild(contentGrid);
     containerDiv.appendChild(subsectionDiv);
 
@@ -996,7 +999,7 @@ async function renderPersonalSection(container, section, config) {
     const dataResponse = await fetch("/" + section.dataFile);
     const data = await dataResponse.json();
 
-    const personalGrid = createElement("div", { className: "personal-grid" });
+    const personalGrid = createElement("div", { className: "content-grid" });
 
     if (data.reading) {
       const readingCard = createElement("a", {
@@ -1226,7 +1229,7 @@ function displayItems(containerOrId, items, options = {}) {
   if (!container) return;
   container.textContent = "";
 
-  // Apply optional container class (e.g., tweet-grid)
+  // Apply optional container class override
   if (options.containerClass) {
     container.className = options.containerClass;
   }
@@ -1427,8 +1430,7 @@ function displayTweets(containerOrId, items, handle) {
   displayItems(containerOrId, items, {
     type: "tweets",
     emptyMessage: "No tweets to display yet.",
-    handle: handle,
-    containerClass: "tweet-grid"
+    handle: handle
   });
 }
 

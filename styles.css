@@ -1350,28 +1350,8 @@ nav.container {
 }
 
 /* =============================================================================
-   8. TRAINING GRID
+   8. TRAINING CARDS
    ============================================================================= */
-
-.training-grid {
-    display: flex;
-    gap: 1.25rem;
-    overflow-x: auto;
-    overflow-y: visible;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    padding: 0.75rem 1rem 1.5rem 1rem;
-    margin: -0.75rem -1rem -1rem -1rem;
-    scroll-padding-left: 1rem;
-    position: relative;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.training-grid::-webkit-scrollbar {
-    display: none;
-}
 
 .training-card-link {
     text-decoration: none;
@@ -1382,9 +1362,6 @@ nav.container {
     scroll-snap-align: start;
 }
 
-.training-card-link:first-child {
-    margin-left: 1rem;
-}
 
 .training-card-link:last-child {
     margin-right: 1rem;
@@ -1503,19 +1480,9 @@ nav.container {
 }
 
 @media (max-width: 800px) {
-    .training-grid {
-        gap: 1rem;
-        padding: 0.75rem 1rem 1rem 1rem;
-        margin: -0.75rem -1rem -0.75rem -1rem;
-    }
-
     .training-card-link {
         flex: 0 0 300px;
         min-height: 400px;
-    }
-
-    .training-card-link:first-child {
-        margin-left: 1rem;
     }
 
     .training-card {
@@ -1532,26 +1499,6 @@ nav.container {
 /* =============================================================================
    9. TWEET CARDS
    ============================================================================= */
-
-.tweet-grid {
-    display: flex;
-    gap: 1.25rem;
-    overflow-x: auto;
-    overflow-y: visible;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    padding: 0.75rem 1rem 1.5rem 1rem;
-    margin: -0.75rem -1rem -1rem -1rem;
-    scroll-padding-left: 1rem;
-    position: relative;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.tweet-grid::-webkit-scrollbar {
-    display: none;
-}
 
 .tweet-card {
     flex: 0 0 320px;
@@ -1604,10 +1551,6 @@ nav.container {
 .tweet-card-with-image .tweet-stats {
     position: relative;
     z-index: 2;
-}
-
-.tweet-card:first-child {
-    margin-left: 1rem;
 }
 
 .tweet-card:last-child {
@@ -1717,20 +1660,10 @@ nav.container {
 }
 
 @media (max-width: 800px) {
-    .tweet-grid {
-        gap: 1rem;
-        padding: 0.75rem 1rem 1rem 1rem;
-        margin: -0.75rem -1rem -0.75rem -1rem;
-    }
-
     .tweet-card {
         flex: 0 0 300px;
         min-width: 280px;
         min-height: 260px;
-    }
-
-    .tweet-card:first-child {
-        margin-left: 1rem;
     }
 
     .tweet-text {
@@ -1890,7 +1823,7 @@ nav.container {
     -ms-overflow-style: none;
 }
 
-.content-grid .content-card:first-child {
+.content-grid--projects .content-card:first-child {
     margin-left: 1rem;
 }
 
@@ -2331,11 +2264,6 @@ nav.container {
 /* =============================================================================
    11. PERSONAL SECTION
    ============================================================================= */
-
-.personal-grid {
-    display: flex;
-    gap: 1.25rem;
-}
 
 .personal-card {
     flex: 0 0 320px;
@@ -2905,7 +2833,7 @@ footer {
         scroll-padding-left: 1rem;
     }
 
-    .content-grid .content-card:first-child {
+    .content-grid--projects .content-card:first-child {
         margin-left: 1rem;
     }
 
@@ -2913,29 +2841,6 @@ footer {
         flex: 0 0 300px;
         min-width: 280px;
         max-width: 320px;
-    }
-
-    .personal-grid {
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        overflow-y: visible;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        padding: 0.75rem 1rem 1rem 1rem;
-        margin: -0.75rem -1rem -0.75rem -1rem;
-        scroll-padding-left: 1rem;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .personal-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-    .personal-grid .personal-card:first-child {
-        margin-left: 1rem;
     }
 
     .personal-card {
