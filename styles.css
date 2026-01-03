@@ -640,8 +640,8 @@ nav.container {
     inset: 0;
     background: linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-primary) 8%, transparent) 0%,
-        color-mix(in srgb, var(--accent-primary) 3%, transparent) 100%
+        color-mix(in srgb, var(--section-accent) 8%, transparent) 0%,
+        color-mix(in srgb, var(--section-accent) 3%, transparent) 100%
     );
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -680,7 +680,7 @@ nav.container {
 }
 
 .hero-nav-item:hover .hero-nav-icon {
-    background: color-mix(in srgb, var(--accent-primary) 20%, transparent);
+    background: color-mix(in srgb, var(--section-accent) 20%, transparent);
     transform: scale(1.1);
 }
 
