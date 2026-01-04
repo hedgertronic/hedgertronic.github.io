@@ -679,6 +679,7 @@ nav.container {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .hero-nav-item::before {
@@ -3380,7 +3381,7 @@ footer {
 
     .hero-nav-item:hover .hero-nav-icon,
     .hero-nav-item:focus .hero-nav-icon {
-        background: color-mix(in srgb, var(--accent-primary) 12%, transparent);
+        background: color-mix(in srgb, var(--section-accent) 12%, transparent);
         transform: none;
     }
 
