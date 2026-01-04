@@ -185,4 +185,35 @@ function renderResume(resume, siteConfig) {
     container.appendChild(mainGrid);
 }
 
-document.addEventListener('DOMContentLoaded', initResume);
+document.addEventListener('DOMContentLoaded', async () => {
+    await initResume();
+
+    // Headshot click animation
+    const headshot = document.querySelector('.hero-headshot');
+    if (headshot) {
+        // Mark as ready for click animation (no scaleIn animation on resume page)
+        headshot.classList.add('animation-ready');
+
+        headshot.addEventListener('click', () => {
+            if (!headshot.classList.contains('animation-ready')) return;
+
+            headshot.classList.remove('clicked', 'transitioning-out');
+            // Force reflow to restart animation
+            void headshot.offsetWidth;
+            headshot.classList.add('clicked');
+
+            // After animation completes, transition smoothly back to base state
+            setTimeout(() => {
+                headshot.classList.add('transitioning-out');
+                // Brief moment to disable animation, then remove styles to trigger transition
+                requestAnimationFrame(() => {
+                    headshot.classList.remove('clicked');
+                    // Clean up transitioning-out after transition completes
+                    setTimeout(() => {
+                        headshot.classList.remove('transitioning-out');
+                    }, 300); // Match transition duration
+                });
+            }, 300); // Animation duration
+        });
+    }
+});

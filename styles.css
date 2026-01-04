@@ -510,6 +510,53 @@ nav.container {
         0 0 30px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
 
+.hero-headshot {
+    cursor: pointer;
+}
+
+/* Click animation for headshot */
+@keyframes headshotClick {
+    0%, 100% {
+        transform: scale(1.05);
+        border-color: var(--accent-primary);
+        box-shadow:
+            0 12px 40px rgba(0, 0, 0, 0.6),
+            0 0 0 4px var(--bg-primary),
+            0 0 30px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+    }
+    50% {
+        transform: scale(1.3);
+        border-color: var(--accent-primary);
+        box-shadow:
+            0 16px 50px rgba(0, 0, 0, 0.7),
+            0 0 0 4px var(--bg-primary),
+            0 0 40px color-mix(in srgb, var(--accent-primary) 50%, transparent);
+    }
+}
+
+.hero-headshot.animation-ready {
+    animation: none;
+    /* Ensure clean base state after scaleIn completes */
+    transform: scale(1);
+    opacity: 1;
+}
+
+.hero-headshot.animation-ready.clicked {
+    animation: headshotClick 0.3s ease-out;
+    /* Lock hover state during animation to prevent stutter if mouse moves away */
+    transform: scale(1.05);
+    border-color: var(--accent-primary);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        0 0 0 4px var(--bg-primary),
+        0 0 30px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
+.hero-headshot.animation-ready.clicked.transitioning-out {
+    animation: none;
+    /* Keep hover styles but allow transition back to base state */
+}
+
 .hero-name {
     font-family: var(--font-serif);
     font-size: clamp(2.25rem, 5vw, 3.25rem);

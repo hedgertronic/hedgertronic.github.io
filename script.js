@@ -1923,8 +1923,39 @@ async function initSite() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   if (!document.body.classList.contains("resume-page")) {
-    initSite();
+    await initSite();
+
+    // Headshot click animation
+    const headshot = document.querySelector(".hero-headshot");
+    if (headshot) {
+      // Mark as ready for click animation after initial scaleIn completes
+      setTimeout(() => {
+        headshot.classList.add("animation-ready");
+      }, 600); // scaleIn is 0.5s with 0.1s delay
+
+      headshot.addEventListener("click", () => {
+        if (!headshot.classList.contains("animation-ready")) return;
+
+        headshot.classList.remove("clicked", "transitioning-out");
+        // Force reflow to restart animation
+        void headshot.offsetWidth;
+        headshot.classList.add("clicked");
+
+        // After animation completes, transition smoothly back to base state
+        setTimeout(() => {
+          headshot.classList.add("transitioning-out");
+          // Brief moment to disable animation, then remove styles to trigger transition
+          requestAnimationFrame(() => {
+            headshot.classList.remove("clicked");
+            // Clean up transitioning-out after transition completes
+            setTimeout(() => {
+              headshot.classList.remove("transitioning-out");
+            }, 300); // Match transition duration
+          });
+        }, 300); // Animation duration
+      });
+    }
   }
 });
