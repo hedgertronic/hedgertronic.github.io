@@ -1313,9 +1313,10 @@ function createProjectCard(project) {
   title.textContent = project.title;
   card.appendChild(title);
 
-  // Badge row (pinned/new) - similar to tweet card
+  // Badge row (pinned/new/gist) - similar to tweet card
   const isNew = project.date && isWithinDays(project.date, 30);
-  if (isNew || project.pinned) {
+  const isGist = project.url && project.url.includes("gist.github.com");
+  if (isNew || project.pinned || isGist) {
     const badgeRow = document.createElement("div");
     badgeRow.className = "card-badge-row";
 
@@ -1331,6 +1332,13 @@ function createProjectCard(project) {
       newBadge.className = "new-badge";
       newBadge.textContent = "New";
       badgeRow.appendChild(newBadge);
+    }
+
+    if (isGist) {
+      const gistBadge = document.createElement("span");
+      gistBadge.className = "gist-badge";
+      gistBadge.textContent = "Gist";
+      badgeRow.appendChild(gistBadge);
     }
 
     card.appendChild(badgeRow);

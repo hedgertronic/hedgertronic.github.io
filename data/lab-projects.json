@@ -5,8 +5,7 @@
     "url": "https://github.com/hedgertronic/hedgertronic.github.io",
     "language": "JavaScript",
     "stars": 0,
-    "forks": 0,
-    "pinned": true
+    "forks": 0
   },
   {
     "title": "whoop",
@@ -30,6 +29,31 @@
     "url": "https://github.com/hedgertronic/pulse-throw",
     "language": "Python",
     "stars": 2,
+    "forks": 0
+  },
+  {
+    "title": "transform_accelerations",
+    "description": "Transform ball flight acceleration components from the global reference frame to the initial velocity vector.",
+    "url": "https://gist.github.com/hedgertronic/ace4513eafec0021d7dcfe843af92c8a",
+    "language": "Python",
+    "stars": 0,
+    "forks": 0,
+    "pinned": true
+  },
+  {
+    "title": "re24_per_9",
+    "description": "Calculate RE24/9 from pybaseball data and produce leaderboard.",
+    "url": "https://gist.github.com/hedgertronic/1b83cc84532b5f67fada878344a8af56",
+    "language": "Python",
+    "stars": 0,
+    "forks": 0
+  },
+  {
+    "title": "nathan",
+    "description": "Add induced movement, spin axis, and other spin columns to Statcast data using Alan Nathan's formulas.",
+    "url": "https://gist.github.com/hedgertronic/92eb84500ace3efb83007aa6a9f65ccb",
+    "language": "Python",
+    "stars": 0,
     "forks": 0
   }
 ]

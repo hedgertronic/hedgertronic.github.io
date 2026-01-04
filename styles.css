@@ -2016,9 +2016,9 @@ nav.container {
 }
 
 .tweet-card .pinned-badge {
-    color: var(--text-secondary);
-    background: color-mix(in srgb, var(--text-secondary) 15%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--text-secondary) 35%, transparent);
+    color: var(--accent-warm);
+    background: color-mix(in srgb, var(--accent-warm) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--accent-warm) 35%, transparent);
 }
 
 .tweet-card:hover .new-badge {
@@ -2027,8 +2027,8 @@ nav.container {
 }
 
 .tweet-card:hover .pinned-badge {
-    background: color-mix(in srgb, var(--text-secondary) 25%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--text-secondary) 50%, transparent);
+    background: color-mix(in srgb, var(--accent-warm) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--accent-warm) 50%, transparent);
 }
 
 .training-card .card-badge-row {
@@ -2036,7 +2036,8 @@ nav.container {
 }
 
 .new-badge,
-.pinned-badge {
+.pinned-badge,
+.gist-badge {
     display: inline-block;
     font-family: var(--font-mono);
     font-size: 0.65rem;
@@ -2058,6 +2059,12 @@ nav.container {
 }
 
 .pinned-badge {
+    color: var(--accent-warm);
+    background: color-mix(in srgb, var(--accent-warm) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--accent-warm) 35%, transparent);
+}
+
+.gist-badge {
     color: var(--text-secondary);
     background: color-mix(in srgb, var(--text-secondary) 15%, var(--bg-primary));
     border-color: color-mix(in srgb, var(--text-secondary) 35%, transparent);
@@ -2073,6 +2080,12 @@ nav.container {
 .content-card:hover .pinned-badge,
 .tweet-card:hover .pinned-badge,
 .training-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--accent-warm) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--accent-warm) 50%, transparent);
+}
+
+.content-card:hover .gist-badge,
+.project-card:hover .gist-badge {
     background: color-mix(in srgb, var(--text-secondary) 25%, var(--bg-primary));
     border-color: color-mix(in srgb, var(--text-secondary) 50%, transparent);
 }
