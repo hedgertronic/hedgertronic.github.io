@@ -143,12 +143,19 @@
       "type": "content",
       "subsections": [
         {
-          "title": "Podcasts",
-          "dataFile": "data/media-podcasts.json",
+          "title": "Driveline R&D Podcast",
+          "dataFile": "data/media-rd-podcast.json",
+          "displayType": "content",
+          "viewAllUrl": "https://www.youtube.com/playlist?list=PLGSlrSk6rBqJH8h8_Im9AaUbkweRMRXc9",
+          "viewAllLabel": "View Podcast"
+        },
+        {
+          "title": "Podcast Features",
+          "dataFile": "data/media-podcast-features.json",
           "displayType": "content"
         },
         {
-          "title": "Press & Features",
+          "title": "Press & Interviews",
           "dataFile": "data/media-press.json",
           "displayType": "content"
         }

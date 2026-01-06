@@ -487,6 +487,25 @@ async function renderStatsSection(container, section, config) {
   subsectionHeader.appendChild(
     createElement("h3", { textContent: "Career Stats" }),
   );
+
+  // Dynamic stats link - changes based on selected category
+  // Minors -> MiLB, everything else -> BBRef
+  const statsLinkConfig = {
+    Minors: section.statsLinks.find((l) => l.name === "MiLB"),
+    College: section.statsLinks.find((l) => l.name === "BBRef"),
+    Summer: section.statsLinks.find((l) => l.name === "BBRef"),
+    Independent: section.statsLinks.find((l) => l.name === "BBRef"),
+  };
+
+  const viewStatsLink = createElement("a", {
+    href: statsLinkConfig.Minors?.url || "#",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    className: "view-all-link",
+    textContent: "View MiLB",
+  });
+  subsectionHeader.appendChild(viewStatsLink);
+
   subsection.appendChild(subsectionHeader);
 
   // Calculate year ranges for each category
@@ -717,6 +736,13 @@ async function renderStatsSection(container, section, config) {
       el.textContent = newHighlights[stat];
     });
 
+    // Update the dynamic stats link
+    const linkConfig = statsLinkConfig[selectedCategory];
+    if (linkConfig) {
+      viewStatsLink.href = linkConfig.url;
+      viewStatsLink.textContent = selectedCategory === "Minors" ? "View MiLB" : "View BBRef";
+    }
+
     // Filter table body rows
     tbody.querySelectorAll("tr").forEach((row) => {
       row.style.display = row.dataset.category === selectedCategory ? "" : "none";
@@ -729,26 +755,6 @@ async function renderStatsSection(container, section, config) {
   });
 
   containerDiv.appendChild(subsection);
-
-  // Stats links - below the table
-  const statsLinks = createElement("div", { className: "stats-links" });
-  section.statsLinks.forEach((link) => {
-    const linkEl = createElement("a", {
-      href: link.url,
-      target: "_blank",
-      rel: "noopener noreferrer",
-      className: "stats-link",
-    });
-    linkEl.appendChild(
-      createElement("span", {
-        className: "stats-link-name",
-        textContent: link.name,
-      }),
-    );
-    linkEl.appendChild(createIconElement("externalLink"));
-    statsLinks.appendChild(linkEl);
-  });
-  containerDiv.appendChild(statsLinks);
 
   // My Training subsection
   if (section.trainingFile) {
