@@ -26,10 +26,15 @@ def main():
     template_path = Path(__file__).parent / "og-template.html"
     output_path = root / "assets" / "images" / "og" / "og-image.png"
     site_json_path = root / "data" / "site.json"
+    themes_json_path = root / "data" / "themes.json"
 
     # Load site data
     with open(site_json_path, "r") as f:
         site_data = json.load(f)
+
+    # Load theme data
+    with open(themes_json_path, "r") as f:
+        themes_data = json.load(f)
 
     profile = site_data["profile"]
     name = profile["name"]
@@ -38,6 +43,10 @@ def main():
     headshot_rel = profile["headshot"].lstrip("/")
     headshot_abs = (root / headshot_rel).resolve()
 
+    # Get theme colors
+    default_theme = themes_data["defaultTheme"]
+    theme = themes_data["themes"][default_theme]
+
     # Read and populate template
     with open(template_path, "r") as f:
         html = f.read()
@@ -45,6 +54,11 @@ def main():
     html = html.replace("{{NAME}}", name)
     html = html.replace("{{BIO}}", bio)
     html = html.replace("{{HEADSHOT}}", f"file://{headshot_abs}")
+    html = html.replace("{{BG_PRIMARY}}", theme["bgPrimary"])
+    html = html.replace("{{ACCENT_PRIMARY}}", theme["accentPrimary"])
+    html = html.replace("{{TEXT_PRIMARY}}", theme["textPrimary"])
+    html = html.replace("{{TEXT_SECONDARY}}", theme["textSecondary"])
+    html = html.replace("{{BORDER_COLOR}}", theme["borderColor"])
 
     # Write temporary HTML file (Playwright needs a file to load fonts properly)
     temp_html = Path(__file__).parent / "og-temp.html"

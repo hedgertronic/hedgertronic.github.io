@@ -1,0 +1,49 @@
+{
+  "defaultTheme": "hopkins",
+  "themes": {
+    "driveline": {
+      "bgPrimary": "#0a0a0a",
+      "bgSecondary": "#111111",
+      "bgCard": "#1a1a1a",
+      "accentPrimary": "#FFA300",
+      "accentSecondary": "#cc8200",
+      "textPrimary": "#ffffff",
+      "textSecondary": "#b0b0b0",
+      "textMuted": "#707070",
+      "borderColor": "#333333"
+    },
+    "hopkins": {
+      "bgPrimary": "#0a0e1a",
+      "bgSecondary": "#0f1320",
+      "bgCard": "#151a2e",
+      "accentPrimary": "#68ace5",
+      "accentSecondary": "#4a90d9",
+      "textPrimary": "#e8f4ff",
+      "textSecondary": "#a0c4e8",
+      "textMuted": "#5a7090",
+      "borderColor": "#2a3f5f"
+    },
+    "mets": {
+      "bgPrimary": "#0a1428",
+      "bgSecondary": "#0f1a30",
+      "bgCard": "#152238",
+      "accentPrimary": "#ff5910",
+      "accentSecondary": "#002d72",
+      "textPrimary": "#e8f0ff",
+      "textSecondary": "#8ba8d9",
+      "textMuted": "#5a7090",
+      "borderColor": "#2a3d5f"
+    },
+    "phillies": {
+      "bgPrimary": "#120a0c",
+      "bgSecondary": "#1a1012",
+      "bgCard": "#241419",
+      "accentPrimary": "#e81828",
+      "accentSecondary": "#002d72",
+      "textPrimary": "#ffeef0",
+      "textSecondary": "#d8a0a8",
+      "textMuted": "#886070",
+      "borderColor": "#4a2a35"
+    }
+  }
+}

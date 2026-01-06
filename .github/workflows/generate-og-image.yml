@@ -5,8 +5,10 @@ on:
   push:
     paths:
       - 'data/site.json'
+      - 'data/themes.json'
       - 'assets/images/headshot/**'
       - 'tools/og-template.html'
+      - 'tools/generate_og_image.py'
     branches:
       - main
 
