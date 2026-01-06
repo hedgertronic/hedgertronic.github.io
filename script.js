@@ -172,7 +172,7 @@ function parseCSV(text) {
    ============================================================================= */
 
 function getThemedHeadshot(config) {
-  const theme = localStorage.getItem("theme") || "driveline";
+  const theme = localStorage.getItem("theme") || "hopkins";
   if (config.profile.headshots && config.profile.headshots[theme]) {
     return config.profile.headshots[theme];
   }
@@ -1775,7 +1775,7 @@ function sortByDate(items) {
 
 function initThemeSwitcher() {
   const buttons = document.querySelectorAll(".theme-btn");
-  const savedTheme = localStorage.getItem("theme") || "driveline";
+  const savedTheme = localStorage.getItem("theme") || "hopkins";
   const themeColors = {
     driveline: "#0a0a0a",
     hopkins: "#0a0e1a",
