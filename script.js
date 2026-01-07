@@ -247,6 +247,7 @@ function renderHero(config) {
       src: getThemedHeadshot(config),
       alt: config.profile.name,
       className: "hero-headshot",
+      fetchpriority: "high",
     }),
   );
   heroIntro.appendChild(

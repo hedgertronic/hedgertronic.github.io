@@ -2533,6 +2533,11 @@ footer {
     padding-bottom: calc(3rem + env(safe-area-inset-bottom));
 }
 
+/* Hide footer until JS populates it to prevent CLS */
+footer:empty {
+    display: none;
+}
+
 .footer-content {
     display: flex;
     justify-content: center;
