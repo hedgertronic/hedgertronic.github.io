@@ -183,6 +183,7 @@ def load_resume():
 
 def generate_pdf(resume: dict, output_path: str, use_custom_fonts: bool = True):
     pdf = ResumePDF(use_custom_fonts=use_custom_fonts)
+    pdf.set_title("Resume - Josh Hejka")
     pdf.add_page()
 
     # Header
