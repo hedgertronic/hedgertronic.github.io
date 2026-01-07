@@ -40,8 +40,8 @@
       "highlights": [
         "Built state-of-the-art pitch quality metrics using gradient-boosted machine learning models [Python]",
         "Built advanced pitch type and location usage recommendation models for major league clients [Python]",
-        "Contributed to creation of arsenal quality models using novel machine learning methodology; team presented research at Sabersem 2024 [Python]",
-        "Contributed to creation of the most advanced pitch design tool in the industry; team presented research at Sabersem 2025 [Python]",
+        "Collaborated with team on arsenal quality models using novel machine learning methodology; research presented at Sabersem 2024 [Python]",
+        "Collaborated with team on most advanced pitch design tool in the industry; research presented at Sabersem 2025 [Python]",
         "Modernized physics engine for IMU-based wearable, improving accuracy and significantly decreasing error rate [C]",
         "Co-host of the Driveline R&D Podcast, discussing player development, baseball analytics, and the latest research in sports science"
       ]
@@ -65,7 +65,7 @@
       "location": "New York, NY",
       "highlights": [
         "Maintained legacy stats portal [PHP]",
-        "Collaborated with team on project design, documentation, and implementation of future stats portal [React]",
+        "Collaborated with team on project design of future stats portal [React]",
         "Led project design, implementation, and documentation of mobile app for pitchers [React Native]",
         "Led project design, implementation, and documentation of pitch usage optimization tool using novel methodology [Python]"
       ]
@@ -77,7 +77,7 @@
       "location": "Forest Hill, MD",
       "highlights": [
         "Developed web applications and forms for trauma centers [JS]",
-        "Developed full-stack web application for nutritionist client [Flask, HTML, CSS, JS]",
+        "Developed full-stack web application for nutritionist client [Flask, JS]",
         "Created automation programs for internal development [Python]",
         "Documented processes, SOPs, and code"
       ]
