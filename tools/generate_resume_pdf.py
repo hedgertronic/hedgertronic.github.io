@@ -124,7 +124,7 @@ class ResumePDF(FPDF):
                 old_l_margin = self.l_margin
                 self.set_left_margin(27)
                 self.set_text_color(*DARK_TEXT)
-                self.multi_cell(0, 4.5, highlight)
+                self.multi_cell(0, 4.5, highlight, align="L")
                 self.set_left_margin(old_l_margin)
         self.ln(5)
 
@@ -137,7 +137,7 @@ class ResumePDF(FPDF):
         # Description
         self.set_font(self.font_family, "", 9)
         self.set_text_color(*MEDIUM_TEXT)
-        self.multi_cell(0, 4.5, description)
+        self.multi_cell(0, 4.5, description, align="L")
 
         # Technologies as inline tags
         if technologies:
@@ -145,7 +145,7 @@ class ResumePDF(FPDF):
             self.set_font(self.font_family, "I", 8)
             self.set_text_color(*LIGHT_TEXT)
             tech_text = " / ".join(technologies)
-            self.multi_cell(0, 4, tech_text)
+            self.multi_cell(0, 4, tech_text, align="L")
         self.ln(4)
 
     def skills_section(self, skills: list):
