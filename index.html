@@ -50,7 +50,7 @@
             document.documentElement.style.backgroundColor = color;
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute("content", color);
-            // Preload headshot image for faster LCP
+            // Preload and update headshot image for faster LCP
             var headshot = themeHeadshots[theme] || themeHeadshots.hopkins;
             var link = document.createElement("link");
             link.rel = "preload";
@@ -58,6 +58,11 @@
             link.href = headshot;
             link.fetchPriority = "high";
             document.head.appendChild(link);
+            // Update hero image src if it exists in HTML
+            var heroImg = document.getElementById("hero-headshot-img");
+            if (heroImg && heroImg.src !== headshot) {
+                heroImg.src = headshot;
+            }
         })();
     </script>
 </head>
@@ -66,7 +71,16 @@
     <div class="grid-overlay"></div>
     <header></header>
     <main>
-        <section id="about"></section>
+        <section id="about">
+            <!-- Hero image in HTML for faster LCP - JS will move/enhance this -->
+            <img id="hero-headshot-img"
+                 src="/assets/images/headshot/headshot-dl-sm.jpg"
+                 alt="Josh Hejka"
+                 class="hero-headshot"
+                 width="100"
+                 height="100"
+                 fetchpriority="high">
+        </section>
     </main>
     <footer></footer>
     <script defer src="/script.js"></script>

@@ -242,16 +242,23 @@ function renderHero(config) {
   const container = createElement("div", { className: "container" });
 
   const heroIntro = createElement("div", { className: "hero-intro" });
-  heroIntro.appendChild(
-    createElement("img", {
+
+  // Reuse existing hero image from HTML for faster LCP, or create new one
+  let heroImg = document.getElementById("hero-headshot-img");
+  if (heroImg) {
+    heroImg.src = getThemedHeadshot(config);
+    heroImg.alt = config.profile.name;
+  } else {
+    heroImg = createElement("img", {
       src: getThemedHeadshot(config),
       alt: config.profile.name,
       className: "hero-headshot",
       fetchpriority: "high",
       width: 100,
       height: 100,
-    }),
-  );
+    });
+  }
+  heroIntro.appendChild(heroImg);
   heroIntro.appendChild(
     createElement("h1", {
       className: "hero-name",
@@ -799,6 +806,7 @@ async function renderStatsSection(container, section, config) {
               const img = createElement("img", {
                 src: item.poster,
                 alt: "Training video thumbnail",
+                loading: "lazy",
               });
               imgWrapper.appendChild(img);
               card.appendChild(imgWrapper);
@@ -1045,6 +1053,7 @@ async function renderPersonalSection(container, section, config) {
         src: data.reading.book.cover,
         alt: data.reading.book.title,
         className: "personal-cover",
+        loading: "lazy",
       });
       readingCard.appendChild(coverImg);
 
@@ -1089,6 +1098,7 @@ async function renderPersonalSection(container, section, config) {
         src: data.listening.album.cover,
         alt: data.listening.album.title,
         className: "personal-cover",
+        loading: "lazy",
       });
       listeningCard.appendChild(coverImg);
 
@@ -1880,19 +1890,28 @@ function initNavigation() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-links a[data-section]");
 
+  // Cache layout values to avoid forced reflows on scroll
+  let headerThreshold = 400;
+  let sectionPositions = [];
+
+  function cacheLayoutValues() {
+    const firstContentSection = document.querySelector("section.content-section");
+    if (firstContentSection) {
+      headerThreshold = firstContentSection.offsetTop - 100;
+    }
+
+    sectionPositions = Array.from(sections).map((section) => ({
+      id: section.getAttribute("id"),
+      top: section.offsetTop,
+      bottom: section.offsetTop + section.offsetHeight,
+    }));
+  }
+
   function updateOnScroll() {
     const scrollPos = window.scrollY;
 
     if (header) {
-      const firstContentSection = document.querySelector(
-        "section.content-section",
-      );
-      let threshold = 400;
-      if (firstContentSection) {
-        threshold = firstContentSection.offsetTop - 100;
-      }
-
-      if (scrollPos > threshold) {
+      if (scrollPos > headerThreshold) {
         header.classList.add("visible");
       } else {
         header.classList.remove("visible");
@@ -1900,25 +1919,32 @@ function initNavigation() {
     }
 
     const navOffset = scrollPos + 150;
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute("id");
-
-      if (navOffset >= top && navOffset < top + height) {
+    for (const section of sectionPositions) {
+      if (navOffset >= section.top && navOffset < section.bottom) {
         navLinks.forEach((link) => {
           link.classList.remove("active");
-          if (link.getAttribute("data-section") === id) {
+          if (link.getAttribute("data-section") === section.id) {
             link.classList.add("active");
           }
         });
+        break;
       }
-    });
+    }
   }
 
+  // Cache values after layout is stable, then on resize
+  window.addEventListener("load", () => {
+    cacheLayoutValues();
+    updateOnScroll();
+  });
+  window.addEventListener("resize", cacheLayoutValues, { passive: true });
   window.addEventListener("scroll", updateOnScroll, { passive: true });
-  window.addEventListener("load", updateOnScroll);
-  updateOnScroll();
+
+  // Initial cache and update
+  requestAnimationFrame(() => {
+    cacheLayoutValues();
+    updateOnScroll();
+  });
 }
 
 /* =============================================================================
