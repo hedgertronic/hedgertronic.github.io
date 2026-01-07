@@ -38,8 +38,8 @@
       "dates": "Nov 2022 - Present",
       "location": "Seattle, WA; Tampa, FL",
       "highlights": [
-        "Created state-of-the-art pitch quality metrics using gradient-boosted machine learning models [Python]",
-        "Created advanced pitch type and location usage recommendation models for major league clients [Python]",
+        "Built state-of-the-art pitch quality metrics using gradient-boosted machine learning models [Python]",
+        "Built advanced pitch type and location usage recommendation models for major league clients [Python]",
         "Contributed to creation of arsenal quality models using novel machine learning methodology; team presented research at Sabersem 2024 [Python]",
         "Contributed to creation of the most advanced pitch design tool in the industry; team presented research at Sabersem 2025 [Python]",
         "Modernized physics engine for IMU-based wearable, improving accuracy and significantly decreasing error rate [C]",
@@ -53,7 +53,6 @@
       "location": "Various: NY, NJ, PA, FL",
       "highlights": [
         "Built personal website to consolidate stats, videos, and information for MLB scouts and front offices, leading to playing contract",
-        "Career 3.58 ERA and 87 xERA- through levels up to Triple-A",
         "Utilized wearables such as PULSE to optimize throwing workload and Oura/Whoop to optimize sleep and performance",
         "Worked closely with pitching, analytics, and sports science departments to improve biomechanics, pitch arsenal, and pitch selection",
         "Presented plans for organizational improvement in systems, analytics, pitching evaluation, player development, and rehab"
