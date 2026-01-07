@@ -339,7 +339,8 @@ function renderHero(config) {
 async function renderSections(config) {
   const main = document.querySelector("main");
 
-  for (const [index, section] of config.sections.entries()) {
+  // Start all section renders in parallel for faster loading
+  const sectionPromises = config.sections.map(async (section, index) => {
     const sectionEl = createElement("section", {
       id: section.id,
       className: "content-section" + (index % 2 === 0 ? " alt-bg" : ""),
@@ -353,8 +354,12 @@ async function renderSections(config) {
       await renderContentSection(sectionEl, section, config);
     }
 
-    main.appendChild(sectionEl);
-  }
+    return sectionEl;
+  });
+
+  // Wait for all sections to complete, then append in order
+  const sections = await Promise.all(sectionPromises);
+  sections.forEach((sectionEl) => main.appendChild(sectionEl));
 }
 
 async function renderStatsSection(container, section, config) {
@@ -933,7 +938,8 @@ async function renderContentSection(container, section, config) {
     containerDiv.appendChild(topicsContainer);
   }
 
-  for (const subsection of section.subsections) {
+  // Build DOM structure and start all fetches in parallel
+  const subsectionFetches = section.subsections.map((subsection) => {
     const subsectionDiv = createElement("div", { className: "subsection" });
 
     const subsectionHeader = createElement("div", {
@@ -961,21 +967,25 @@ async function renderContentSection(container, section, config) {
     subsectionDiv.appendChild(contentGrid);
     containerDiv.appendChild(subsectionDiv);
 
-    try {
-      const dataResponse = await fetch("/" + subsection.dataFile);
-      const items = await dataResponse.json();
+    // Start fetch immediately, return promise with context
+    return fetch("/" + subsection.dataFile)
+      .then((response) => response.json())
+      .then((items) => {
+        if (subsection.displayType === "projects") {
+          displayProjects(contentGrid, items);
+        } else if (subsection.displayType === "tweets") {
+          displayTweets(contentGrid, items, subsection.handle);
+        } else {
+          displayContent(contentGrid, items);
+        }
+      })
+      .catch(() => {
+        displayError(contentGrid);
+      });
+  });
 
-      if (subsection.displayType === "projects") {
-        displayProjects(contentGrid, items);
-      } else if (subsection.displayType === "tweets") {
-        displayTweets(contentGrid, items, subsection.handle);
-      } else {
-        displayContent(contentGrid, items);
-      }
-    } catch (error) {
-      displayError(contentGrid);
-    }
-  }
+  // Wait for all subsection data to load
+  await Promise.all(subsectionFetches);
 
   container.appendChild(containerDiv);
 }
