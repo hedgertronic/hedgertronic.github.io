@@ -5,7 +5,8 @@
     "url": "https://ballnine.com/2021/03/23/dont-stress-the-stress/",
     "source": "BallNine",
     "thumbnail": "https://ballnine.com/wp-content/uploads/2021/03/TheSyndicate_Stress_Feature.jpg",
-    "authors": ["Josh Hejka"]
+    "authors": ["Josh Hejka"],
+    "pinned": true
   },
   {
     "title": "Returning to Action in a New World",

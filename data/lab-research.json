@@ -13,7 +13,8 @@
     "url": "https://www.youtube.com/watch?v=HeBvjYrU_vk",
     "source": "Sabersem 2025",
     "thumbnail": "https://img.youtube.com/vi/HeBvjYrU_vk/maxresdefault.jpg",
-    "authors": ["Jack Lambert", "Marek Ramillo", "Josh Hejka"]
+    "authors": ["Jack Lambert", "Marek Ramillo", "Josh Hejka"],
+    "pinned": true
   },
   {
     "title": "FlexPro Grip's 2025 Wake Forest PD Seminar Player Panel",
