@@ -2056,27 +2056,27 @@ nav.container {
     flex-shrink: 0;
 }
 
-/* Ensure badges in tweet cards have correct section color */
+/* Ensure badges in tweet cards have correct colors */
 .tweet-card .new-badge {
-    color: var(--section-writing);
-    background: color-mix(in srgb, var(--section-writing) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-writing) 40%, transparent);
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 35%, transparent);
 }
 
 .tweet-card .pinned-badge {
-    color: var(--accent-warm);
-    background: color-mix(in srgb, var(--accent-warm) 15%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--accent-warm) 35%, transparent);
+    color: var(--section-writing);
+    background: color-mix(in srgb, var(--section-writing) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 35%, transparent);
 }
 
 .tweet-card:hover .new-badge {
-    background: color-mix(in srgb, var(--section-writing) 30%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-writing) 60%, transparent);
+    background: color-mix(in srgb, var(--text-primary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 50%, transparent);
 }
 
 .tweet-card:hover .pinned-badge {
-    background: color-mix(in srgb, var(--accent-warm) 25%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--accent-warm) 50%, transparent);
+    background: color-mix(in srgb, var(--section-writing) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 50%, transparent);
 }
 
 .training-card .card-badge-row {
@@ -2101,15 +2101,15 @@ nav.container {
 }
 
 .new-badge {
-    color: var(--section-color, var(--accent-primary));
-    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 40%, transparent);
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 35%, transparent);
 }
 
 .pinned-badge {
-    color: var(--accent-warm);
-    background: color-mix(in srgb, var(--accent-warm) 15%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--accent-warm) 35%, transparent);
+    color: var(--section-color, var(--accent-primary));
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 35%, transparent);
 }
 
 .gist-badge {
@@ -2121,15 +2121,15 @@ nav.container {
 .content-card:hover .new-badge,
 .tweet-card:hover .new-badge,
 .training-card:hover .new-badge {
-    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 30%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 60%, transparent);
+    background: color-mix(in srgb, var(--text-primary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 50%, transparent);
 }
 
 .content-card:hover .pinned-badge,
 .tweet-card:hover .pinned-badge,
 .training-card:hover .pinned-badge {
-    background: color-mix(in srgb, var(--accent-warm) 25%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--accent-warm) 50%, transparent);
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 50%, transparent);
 }
 
 .content-card:hover .gist-badge,
@@ -2240,16 +2240,16 @@ nav.container {
     height: 14px;
 }
 
-/* Project card badge colors use lab section color */
-.project-card .new-badge {
+/* Project card badge colors - pinned uses lab section color */
+.project-card .pinned-badge {
     color: var(--section-lab);
-    background: color-mix(in srgb, var(--section-lab) 20%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-lab) 40%, transparent);
+    background: color-mix(in srgb, var(--section-lab) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-lab) 35%, transparent);
 }
 
-.project-card:hover .new-badge {
-    background: color-mix(in srgb, var(--section-lab) 30%, var(--bg-primary));
-    border-color: color-mix(in srgb, var(--section-lab) 60%, transparent);
+.project-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--section-lab) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-lab) 50%, transparent);
 }
 
 .tweet-stats {
