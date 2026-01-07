@@ -2303,7 +2303,7 @@ nav.container {
 
 .content-card .thumbnail {
     width: 100%;
-    height: 160px;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
