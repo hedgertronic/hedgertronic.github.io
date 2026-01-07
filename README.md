@@ -24,11 +24,11 @@ Additionally, the website includes a resume page along with a downloadable PDF v
 - **Responsive design**: Full-screen hero page with five subsections. Hero section adapts to screen size and orientation for consistent experience across devices.
 - **JSON content approach**: Manages website content through JSON files, allowing for easy updates and version control.
 - **Theme switcher**: Four color schemes based on a "team colors" concept. Can choose Driveline, Hopkins, Mets, or Phillies to update website accent colors and my photo headshot.
-- **Automated workflows**: Resume PDF automatically generates from resume webpage content. Open Graph image automatically generates from hero section content. Career stats automatically processed from Baseball Reference CSV data.
+- **Automated workflows**: Resume webpage and PDF automatically generates from JSON file. Open Graph image automatically generates from hero section content and theme. Career stats automatically processed from Baseball Reference data.
 
 ## Future Plans
 
-Automate data fetching to reduce manual updates:
+Automatation of data fetching to reduce manual updates:
 
 - **MiLB**: Pull career and season stats.
 - **Twitter/X**: Sync likes, retweets, and bookmarks for content curation.
