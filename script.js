@@ -248,6 +248,8 @@ function renderHero(config) {
       alt: config.profile.name,
       className: "hero-headshot",
       fetchpriority: "high",
+      width: 100,
+      height: 100,
     }),
   );
   heroIntro.appendChild(
