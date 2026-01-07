@@ -1752,7 +1752,8 @@ function initCarouselScrollDetection(carousel) {
     wrapper.classList.toggle("has-overflow-right", hasOverflowRight);
   }
 
-  requestAnimationFrame(updateScrollIndicators);
+  // Defer initial layout read until after paint to avoid forced reflow
+  setTimeout(updateScrollIndicators, 0);
   carousel.addEventListener("scroll", updateScrollIndicators, { passive: true });
   window.addEventListener("resize", updateScrollIndicators, { passive: true });
 }
@@ -1856,11 +1857,9 @@ function initScrollReveal() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("revealed");
-        } else {
-          const rect = entry.target.getBoundingClientRect();
-          if (rect.top > 0) {
-            entry.target.classList.remove("revealed");
-          }
+        } else if (entry.boundingClientRect.top > 0) {
+          // Use entry's boundingClientRect to avoid forced reflow
+          entry.target.classList.remove("revealed");
         }
       });
     },
@@ -1940,11 +1939,11 @@ function initNavigation() {
   window.addEventListener("resize", cacheLayoutValues, { passive: true });
   window.addEventListener("scroll", updateOnScroll, { passive: true });
 
-  // Initial cache and update
-  requestAnimationFrame(() => {
+  // Defer initial cache until after paint to avoid forced reflow during load
+  setTimeout(() => {
     cacheLayoutValues();
     updateOnScroll();
-  });
+  }, 0);
 }
 
 /* =============================================================================
