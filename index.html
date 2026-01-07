@@ -38,12 +38,26 @@
         // Apply theme immediately to prevent Safari toolbar flash
         (function() {
             var themeColors = { driveline: "#0a0a0a", hopkins: "#0a0e1a", mets: "#0a1428", phillies: "#120a0c" };
+            var themeHeadshots = {
+                driveline: "/assets/images/headshot/headshot-dl-sm.jpg",
+                hopkins: "/assets/images/headshot/headshot-dl-sm.jpg",
+                mets: "/assets/images/headshot/headshot-mets-sm.jpg",
+                phillies: "/assets/images/headshot/headshot-phillies-sm.jpg"
+            };
             var theme = localStorage.getItem("theme") || "hopkins";
             var color = themeColors[theme] || themeColors.hopkins;
             document.documentElement.setAttribute("data-theme", theme);
             document.documentElement.style.backgroundColor = color;
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute("content", color);
+            // Preload headshot image for faster LCP
+            var headshot = themeHeadshots[theme] || themeHeadshots.hopkins;
+            var link = document.createElement("link");
+            link.rel = "preload";
+            link.as = "image";
+            link.href = headshot;
+            link.fetchPriority = "high";
+            document.head.appendChild(link);
         })();
     </script>
 </head>
