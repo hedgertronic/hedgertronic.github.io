@@ -219,7 +219,7 @@
 }
 
 html, body {
-    background-color: transparent;
+    /* Background set via inline critical CSS and JS for instant theme application */
 }
 
 html {
@@ -279,6 +279,15 @@ body {
     padding: 0 2rem;
     position: relative;
     z-index: 1;
+}
+
+/* Hide hero container until JS builds all content (prevents layout shift) */
+.hero > .container {
+    visibility: hidden;
+}
+
+.hero > .container.rendered {
+    visibility: visible;
 }
 
 header {
@@ -451,11 +460,6 @@ nav.container {
 .hero-intro {
     text-align: center;
     margin-bottom: 2.5rem;
-    visibility: hidden; /* Hidden until JS renders full content */
-}
-
-.hero-intro.rendered {
-    visibility: visible;
 }
 
 @keyframes fadeInUp {
@@ -595,6 +599,7 @@ nav.container {
 .hero-intro .social-links {
     justify-content: center;
     flex-wrap: wrap;
+    min-height: 38px; /* Reserve space before JS populates links */
     animation: fadeInUp 0.5s ease-out 0.4s both;
 }
 
@@ -2744,6 +2749,7 @@ footer:empty {
 
     .hero-intro .social-links {
         animation-delay: 0.2s;
+        min-height: clamp(30px, calc(36px - (700px - 100svh) * 0.04), 36px);
     }
 
     .hero-intro .social-links a {

@@ -270,20 +270,28 @@ function renderHero(config) {
     });
     heroIntro.appendChild(heroImg);
   }
-  heroIntro.appendChild(
-    createElement("h1", {
-      className: "hero-name",
-      textContent: config.profile.name,
-    }),
-  );
-  heroIntro.appendChild(
-    createElement("p", {
-      className: "hero-description",
-      textContent: config.profile.bio,
-    }),
-  );
 
-  const socialLinks = createElement("div", { className: "social-links" });
+  // Reuse existing h1/p from HTML, or create if missing
+  let heroName = heroIntro.querySelector(".hero-name");
+  if (!heroName) {
+    heroName = createElement("h1", { className: "hero-name" });
+    heroIntro.appendChild(heroName);
+  }
+  heroName.textContent = config.profile.name;
+
+  let heroDescription = heroIntro.querySelector(".hero-description");
+  if (!heroDescription) {
+    heroDescription = createElement("p", { className: "hero-description" });
+    heroIntro.appendChild(heroDescription);
+  }
+  heroDescription.textContent = config.profile.bio;
+
+  // Reuse existing social-links container from HTML, or create if missing
+  let socialLinks = heroIntro.querySelector(".social-links");
+  if (!socialLinks) {
+    socialLinks = createElement("div", { className: "social-links" });
+    heroIntro.appendChild(socialLinks);
+  }
   config.socials.forEach((social) => {
     const isExternal = social.url.startsWith("http");
     const linkAttrs = { href: social.url };
@@ -302,12 +310,10 @@ function renderHero(config) {
     }
     socialLinks.appendChild(link);
   });
-  heroIntro.appendChild(socialLinks);
+
   if (!heroIntroExisted) {
     container.appendChild(heroIntro);
   }
-  // Reveal hero-intro now that content is fully rendered
-  heroIntro.classList.add("rendered");
 
   const heroNav = createElement("nav", { className: "hero-nav" });
   config.sections.forEach((section) => {
@@ -352,6 +358,9 @@ function renderHero(config) {
     heroNav.appendChild(navLink);
   });
   container.appendChild(heroNav);
+
+  // Reveal container now that all content is built
+  container.classList.add("rendered");
 }
 
 /* =============================================================================
