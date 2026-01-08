@@ -451,6 +451,11 @@ nav.container {
 .hero-intro {
     text-align: center;
     margin-bottom: 2.5rem;
+    visibility: hidden; /* Hidden until JS renders full content */
+}
+
+.hero-intro.rendered {
+    visibility: visible;
 }
 
 @keyframes fadeInUp {

@@ -237,11 +237,22 @@ function renderHero(config) {
   const heroSection = document.getElementById("about");
   if (!heroSection) return;
 
-  heroSection.className = "hero";
+  // Reuse existing structure from HTML, or create if missing
+  let container = heroSection.querySelector(".container");
+  if (!container) {
+    container = createElement("div", { className: "container" });
+    heroSection.appendChild(container);
+  }
 
-  const container = createElement("div", { className: "container" });
+  let heroIntro = container.querySelector(".hero-intro");
+  const heroIntroExisted = !!heroIntro;
+  if (!heroIntro) {
+    heroIntro = createElement("div", { className: "hero-intro" });
+  }
 
-  const heroIntro = createElement("div", { className: "hero-intro" });
+  // Remove inline script if present (was used to set headshot src)
+  const inlineScript = heroIntro.querySelector("script");
+  if (inlineScript) inlineScript.remove();
 
   // Reuse existing hero image from HTML for faster LCP, or create new one
   let heroImg = document.getElementById("hero-headshot-img");
@@ -257,8 +268,8 @@ function renderHero(config) {
       width: 100,
       height: 100,
     });
+    heroIntro.appendChild(heroImg);
   }
-  heroIntro.appendChild(heroImg);
   heroIntro.appendChild(
     createElement("h1", {
       className: "hero-name",
@@ -292,7 +303,11 @@ function renderHero(config) {
     socialLinks.appendChild(link);
   });
   heroIntro.appendChild(socialLinks);
-  container.appendChild(heroIntro);
+  if (!heroIntroExisted) {
+    container.appendChild(heroIntro);
+  }
+  // Reveal hero-intro now that content is fully rendered
+  heroIntro.classList.add("rendered");
 
   const heroNav = createElement("nav", { className: "hero-nav" });
   config.sections.forEach((section) => {
@@ -337,9 +352,6 @@ function renderHero(config) {
     heroNav.appendChild(navLink);
   });
   container.appendChild(heroNav);
-
-  heroSection.textContent = "";
-  heroSection.appendChild(container);
 }
 
 /* =============================================================================
