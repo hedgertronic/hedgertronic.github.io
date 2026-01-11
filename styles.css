@@ -544,14 +544,14 @@ nav.container {
     }
 }
 
-.hero-headshot.animation-ready {
+.hero > .container.rendered .hero-headshot.animation-ready {
     animation: none;
     /* Ensure clean base state after scaleIn completes */
     transform: scale(1);
     opacity: 1;
 }
 
-.hero-headshot.animation-ready.clicked {
+.hero > .container.rendered .hero-headshot.animation-ready.clicked {
     animation: headshotClick 0.3s ease-out;
     /* Lock hover state during animation to prevent stutter if mouse moves away */
     transform: scale(1.05);
@@ -562,7 +562,7 @@ nav.container {
         0 0 30px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
 
-.hero-headshot.animation-ready.clicked.transitioning-out {
+.hero > .container.rendered .hero-headshot.animation-ready.clicked.transitioning-out {
     animation: none;
     /* Keep hover styles but allow transition back to base state */
 }
