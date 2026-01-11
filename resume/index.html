@@ -71,7 +71,7 @@
         [data-theme="phillies"], [data-theme="phillies"] .page-background { background-color: #120a0c; }
     </style>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/resume/styles.css">
+    <link rel="stylesheet" href="/css/resume.css">
     <script src="/assets/vendor/html2pdf.bundle.min.js"></script>
 </head>
 <body class="resume-page" style="background-color: #0a0e1a;">
@@ -85,7 +85,17 @@
         <nav class="container">
             <a href="/" class="logo">
                 <span class="back-arrow">&larr;</span>
-                <img src="/assets/images/headshot/headshot.jpg" alt="Josh Hejka" class="logo-headshot">
+                <img id="logo-headshot" src="/assets/images/headshot/headshot-dl-sm.jpg" alt="Josh Hejka" class="logo-headshot">
+                <script>
+                    (function() {
+                        var cfg = window.__themeConfig;
+                        var theme = window.__currentTheme || "hopkins";
+                        var img = document.getElementById("logo-headshot");
+                        if (img && cfg && cfg.headshots[theme]) {
+                            img.src = cfg.headshots[theme];
+                        }
+                    })();
+                </script>
                 <span class="logo-text">Josh Hejka</span>
             </a>
             <a href="/assets/documents/resume.pdf" target="_blank" class="download-btn" id="download-pdf">
