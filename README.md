@@ -11,7 +11,7 @@ The home page features five subsections:
 
 Additionally, the website includes a resume page along with a downloadable PDF version that is automatically generated to ensure information consistency.
 
-Designed to be responsive and lightweight on the front-end, though admittedly a bit over-engineered on the back-end with JS builds and various testing mechanisms.
+Designed to be lightweight and responsive on the front-end, though admittedly a bit over-engineered on the back-end with JS builds and various testing mechanisms.
 
 ## Structure
 
