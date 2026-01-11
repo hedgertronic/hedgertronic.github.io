@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:js": "esbuild src/main.js --bundle --minify --sourcemap --outfile=script.js && esbuild src/resume.js --bundle --minify --sourcemap --outfile=resume/script.js",
-    "build:css": "cat css/base.css css/layout.css css/components.css css/sections.css > styles.css",
+    "build:css": "cat css/base.css css/components.css css/sections.css css/layout.css > styles.css",
     "build": "npm run build:js && npm run build:css",
     "dev": "esbuild src/main.js --bundle --sourcemap --outfile=script.js --watch & esbuild src/resume.js --bundle --sourcemap --outfile=resume/script.js --watch",
     "test": "vitest run",

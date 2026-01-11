@@ -372,6 +372,10 @@ export function createContentCard(item) {
     thumb.alt = item.title;
     thumb.loading = "lazy";
     thumb.referrerPolicy = "no-referrer";
+    thumb.onerror = () => {
+      thumb.style.display = "none";
+      thumbWrapper.classList.add("thumbnail-error");
+    };
     thumbWrapper.appendChild(thumb);
 
     if (hasBadges) {

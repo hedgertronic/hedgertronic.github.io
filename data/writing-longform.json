@@ -9,6 +9,15 @@
     "pinned": true
   },
   {
+    "title": "[TEST] Broken Image Example",
+    "date": "2025-01-01",
+    "url": "#",
+    "source": "Test",
+    "thumbnail": "https://example.com/this-image-does-not-exist.jpg",
+    "authors": ["Test Author"],
+    "pinned": true
+  },
+  {
     "title": "Returning to Action in a New World",
     "date": "2021-04-19",
     "url": "https://metsmerizedonline.com/hanging-with-hejka-returning-to-action-in-a-new-world/",

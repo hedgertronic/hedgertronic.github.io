@@ -433,6 +433,10 @@ export async function renderStatsSection(container, section, config) {
                 alt: "Training video thumbnail",
                 loading: "lazy",
               });
+              img.onerror = () => {
+                imgWrapper.remove();
+                card.classList.add("no-poster");
+              };
               imgWrapper.appendChild(img);
               card.appendChild(imgWrapper);
 
