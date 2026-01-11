@@ -5,11 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0a0e1a">
     <script>
+        // Single source of truth for theme configuration
+        window.__themeConfig = {
+            colors: { driveline: "#0a0a0a", hopkins: "#0a0e1a", mets: "#0a1428", phillies: "#120a0c" },
+            headshots: {
+                driveline: "/assets/images/headshot/headshot-dl-sm.jpg",
+                hopkins: "/assets/images/headshot/headshot-dl-sm.jpg",
+                mets: "/assets/images/headshot/headshot-mets-sm.jpg",
+                phillies: "/assets/images/headshot/headshot-phillies-sm.jpg"
+            }
+        };
         // Apply theme background IMMEDIATELY - before any rendering
         (function() {
-            var themeColors = { driveline: "#0a0a0a", hopkins: "#0a0e1a", mets: "#0a1428", phillies: "#120a0c" };
+            var cfg = window.__themeConfig;
             var theme = localStorage.getItem("theme") || "hopkins";
-            var color = themeColors[theme] || themeColors.hopkins;
+            var color = cfg.colors[theme] || cfg.colors.hopkins;
+            window.__currentTheme = theme;
+            window.__currentColor = color;
             document.documentElement.setAttribute("data-theme", theme);
             document.documentElement.style.backgroundColor = color;
             var meta = document.querySelector('meta[name="theme-color"]');
@@ -60,33 +72,25 @@
     </style>
     <link rel="stylesheet" href="/styles.css">
     <script>
-        // Preload theme-specific headshot for faster LCP
+        // Preload theme-specific headshot for faster LCP (uses config from above)
         (function() {
-            var themeHeadshots = {
-                driveline: "/assets/images/headshot/headshot-dl-sm.jpg",
-                hopkins: "/assets/images/headshot/headshot-dl-sm.jpg",
-                mets: "/assets/images/headshot/headshot-mets-sm.jpg",
-                phillies: "/assets/images/headshot/headshot-phillies-sm.jpg"
-            };
-            var theme = localStorage.getItem("theme") || "hopkins";
-            var headshot = themeHeadshots[theme] || themeHeadshots.hopkins;
+            var cfg = window.__themeConfig;
+            var theme = window.__currentTheme || "hopkins";
+            var headshot = cfg.headshots[theme] || cfg.headshots.hopkins;
             var link = document.createElement("link");
             link.rel = "preload";
             link.as = "image";
             link.href = headshot;
             link.fetchPriority = "high";
             document.head.appendChild(link);
-            // Store headshot path for use after body loads
             window.__themeHeadshot = headshot;
         })();
     </script>
 </head>
 <body id="top" style="background-color: #0a0e1a;">
     <script>
-        // Immediately apply theme background to body
-        var t = localStorage.getItem("theme") || "hopkins";
-        var c = {driveline:"#0a0a0a",hopkins:"#0a0e1a",mets:"#0a1428",phillies:"#120a0c"};
-        document.body.style.backgroundColor = c[t] || c.hopkins;
+        // Immediately apply theme background to body (uses cached value from head)
+        document.body.style.backgroundColor = window.__currentColor || "#0a0e1a";
     </script>
     <div class="page-background"></div>
     <div class="grid-overlay"></div>
@@ -114,6 +118,8 @@
                     <!-- Social links populated by JS -->
                     <div class="social-links"></div>
                 </div>
+                <!-- Hero nav placeholder - reserves space to prevent layout shift -->
+                <nav class="hero-nav"></nav>
             </div>
         </section>
     </main>

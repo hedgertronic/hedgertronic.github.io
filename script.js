@@ -315,7 +315,13 @@ function renderHero(config) {
     container.appendChild(heroIntro);
   }
 
-  const heroNav = createElement("nav", { className: "hero-nav" });
+  // Reuse existing hero-nav from HTML, or create if missing
+  let heroNav = container.querySelector(".hero-nav");
+  if (!heroNav) {
+    heroNav = createElement("nav", { className: "hero-nav" });
+    container.appendChild(heroNav);
+  }
+
   config.sections.forEach((section) => {
     const navLink = createElement("a", {
       href: `#${section.id}`,
@@ -357,9 +363,8 @@ function renderHero(config) {
 
     heroNav.appendChild(navLink);
   });
-  container.appendChild(heroNav);
 
-  // Reveal container now that all content is built
+  // Trigger animations now that JS has enhanced the hero
   container.classList.add("rendered");
 }
 
@@ -1827,7 +1832,8 @@ function sortByDate(items) {
 function initThemeSwitcher() {
   const buttons = document.querySelectorAll(".theme-btn");
   const savedTheme = localStorage.getItem("theme") || "hopkins";
-  const themeColors = {
+  // Use global config set in HTML head, with fallback
+  const themeColors = window.__themeConfig?.colors || {
     driveline: "#0a0a0a",
     hopkins: "#0a0e1a",
     mets: "#0a1428",
@@ -1914,6 +1920,9 @@ function initNavigation() {
   let headerThreshold = 400;
   let sectionPositions = [];
 
+  // Expose recache function globally so it can be called after dynamic content loads
+  window.__recacheLayoutValues = cacheLayoutValues;
+
   function cacheLayoutValues() {
     const firstContentSection = document.querySelector("section.content-section");
     if (firstContentSection) {
@@ -1983,12 +1992,23 @@ async function initSite() {
     initThemeSwitcher();
     initNavigation();
     initScrollReveal();
+
+    // Recache layout values now that all dynamic content is loaded
+    if (window.__recacheLayoutValues) {
+      window.__recacheLayoutValues();
+    }
   } catch (error) {
     console.error("Error initializing site:", error);
   }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Ensure page starts at top on reload (fixes mobile scroll restoration)
+  if (history.scrollRestoration) {
+    history.scrollRestoration = "manual";
+  }
+  window.scrollTo(0, 0);
+
   if (!document.body.classList.contains("resume-page")) {
     await initSite();
 
