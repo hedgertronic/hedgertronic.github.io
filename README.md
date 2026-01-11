@@ -11,12 +11,33 @@ The home page features five subsections:
 
 Additionally, the website includes a resume page along with a downloadable PDF version that is automatically generated to ensure information consistency.
 
+Designed to be responsive and lightweight on the front-end, though admittedly a bit over-engineered on the back-end with JS builds and various testing mechanisms.
+
 ## Structure
 
 ```
 /assets      Fonts, images, documents
+/css         Stylesheets
 /data        JSON content to define each website section
+/src         JavaScript modules (bundled with esbuild)
+/tests       Unit and E2E tests
 /tools       Python scripts for automation
+```
+
+## Development
+
+**Build**
+```bash
+npm install
+npm run build      # Bundle JS and CSS
+npm run dev        # Watch mode for development
+```
+
+**Test**
+```bash
+npm test           # JS unit tests (Vitest)
+npm run test:e2e   # E2E browser tests (Playwright)
+uv run pytest      # Python unit tests
 ```
 
 ## Features
