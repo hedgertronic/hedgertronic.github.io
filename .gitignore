@@ -60,6 +60,3 @@ assets/images/og/og-image.png
 playwright-report/
 test-results/
 .pytest_cache/
-
-# uv lock file
-uv.lock
