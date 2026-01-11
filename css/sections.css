@@ -1,0 +1,856 @@
+/* =============================================================================
+   6. CONTENT SECTIONS
+   ============================================================================= */
+
+.content-section {
+    padding: 6rem 0;
+    scroll-margin-top: 20px;
+}
+
+.content-section > .container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.content-section.revealed > .container {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-section.alt-bg {
+    background: var(--bg-secondary);
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--accent-primary);
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-header:hover .section-icon {
+    transform: scale(1.05);
+    border-color: currentColor;
+    box-shadow: 0 0 20px color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.section-icon.field-icon { color: var(--section-field); }
+.section-icon.lab-icon { color: var(--section-lab); }
+.section-icon.media-icon { color: var(--section-media); }
+.section-icon.writing-icon { color: var(--section-writing); }
+.section-icon.offtheClock-icon { color: var(--section-offtheClock); }
+
+.section-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+}
+
+.section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.section-intro {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.section-description {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 700px;
+    margin-bottom: 2.5rem;
+}
+
+.section-topics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+}
+
+.section-topics-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-topics-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Topic tags use section color (--section-color defined in section 10) */
+.section-topic-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 10%, transparent);
+    color: var(--section-color, var(--section-offtheClock));
+    border: 1px solid color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
+    border-radius: 100px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+
+.section-topic-tag:hover {
+    background: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
+    border-color: color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 40%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-color, var(--section-offtheClock)) 20%, transparent);
+}
+
+
+/* =============================================================================
+   10. CONTENT CARDS
+   ============================================================================= */
+
+.subsection {
+    margin-bottom: 4rem;
+}
+
+.subsection:last-child {
+    margin-bottom: 0;
+}
+
+.subsection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.subsection-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.view-all-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.view-all-link:hover {
+    gap: 0.5rem;
+    color: var(--text-primary);
+    background: var(--bg-card);
+}
+
+/* View-all-links use section color */
+.content-section .view-all-link { color: var(--section-color); }
+.content-section .view-all-link:hover { background: color-mix(in srgb, var(--section-color) 10%, transparent); }
+
+.view-all-link::after {
+    content: '\2192';
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.view-all-link:hover::after {
+    transform: translateX(3px);
+}
+
+.content-grid {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.75rem 1rem 1.5rem 1rem;
+    margin: -0.75rem -1rem -1rem -1rem;
+    scroll-padding-left: 1rem;
+    position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.content-grid--projects .content-card:first-child {
+    margin-left: 1rem;
+}
+
+.content-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.content-grid .content-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+    min-width: 280px;
+    max-width: 360px;
+}
+
+.content-grid-wrapper {
+    position: relative;
+}
+
+.content-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        color-mix(in srgb, var(--accent-primary) 5%, transparent) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.content-card:hover::before {
+    opacity: 1;
+}
+
+.content-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        0 0 0 1px var(--accent-primary),
+        0 0 30px color-mix(in srgb, var(--accent-primary) 12%, transparent);
+}
+
+/*
+ * Section-specific theming using --section-color custom property.
+ * Each section sets its own color, then generic rules apply it consistently.
+ * This reduces repetition from ~60 lines to ~15 lines.
+ */
+#field { --section-color: var(--section-field); }
+#writing { --section-color: var(--section-writing); }
+#lab { --section-color: var(--section-lab); }
+#media { --section-color: var(--section-media); }
+#offtheClock { --section-color: var(--section-offtheClock); }
+
+/* Content cards inherit section color */
+.content-section .content-card::before {
+    background: linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--section-color) 5%, transparent) 100%);
+}
+.content-section .content-card:hover {
+    border-color: var(--section-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--section-color), 0 0 30px color-mix(in srgb, var(--section-color) 12%, transparent);
+}
+.content-section .content-card .date { color: var(--section-color); }
+
+.content-card.featured-card {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+    border-color: var(--border-hover);
+}
+
+.card-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.content-card:hover .card-badge {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+}
+
+/* Card badges use section color (defined above) */
+.content-section .card-badge {
+    color: var(--section-color);
+    background: color-mix(in srgb, var(--section-color) 10%, transparent);
+    border-color: color-mix(in srgb, var(--section-color) 25%, transparent);
+}
+.content-section .content-card:hover .card-badge {
+    background: color-mix(in srgb, var(--section-color) 15%, transparent);
+    border-color: color-mix(in srgb, var(--section-color) 40%, transparent);
+}
+
+.content-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    transition: color 0.25s ease;
+    position: relative;
+}
+
+.content-card:hover h3 {
+    color: var(--text-primary);
+}
+
+.content-card .card-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.content-card .card-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Thumbnail wrapper for badge overlay positioning */
+.thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.thumbnail-wrapper .thumbnail {
+    width: 100%;
+    display: block;
+}
+
+/* Badge overlay on thumbnails */
+.card-badge-overlay {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 2;
+}
+
+/* Badge row for tweet/training cards */
+.card-badge-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Tweet and training cards need z-index for badge row to appear above overlays */
+.tweet-card .card-badge-row,
+.training-card .card-badge-row {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* Ensure badges in tweet cards have correct colors */
+.tweet-card .new-badge {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 35%, transparent);
+}
+
+.tweet-card .pinned-badge {
+    color: var(--section-writing);
+    background: color-mix(in srgb, var(--section-writing) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 35%, transparent);
+}
+
+.tweet-card:hover .new-badge {
+    background: color-mix(in srgb, var(--text-primary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.tweet-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--section-writing) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-writing) 50%, transparent);
+}
+
+.training-card .card-badge-row {
+    padding: 0 1.25rem;
+}
+
+.new-badge,
+.pinned-badge,
+.gist-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.new-badge {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--text-primary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 35%, transparent);
+}
+
+.pinned-badge {
+    color: var(--section-color, var(--accent-primary));
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 35%, transparent);
+}
+
+.gist-badge {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--text-secondary) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 35%, transparent);
+}
+
+.content-card:hover .new-badge,
+.tweet-card:hover .new-badge,
+.training-card:hover .new-badge {
+    background: color-mix(in srgb, var(--text-primary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.content-card:hover .pinned-badge,
+.tweet-card:hover .pinned-badge,
+.training-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--section-color, var(--accent-primary)) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 50%, transparent);
+}
+
+.content-card:hover .gist-badge,
+.project-card:hover .gist-badge {
+    background: color-mix(in srgb, var(--text-secondary) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--text-secondary) 50%, transparent);
+}
+
+.content-card .date {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+}
+
+.content-card .source {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.content-card .authors {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.card-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.card-stats {
+    display: flex;
+    gap: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Project Card Specifics */
+.project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-card h3 {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+}
+
+.project-card .card-badge-row {
+    flex-shrink: 0;
+}
+
+.project-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.project-stats {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+}
+
+.project-language {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.language-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.project-stat {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.project-stat .icon-wrapper {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+}
+
+.project-stat .icon-wrapper svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Project card badge colors - pinned uses lab section color */
+.project-card .pinned-badge {
+    color: var(--section-lab);
+    background: color-mix(in srgb, var(--section-lab) 15%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-lab) 35%, transparent);
+}
+
+.project-card:hover .pinned-badge {
+    background: color-mix(in srgb, var(--section-lab) 25%, var(--bg-primary));
+    border-color: color-mix(in srgb, var(--section-lab) 50%, transparent);
+}
+
+/* Tweet-style stats within content cards (different from .tweet-card stats) */
+.content-card .tweet-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.content-card .tweet-stat {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.content-card .tweet-stat-icon {
+    display: inline-flex;
+    color: var(--text-muted);
+}
+
+.content-card .tweet-stat-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.project-topics {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.project-topic {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.25s ease;
+}
+
+.content-card:hover .project-topic {
+    border-color: color-mix(in srgb, var(--section-color, var(--accent-primary)) 30%, var(--border-color));
+    color: var(--text-secondary);
+}
+
+.content-card .thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
+    filter: brightness(0.95) saturate(1.05);
+}
+
+.content-card:hover .thumbnail {
+    transform: scale(1.03);
+    filter: brightness(1) saturate(1.1);
+}
+
+.section-cta {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* =============================================================================
+   11. PERSONAL SECTION
+   ============================================================================= */
+
+.personal-card {
+    flex: 0 0 320px;
+    min-width: 280px;
+    max-width: 360px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.personal-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        color-mix(in srgb, var(--section-offtheClock) 5%, transparent) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+a.personal-card:hover::before {
+    opacity: 1;
+}
+
+a.personal-card:hover {
+    border-color: var(--section-offtheClock);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        0 0 0 1px var(--section-offtheClock),
+        0 0 30px color-mix(in srgb, var(--section-offtheClock) 15%, transparent);
+}
+
+.personal-card-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+    border-radius: var(--radius-md);
+    color: var(--section-offtheClock);
+    margin-bottom: 1rem;
+}
+
+.personal-card-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.personal-cover {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.95) saturate(1.05);
+}
+
+a.personal-card:hover .personal-cover {
+    transform: scale(1.08) rotate(2deg);
+    filter: brightness(1) saturate(1.1);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.personal-item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.personal-item-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Chess card with multiple links */
+.personal-card-multi {
+    cursor: default;
+}
+
+.personal-card-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: auto;
+    width: 100%;
+    flex: 1;
+}
+
+.personal-card-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--section-offtheClock) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--section-offtheClock) 12%, transparent);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex: 1;
+}
+
+.personal-card-link:hover {
+    background: color-mix(in srgb, var(--section-offtheClock) 12%, transparent);
+    border-color: var(--section-offtheClock);
+    transform: scale(1.02);
+}
+
+.personal-link-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--section-offtheClock);
+}
+
+.personal-link-rating-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.625rem;
+    margin-left: auto;
+}
+
+.personal-link-type {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding: 0.2rem 0.5rem;
+    background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent);
+    border-radius: var(--radius-sm);
+}
+
+.personal-link-rating {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    min-width: 2.75rem;
+    text-align: right;
+}
+
+.learning-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.learning-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: color-mix(in srgb, var(--section-offtheClock) 10%, transparent);
+    color: var(--section-offtheClock);
+    border: 1px solid color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+    border-radius: 100px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+
+.learning-tag:hover {
+    background: color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+    border-color: color-mix(in srgb, var(--section-offtheClock) 40%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
+}
+

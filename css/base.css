@@ -1,0 +1,298 @@
+/**
+ * =============================================================================
+ * MAIN STYLESHEET
+ * =============================================================================
+ *
+ * TABLE OF CONTENTS
+ * -----------------
+ * 1. FONTS & VARIABLES ................... Line 82
+ *    - @font-face declarations
+ *    - CSS custom properties (colors, fonts, spacing)
+ *    - Theme variations (hopkins, mets, phillies)
+ *
+ * 2. RESET & BASE ........................ Line 190
+ *    - Box-sizing reset
+ *    - Body defaults
+ *    - Page background & grid overlay
+ *
+ * 3. LAYOUT .............................. Line 250
+ *    - Container
+ *    - Header & navigation
+ *
+ * 4. HERO SECTION ........................ Line 382
+ *    - Hero layout & animations
+ *    - Headshot & name
+ *    - Social links
+ *    - Hero navigation pills
+ *
+ * 5. BUTTONS & LINKS ..................... Line 725
+ *    - Button styles (.btn-*)
+ *    - Social link styles
+ *
+ * 6. CONTENT SECTIONS .................... Line 790
+ *    - Section headers & icons
+ *    - Section-specific colors
+ *    - Topics/tags
+ *
+ * 7. STATS SECTION ....................... Line 966
+ *    - Stats overview cards
+ *    - Stats table
+ *    - Level badges
+ *
+ * 8. TRAINING GRID ....................... Line 1202
+ *    - Training card layout
+ *    - Background images & overlays
+ *
+ * 9. TWEET CARDS ......................... Line 1382
+ *    - Tweet grid layout
+ *    - Tweet card styles
+ *
+ * 10. CONTENT CARDS ...................... Line 1669
+ *     - Subsection headers
+ *     - Content grid & carousel
+ *     - Card base styles
+ *     - Section-specific card colors
+ *     - Project cards
+ *     - Thumbnails
+ *
+ * 11. PERSONAL SECTION ................... Line 2045
+ *     - Personal grid
+ *     - Reading/listening cards
+ *
+ * 12. FOOTER ............................. Line 2181
+ *     - Footer layout
+ *     - Theme switcher
+ *
+ * 13. RESPONSIVE ......................... Line 2253
+ *     - Tablet breakpoint (1024px)
+ *     - Mobile breakpoint (800px)
+ *
+ * 14. UTILITIES .......................... Line 2537
+ *     - Selection styles
+ *     - Scrollbar customization
+ *
+ * 15. RESUME PAGE ........................ Line 2563
+ *     - Resume header
+ *     - Resume grid & sections
+ *     - Resume items & skills
+ *
+ * 16. SHORT VIEWPORT ADAPTATIONS ......... Line 3208
+ *     - Fluid sizing for small mobile screens
+ *
+ * 17. TOUCH DEVICE FIXES ................. Line 3222
+ *     - Reset sticky hover states for touch devices
+ *
+ * =============================================================================
+ */
+
+/* =============================================================================
+   1. FONTS & VARIABLES
+   ============================================================================= */
+
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('/assets/fonts/DMSans.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400 500;
+    font-display: swap;
+    src: url('/assets/fonts/JetBrainsMono.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Instrument Serif';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/assets/fonts/InstrumentSerif.woff2') format('woff2');
+}
+
+:root {
+    --bg-primary: #0c0f1a;
+    --bg-secondary: #131824;
+    --bg-header: rgba(12, 15, 26, 0.9);
+    --bg-card: #1a2030;
+    --bg-card-hover: #212838;
+    --accent-primary: #60a5fa;
+    --accent-secondary: #34d399;
+    --accent-warm: #fbbf24;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #2a3444;
+    --border-hover: #3d4a5c;
+
+    --section-field: #fbbf24;
+    --section-writing: #a78bfa;
+    --section-lab: #22c55e;
+    --section-media: #60a5fa;
+    --section-offtheClock: #f472b6;
+
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    --max-width: 1200px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s ease;
+}
+
+[data-theme="driveline"] {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-header: rgba(10, 10, 10, 0.9);
+    --bg-card: #1a1a1a;
+    --bg-card-hover: #222222;
+    --accent-primary: #FFA300;
+    --accent-secondary: #cc8200;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #707070;
+    --border-color: #333333;
+    --border-hover: #444444;
+}
+
+[data-theme="hopkins"] {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #0f1320;
+    --bg-header: rgba(10, 14, 26, 0.9);
+    --bg-card: #151a2e;
+    --bg-card-hover: #1a2038;
+    --accent-primary: #68ace5;
+    --accent-secondary: #4a90d9;
+    --text-primary: #e8f4ff;
+    --text-secondary: #a0c4e8;
+    --text-muted: #5a7090;
+    --border-color: #2a3f5f;
+    --border-hover: #3a5070;
+}
+
+[data-theme="mets"] {
+    --bg-primary: #0a1428;
+    --bg-secondary: #0f1a30;
+    --bg-header: rgba(10, 20, 40, 0.9);
+    --bg-card: #152238;
+    --bg-card-hover: #1a2a45;
+    --accent-primary: #ff5910;
+    --accent-secondary: #002d72;
+    --text-primary: #e8f0ff;
+    --text-secondary: #8ba8d9;
+    --text-muted: #5a7090;
+    --border-color: #2a3d5f;
+    --border-hover: #3a5070;
+}
+
+[data-theme="phillies"] {
+    --bg-primary: #120a0c;
+    --bg-secondary: #1a1012;
+    --bg-header: rgba(18, 10, 12, 0.9);
+    --bg-card: #241419;
+    --bg-card-hover: #2e1a20;
+    --accent-primary: #e81828;
+    --accent-secondary: #002d72;
+    --text-primary: #ffeef0;
+    --text-secondary: #d8a0a8;
+    --text-muted: #886070;
+    --border-color: #4a2a35;
+    --border-hover: #5a3a45;
+}
+
+/* =============================================================================
+   2. RESET & BASE
+   ============================================================================= */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    /* Background set via inline critical CSS and JS for instant theme application */
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: color 0.4s ease;
+}
+
+.page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100dvh;
+    background: var(--bg-primary);
+    z-index: -1;
+    transition: background-color 0.4s ease;
+}
+
+.grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100dvh;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.grid-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+}
+
+
+/* =============================================================================
+   14. UTILITIES
+   ============================================================================= */
+
+::selection {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+

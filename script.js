@@ -5,48 +5,50 @@
  *
  * TABLE OF CONTENTS
  * -----------------
- * 1. ICONS REGISTRY ...................... Line 56
+ * 1. ICONS REGISTRY ...................... Line ~60
  *    - SVG icon definitions for UI elements
  *
- * 2. DOM UTILITIES ....................... Line 101
+ * 2. DOM UTILITIES ....................... Line ~105
  *    - createElement() - DOM element factory
  *    - setTrustedHTML() - safe innerHTML wrapper
  *    - createIconElement() - icon span factory
  *
- * 3. DATA LOADING ........................ Line 142
+ * 3. DATA LOADING ........................ Line ~145
  *    - loadSiteConfig() - fetch site.json
  *    - parseCSV() - parse CSV data files
  *
- * 4. HEADER & HERO ....................... Line 170
+ * 4. HEADER & HERO ....................... Line ~175
+ *    - renderHeroIntro() - shared hero intro (homepage/resume)
  *    - renderHeader() - sticky nav bar
  *    - renderHero() - hero section with nav pills
  *
- * 5. SECTION RENDERING ................... Line 325
+ * 5. SECTION RENDERING ................... Line ~415
  *    - renderSections() - main content sections
  *    - renderStatsSection() - baseball stats
  *    - renderContentSection() - articles/projects
  *    - renderPersonalSection() - reading/listening
  *    - renderFooter() - theme switcher
  *
- * 6. CARD RENDERING & DISPLAY ............ Line 909
+ * 6. CARD RENDERING & DISPLAY ............ Line ~1290
  *    - displayItems() - unified display function
  *    - displayProjects/Content/Tweets() - wrappers
  *    - createProjectCard() - GitHub project cards
  *    - createTweetCard() - tweet embed cards
  *    - createContentCard() - article/media cards
  *
- * 7. UI UTILITIES ........................ Line 1281
+ * 7. UI UTILITIES ........................ Line ~1805
  *    - initCarouselScrollDetection() - scroll shadows
  *    - displayEmptyState() - no content message
  *    - formatDate() - date formatting
  *    - sortByDate() - chronological sort
  *
- * 8. INTERACTIVITY ....................... Line 1335
+ * 8. INTERACTIVITY ....................... Line ~1870
  *    - initThemeSwitcher() - team color themes
  *    - initScrollReveal() - section animations
  *    - initNavigation() - smooth scroll & active state
  *
- * 9. INITIALIZATION ...................... Line 1457
+ * 9. INITIALIZATION ...................... Line ~2020
+ *    - initHeadshotClickAnimation() - headshot click effect (shared)
  *    - initSite() - main entry point
  *    - DOMContentLoaded handler
  *
@@ -2018,6 +2020,44 @@ function initNavigation() {
    9. INITIALIZATION
    ============================================================================= */
 
+/**
+ * Initialize headshot click animation.
+ * Shared between homepage and resume page.
+ *
+ * @param {number} readyDelay - Delay before enabling click animation (after initial animation completes)
+ */
+function initHeadshotClickAnimation(readyDelay = 600) {
+  const headshot = document.querySelector(".hero-headshot");
+  if (!headshot) return;
+
+  // Mark as ready for click animation after initial scaleIn completes
+  setTimeout(() => {
+    headshot.classList.add("animation-ready");
+  }, readyDelay);
+
+  headshot.addEventListener("click", () => {
+    if (!headshot.classList.contains("animation-ready")) return;
+
+    headshot.classList.remove("clicked", "transitioning-out");
+    // Force reflow to restart animation
+    void headshot.offsetWidth;
+    headshot.classList.add("clicked");
+
+    // After animation completes, transition smoothly back to base state
+    setTimeout(() => {
+      headshot.classList.add("transitioning-out");
+      // Brief moment to disable animation, then remove styles to trigger transition
+      requestAnimationFrame(() => {
+        headshot.classList.remove("clicked");
+        // Clean up transitioning-out after transition completes
+        setTimeout(() => {
+          headshot.classList.remove("transitioning-out");
+        }, 300); // Match transition duration
+      });
+    }, 300); // Animation duration
+  });
+}
+
 async function initSite() {
   try {
     const config = await loadSiteConfig();
@@ -2049,36 +2089,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!document.body.classList.contains("resume-page")) {
     await initSite();
-
-    // Headshot click animation
-    const headshot = document.querySelector(".hero-headshot");
-    if (headshot) {
-      // Mark as ready for click animation after initial scaleIn completes
-      setTimeout(() => {
-        headshot.classList.add("animation-ready");
-      }, 600); // scaleIn is 0.5s with 0.1s delay
-
-      headshot.addEventListener("click", () => {
-        if (!headshot.classList.contains("animation-ready")) return;
-
-        headshot.classList.remove("clicked", "transitioning-out");
-        // Force reflow to restart animation
-        void headshot.offsetWidth;
-        headshot.classList.add("clicked");
-
-        // After animation completes, transition smoothly back to base state
-        setTimeout(() => {
-          headshot.classList.add("transitioning-out");
-          // Brief moment to disable animation, then remove styles to trigger transition
-          requestAnimationFrame(() => {
-            headshot.classList.remove("clicked");
-            // Clean up transitioning-out after transition completes
-            setTimeout(() => {
-              headshot.classList.remove("transitioning-out");
-            }, 300); // Match transition duration
-          });
-        }, 300); // Animation duration
-      });
-    }
+    initHeadshotClickAnimation(600); // scaleIn is 0.5s with 0.1s delay
   }
 });
