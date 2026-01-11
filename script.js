@@ -179,6 +179,109 @@ function getThemedHeadshot(config) {
   return config.profile.headshot;
 }
 
+/**
+ * Renders the hero intro section (headshot, name, bio, social links).
+ * Shared between homepage and resume page to keep them in sync.
+ *
+ * @param {HTMLElement} container - The container to render into
+ * @param {Object} config - Site config with profile and socials
+ * @param {Object} options - Rendering options
+ * @param {string} options.extraClass - Additional class for hero-intro (e.g., 'resume-hero-intro')
+ * @param {string[]} options.excludePlatforms - Social platforms to exclude (e.g., ['resume'])
+ * @param {boolean} options.includeResumeCta - Whether to render resume as CTA button
+ * @param {boolean} options.reuseExisting - Whether to reuse existing HTML elements (for LCP)
+ * @returns {HTMLElement} The hero-intro element
+ */
+function renderHeroIntro(container, config, options = {}) {
+  const {
+    extraClass = "",
+    excludePlatforms = [],
+    includeResumeCta = false,
+    reuseExisting = false,
+  } = options;
+
+  let heroIntro = reuseExisting ? container.querySelector(".hero-intro") : null;
+  const heroIntroExisted = !!heroIntro;
+
+  if (!heroIntro) {
+    const className = extraClass ? `hero-intro ${extraClass}` : "hero-intro";
+    heroIntro = createElement("div", { className });
+  }
+
+  // Remove inline script if present (was used to set headshot src on homepage)
+  const inlineScript = heroIntro.querySelector("script");
+  if (inlineScript) inlineScript.remove();
+
+  // Headshot
+  let heroImg = reuseExisting ? document.getElementById("hero-headshot-img") : null;
+  if (heroImg) {
+    heroImg.src = getThemedHeadshot(config);
+    heroImg.alt = config.profile.name;
+  } else {
+    heroImg = createElement("img", {
+      src: getThemedHeadshot(config),
+      alt: config.profile.name,
+      className: "hero-headshot",
+      fetchpriority: "high",
+      width: 100,
+      height: 100,
+    });
+    heroIntro.appendChild(heroImg);
+  }
+
+  // Name
+  let heroName = reuseExisting ? heroIntro.querySelector(".hero-name") : null;
+  if (!heroName) {
+    heroName = createElement("h1", { className: "hero-name" });
+    heroIntro.appendChild(heroName);
+  }
+  heroName.textContent = config.profile.name;
+
+  // Description
+  let heroDescription = reuseExisting ? heroIntro.querySelector(".hero-description") : null;
+  if (!heroDescription) {
+    heroDescription = createElement("p", { className: "hero-description" });
+    heroIntro.appendChild(heroDescription);
+  }
+  heroDescription.textContent = config.profile.bio;
+
+  // Social links
+  let socialLinks = reuseExisting ? heroIntro.querySelector(".social-links") : null;
+  if (!socialLinks) {
+    socialLinks = createElement("div", { className: "social-links" });
+    heroIntro.appendChild(socialLinks);
+  }
+
+  config.socials.forEach((social) => {
+    // Skip excluded platforms
+    if (excludePlatforms.includes(social.platform)) return;
+
+    const isExternal = social.url.startsWith("http");
+    const linkAttrs = { href: social.url };
+    if (isExternal) {
+      linkAttrs.target = "_blank";
+      linkAttrs.rel = "noopener noreferrer";
+    }
+    const link = createElement("a", linkAttrs);
+    link.setAttribute("aria-label", social.label);
+
+    // Style resume as a prominent CTA button if enabled
+    if (social.platform === "resume" && includeResumeCta) {
+      link.classList.add("resume-cta");
+      link.appendChild(createElement("span", { textContent: "Résumé" }));
+    } else {
+      link.appendChild(createIconElement(social.platform));
+    }
+    socialLinks.appendChild(link);
+  });
+
+  if (!heroIntroExisted) {
+    container.appendChild(heroIntro);
+  }
+
+  return heroIntro;
+}
+
 function renderHeader(config) {
   const header = document.querySelector("header");
   if (!header) return;
@@ -244,76 +347,11 @@ function renderHero(config) {
     heroSection.appendChild(container);
   }
 
-  let heroIntro = container.querySelector(".hero-intro");
-  const heroIntroExisted = !!heroIntro;
-  if (!heroIntro) {
-    heroIntro = createElement("div", { className: "hero-intro" });
-  }
-
-  // Remove inline script if present (was used to set headshot src)
-  const inlineScript = heroIntro.querySelector("script");
-  if (inlineScript) inlineScript.remove();
-
-  // Reuse existing hero image from HTML for faster LCP, or create new one
-  let heroImg = document.getElementById("hero-headshot-img");
-  if (heroImg) {
-    heroImg.src = getThemedHeadshot(config);
-    heroImg.alt = config.profile.name;
-  } else {
-    heroImg = createElement("img", {
-      src: getThemedHeadshot(config),
-      alt: config.profile.name,
-      className: "hero-headshot",
-      fetchpriority: "high",
-      width: 100,
-      height: 100,
-    });
-    heroIntro.appendChild(heroImg);
-  }
-
-  // Reuse existing h1/p from HTML, or create if missing
-  let heroName = heroIntro.querySelector(".hero-name");
-  if (!heroName) {
-    heroName = createElement("h1", { className: "hero-name" });
-    heroIntro.appendChild(heroName);
-  }
-  heroName.textContent = config.profile.name;
-
-  let heroDescription = heroIntro.querySelector(".hero-description");
-  if (!heroDescription) {
-    heroDescription = createElement("p", { className: "hero-description" });
-    heroIntro.appendChild(heroDescription);
-  }
-  heroDescription.textContent = config.profile.bio;
-
-  // Reuse existing social-links container from HTML, or create if missing
-  let socialLinks = heroIntro.querySelector(".social-links");
-  if (!socialLinks) {
-    socialLinks = createElement("div", { className: "social-links" });
-    heroIntro.appendChild(socialLinks);
-  }
-  config.socials.forEach((social) => {
-    const isExternal = social.url.startsWith("http");
-    const linkAttrs = { href: social.url };
-    if (isExternal) {
-      linkAttrs.target = "_blank";
-      linkAttrs.rel = "noopener noreferrer";
-    }
-    const link = createElement("a", linkAttrs);
-    link.setAttribute("aria-label", social.label);
-    // Style resume as a prominent CTA button (no icon, just text)
-    if (social.platform === "resume") {
-      link.classList.add("resume-cta");
-      link.appendChild(createElement("span", { textContent: "Résumé" }));
-    } else {
-      link.appendChild(createIconElement(social.platform));
-    }
-    socialLinks.appendChild(link);
+  // Render hero intro using shared function
+  renderHeroIntro(container, config, {
+    includeResumeCta: true,
+    reuseExisting: true,
   });
-
-  if (!heroIntroExisted) {
-    container.appendChild(heroIntro);
-  }
 
   // Reuse existing hero-nav from HTML, or create if missing
   let heroNav = container.querySelector(".hero-nav");

@@ -544,16 +544,15 @@ nav.container {
     }
 }
 
+/* Homepage: needs high specificity to override .hero > .container.rendered animation */
 .hero > .container.rendered .hero-headshot.animation-ready {
     animation: none;
-    /* Ensure clean base state after scaleIn completes */
     transform: scale(1);
     opacity: 1;
 }
 
 .hero > .container.rendered .hero-headshot.animation-ready.clicked {
     animation: headshotClick 0.3s ease-out;
-    /* Lock hover state during animation to prevent stutter if mouse moves away */
     transform: scale(1.05);
     border-color: var(--accent-primary);
     box-shadow:
@@ -564,7 +563,27 @@ nav.container {
 
 .hero > .container.rendered .hero-headshot.animation-ready.clicked.transitioning-out {
     animation: none;
-    /* Keep hover styles but allow transition back to base state */
+}
+
+/* Resume page: needs specificity to override .resume-main > .container.rendered animation */
+.resume-main > .container.rendered .hero-headshot.animation-ready {
+    animation: none;
+    transform: scale(1);
+    opacity: 1;
+}
+
+.resume-main > .container.rendered .hero-headshot.animation-ready.clicked {
+    animation: headshotClick 0.3s ease-out;
+    transform: scale(1.05);
+    border-color: var(--accent-primary);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        0 0 0 4px var(--bg-primary),
+        0 0 30px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
+.resume-main > .container.rendered .hero-headshot.animation-ready.clicked.transitioning-out {
+    animation: none;
 }
 
 .hero-name {
@@ -3055,8 +3074,34 @@ footer:empty {
     padding: 3rem 0 4rem;
 }
 
+/* Hide resume content until JS builds it and adds .rendered class */
+.resume-main > .container {
+    visibility: hidden;
+}
+
+.resume-main > .container.rendered {
+    visibility: visible;
+}
+
 .resume-hero-intro {
     margin-bottom: 3rem;
+}
+
+/* Staggered animations for resume page hero elements (matches homepage) */
+.resume-main > .container.rendered .hero-headshot {
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.resume-main > .container.rendered .hero-name {
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.resume-main > .container.rendered .hero-description {
+    animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.resume-main > .container.rendered .social-links {
+    animation: fadeInUp 0.5s ease-out 0.4s both;
 }
 
 .resume-grid {
@@ -3065,7 +3110,10 @@ footer:empty {
     gap: 0;
     max-width: 800px;
     margin: 0 auto;
-    animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.resume-main > .container.rendered .resume-grid {
+    animation: fadeInUp 0.6s ease-out 0.5s both;
 }
 
 .resume-section {

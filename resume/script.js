@@ -59,32 +59,11 @@ function renderResume(resume, siteConfig) {
 
     container.textContent = '';
 
-    const heroIntro = createElement('div', { className: 'hero-intro resume-hero-intro' });
-
-    heroIntro.appendChild(createElement('img', {
-        src: getThemedHeadshot(siteConfig),
-        alt: siteConfig.profile.name,
-        className: 'hero-headshot'
-    }));
-
-    heroIntro.appendChild(createElement('h1', { className: 'hero-name', textContent: siteConfig.profile.name }));
-    heroIntro.appendChild(createElement('p', { className: 'hero-description', textContent: siteConfig.profile.bio }));
-
-    const socialLinks = createElement('div', { className: 'social-links' });
-    siteConfig.socials.forEach(social => {
-        if (social.platform === 'resume') return;
-
-        const link = createElement('a', {
-            href: social.url,
-            target: '_blank',
-            rel: 'noopener noreferrer'
-        });
-        link.setAttribute('aria-label', social.label);
-        link.appendChild(createIconElement(social.platform));
-        socialLinks.appendChild(link);
+    // Render hero intro using shared function from main script.js
+    renderHeroIntro(container, siteConfig, {
+        extraClass: 'resume-hero-intro',
+        excludePlatforms: ['resume'],
     });
-    heroIntro.appendChild(socialLinks);
-    container.appendChild(heroIntro);
 
     const mainGrid = createElement('div', { className: 'resume-grid' });
     const leftCol = createElement('div', { className: 'resume-col resume-col-main' });
@@ -183,6 +162,9 @@ function renderResume(resume, siteConfig) {
 
     mainGrid.appendChild(rightCol);
     container.appendChild(mainGrid);
+
+    // Trigger animations now that all content is built
+    container.classList.add('rendered');
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -191,8 +173,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Headshot click animation
     const headshot = document.querySelector('.hero-headshot');
     if (headshot) {
-        // Mark as ready for click animation (no scaleIn animation on resume page)
-        headshot.classList.add('animation-ready');
+        // Mark as ready for click animation after initial scaleIn completes
+        setTimeout(() => {
+            headshot.classList.add('animation-ready');
+        }, 400); // scaleIn is 0.3s
 
         headshot.addEventListener('click', () => {
             if (!headshot.classList.contains('animation-ready')) return;

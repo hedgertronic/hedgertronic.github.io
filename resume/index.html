@@ -1,6 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #0a0e1a;">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0e1a">
+    <script>
+        // Single source of truth for theme configuration (matches homepage)
+        window.__themeConfig = {
+            colors: { driveline: "#0a0a0a", hopkins: "#0a0e1a", mets: "#0a1428", phillies: "#120a0c" },
+            headshots: {
+                driveline: "/assets/images/headshot/headshot-dl-sm.jpg",
+                hopkins: "/assets/images/headshot/headshot-dl-sm.jpg",
+                mets: "/assets/images/headshot/headshot-mets-sm.jpg",
+                phillies: "/assets/images/headshot/headshot-phillies-sm.jpg"
+            }
+        };
+        // Apply theme background IMMEDIATELY - before any rendering
+        (function() {
+            var cfg = window.__themeConfig;
+            var theme = localStorage.getItem("theme") || "hopkins";
+            var color = cfg.colors[theme] || cfg.colors.hopkins;
+            window.__currentTheme = theme;
+            window.__currentColor = color;
+            document.documentElement.setAttribute("data-theme", theme);
+            document.documentElement.style.backgroundColor = color;
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute("content", color);
+            // Handle Safari bfcache restoration
+            window.addEventListener("pageshow", function(e) {
+                if (e.persisted) {
+                    document.documentElement.style.backgroundColor = color;
+                }
+            });
+        })();
+    </script>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-35RY8Y6Q5V"></script>
     <script>
@@ -9,9 +42,6 @@
       gtag('js', new Date());
       gtag('config', 'G-35RY8Y6Q5V');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0e1a">
     <meta name="description" content="Resume for Josh Hejka - Professional pitcher and R&D analyst at Driveline Baseball.">
 
     <!-- Open Graph -->
@@ -33,22 +63,21 @@
     <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-16.png?v=12" sizes="16x16">
     <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32.png?v=12" sizes="32x32">
     <link rel="apple-touch-icon" href="/assets/images/favicons/apple-touch-icon.png?v=12">
+    <style>
+        /* Critical CSS: prevent background flash before external CSS loads */
+        html, body, .page-background { background-color: #0a0e1a; }
+        [data-theme="driveline"], [data-theme="driveline"] .page-background { background-color: #0a0a0a; }
+        [data-theme="mets"], [data-theme="mets"] .page-background { background-color: #0a1428; }
+        [data-theme="phillies"], [data-theme="phillies"] .page-background { background-color: #120a0c; }
+    </style>
     <link rel="stylesheet" href="/styles.css">
     <script src="/assets/vendor/html2pdf.bundle.min.js"></script>
-    <script>
-        // Apply theme immediately to prevent Safari toolbar flash
-        (function() {
-            var themeColors = { driveline: "#0a0a0a", hopkins: "#0a0e1a", mets: "#0a1428", phillies: "#120a0c" };
-            var theme = localStorage.getItem("theme") || "hopkins";
-            var color = themeColors[theme] || themeColors.hopkins;
-            document.documentElement.setAttribute("data-theme", theme);
-            document.documentElement.style.backgroundColor = color;
-            var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute("content", color);
-        })();
-    </script>
 </head>
-<body class="resume-page">
+<body class="resume-page" style="background-color: #0a0e1a;">
+    <script>
+        // Immediately apply theme background to body (uses cached value from head)
+        document.body.style.backgroundColor = window.__currentColor || "#0a0e1a";
+    </script>
     <div class="page-background"></div>
     <div class="grid-overlay"></div>
     <header class="resume-header visible">
@@ -67,7 +96,7 @@
         <div id="resume-content" class="container"></div>
     </main>
     <footer></footer>
-    <script src="/script.js"></script>
-    <script src="script.js"></script>
+    <script defer src="/script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 </html>
