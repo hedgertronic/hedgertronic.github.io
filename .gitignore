@@ -41,7 +41,7 @@ build/
 *.min.css
 
 # Generated files (built in CI)
-styles.css
+/styles.css
 assets/documents/resume.pdf
 assets/documents/career_stats.csv
 assets/images/og/og-image.png
