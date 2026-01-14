@@ -335,6 +335,45 @@
     max-width: var(--max-width);
 }
 
+@media (max-width: 768px) {
+    /* Fluid resume typography - scales from small phones (320px) to large phones (430px) */
+    .resume-item-title {
+        font-size: clamp(0.95rem, 0.6rem + 1.75vw, 1.05rem);
+    }
+
+    .resume-item-dates {
+        font-size: clamp(0.7rem, 0.5rem + 1vw, 0.75rem);
+    }
+
+    .resume-role-title {
+        font-size: clamp(0.85rem, 0.55rem + 1.5vw, 0.9rem);
+    }
+
+    .resume-item-location {
+        font-size: clamp(0.75rem, 0.5rem + 1.25vw, 0.8rem);
+    }
+
+    .resume-item-subtitle {
+        font-size: clamp(0.85rem, 0.55rem + 1.5vw, 0.9rem);
+    }
+
+    .resume-highlights li {
+        font-size: clamp(0.8rem, 0.55rem + 1.25vw, 0.85rem);
+    }
+
+    .resume-skills-label {
+        font-size: clamp(0.7rem, 0.5rem + 1vw, 0.75rem);
+    }
+
+    .resume-skill-tag {
+        font-size: clamp(0.65rem, 0.45rem + 1vw, 0.7rem);
+    }
+
+    .resume-skills-list li {
+        font-size: clamp(0.75rem, 0.5rem + 1.25vw, 0.8rem);
+    }
+}
+
 @media (max-width: 600px) {
     .resume-item-header {
         flex-direction: column;
