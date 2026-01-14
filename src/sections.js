@@ -115,11 +115,12 @@ export async function renderStatsSection(container, section, config) {
   const containerDiv = createElement("div", { className: "container" });
 
   const sectionHeader = createElement("div", { className: "section-header" });
-  const iconDiv = createElement("div", {
+  const iconLink = createElement("a", {
+    href: `#${section.id}`,
     className: `section-icon ${section.id}-icon`,
   });
-  iconDiv.appendChild(createIconElement(section.icon));
-  sectionHeader.appendChild(iconDiv);
+  iconLink.appendChild(createIconElement(section.icon));
+  sectionHeader.appendChild(iconLink);
 
   const headerText = createElement("div");
   headerText.appendChild(createElement("h2", { textContent: section.title }));
@@ -517,11 +518,12 @@ export async function renderContentSection(container, section, config) {
   const containerDiv = createElement("div", { className: "container" });
 
   const sectionHeader = createElement("div", { className: "section-header" });
-  const iconDiv = createElement("div", {
+  const iconLink = createElement("a", {
+    href: `#${section.id}`,
     className: `section-icon ${section.id}-icon`,
   });
-  iconDiv.appendChild(createIconElement(section.icon));
-  sectionHeader.appendChild(iconDiv);
+  iconLink.appendChild(createIconElement(section.icon));
+  sectionHeader.appendChild(iconLink);
 
   const headerText = createElement("div");
   headerText.appendChild(createElement("h2", { textContent: section.title }));
@@ -617,11 +619,12 @@ export async function renderPersonalSection(container, section, config) {
   const containerDiv = createElement("div", { className: "container" });
 
   const sectionHeader = createElement("div", { className: "section-header" });
-  const iconDiv = createElement("div", {
+  const iconLink = createElement("a", {
+    href: `#${section.id}`,
     className: `section-icon ${section.id}-icon`,
   });
-  iconDiv.appendChild(createIconElement(section.icon));
-  sectionHeader.appendChild(iconDiv);
+  iconLink.appendChild(createIconElement(section.icon));
+  sectionHeader.appendChild(iconLink);
 
   const headerText = createElement("div");
   headerText.appendChild(createElement("h2", { textContent: section.title }));

@@ -129,6 +129,96 @@ test.describe("Theme Switching", () => {
   });
 });
 
+test.describe("Section Icon Navigation", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/");
+    await page.waitForSelector(".content-section");
+  });
+
+  test("section icons have pointer cursor", async ({ page }) => {
+    const sectionIcon = page.locator(".section-icon").first();
+    await expect(sectionIcon).toBeVisible();
+
+    const cursor = await sectionIcon.evaluate((el) =>
+      window.getComputedStyle(el).cursor
+    );
+    expect(cursor).toBe("pointer");
+  });
+
+  test("clicking section icon scrolls section to top", async ({ page }) => {
+    // Scroll to middle of page first
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(100);
+
+    // Get the first content section and its icon
+    const section = page.locator(".content-section").first();
+    const sectionIcon = section.locator(".section-icon");
+
+    // Get section position before click
+    const sectionId = await section.getAttribute("id");
+
+    // Click the icon
+    await sectionIcon.click();
+
+    // Wait for smooth scroll to complete
+    await page.waitForTimeout(600);
+
+    // Section should now be at or near the top of the viewport
+    const sectionTop = await section.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top;
+    });
+
+    // Should be within 30px of top (accounting for scroll-margin-top: 20px)
+    expect(sectionTop).toBeLessThanOrEqual(30);
+    expect(sectionTop).toBeGreaterThanOrEqual(-10);
+  });
+
+  test("clicking section icon from within section scrolls to top", async ({ page }) => {
+    // Get the first content section
+    const section = page.locator(".content-section").first();
+    const sectionIcon = section.locator(".section-icon");
+
+    // Scroll to middle of that section
+    await section.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      window.scrollTo(0, window.scrollY + rect.top + 200);
+    });
+    await page.waitForTimeout(100);
+
+    // Click the icon
+    await sectionIcon.click();
+
+    // Wait for smooth scroll to complete
+    await page.waitForTimeout(600);
+
+    // Section should now be at or near the top
+    const sectionTop = await section.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top;
+    });
+
+    expect(sectionTop).toBeLessThanOrEqual(30);
+    expect(sectionTop).toBeGreaterThanOrEqual(-10);
+  });
+
+  test("all section icons are clickable", async ({ page }) => {
+    const sectionIcons = page.locator(".section-icon");
+    const count = await sectionIcons.count();
+
+    expect(count).toBeGreaterThan(0);
+
+    // Verify each icon has pointer cursor
+    for (let i = 0; i < count; i++) {
+      const icon = sectionIcons.nth(i);
+      const cursor = await icon.evaluate((el) =>
+        window.getComputedStyle(el).cursor
+      );
+      expect(cursor).toBe("pointer");
+    }
+  });
+});
+
 test.describe("Responsive Design", () => {
   test("displays correctly on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
