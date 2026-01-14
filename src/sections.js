@@ -41,7 +41,6 @@ export async function renderStatsSection(container, section, config) {
   // Find all career total rows
   const careerRows = {
     College: statsData.find((row) => row.Season === "College Career"),
-    Summer: statsData.find((row) => row.Season === "Summer Career"),
     Independent: statsData.find((row) => row.Season === "Independent Career"),
     Minors: statsData.find((row) => row.Season === "Minors Career"),
   };
@@ -58,7 +57,6 @@ export async function renderStatsSection(container, section, config) {
     AA: "level-aa",
     AAA: "level-aaa",
     NCAA: "level-ncaa",
-    Summer: "level-summer",
     Independent: "level-independent",
   };
 
@@ -71,17 +69,16 @@ export async function renderStatsSection(container, section, config) {
   };
 
   const orgDisplayNames = {
-    Mets: "New York Mets",
-    Phillies: "Philadelphia Phillies",
-    "Johns Hopkins": "Johns Hopkins Blue Jays",
-    Westside: "Westside Woolly Mammoths",
+    Mets: "NYM",
+    Phillies: "PHI",
+    "Johns Hopkins": "JHU",
+    Westside: "WWM",
     Baltimore: "Baltimore Dodgers",
   };
 
   // Map individual levels to their category
   const levelToCategory = {
     NCAA: "College",
-    Summer: "Summer",
     Independent: "Independent",
     "Rk+": "Minors",
     "A-": "Minors",
@@ -156,7 +153,6 @@ export async function renderStatsSection(container, section, config) {
   const statsLinkConfig = {
     Minors: section.statsLinks.find((l) => l.name === "MiLB"),
     College: section.statsLinks.find((l) => l.name === "BBRef"),
-    Summer: section.statsLinks.find((l) => l.name === "BBRef"),
     Independent: section.statsLinks.find((l) => l.name === "BBRef"),
   };
 
@@ -193,7 +189,7 @@ export async function renderStatsSection(container, section, config) {
 
   // Category selector
   const categorySelector = createElement("div", { className: "stats-category-selector" });
-  const categoryOrder = ["College", "Summer", "Independent", "Minors"];
+  const categoryOrder = ["College", "Independent", "Minors"];
   categoryOrder.forEach((category) => {
     const btn = createElement("button", {
       className: `stats-category-btn${category === "Minors" ? " active" : ""}`,
@@ -251,7 +247,6 @@ export async function renderStatsSection(container, section, config) {
   // League info for non-Minors categories
   const categoryLeagues = {
     College: { name: "NCAA D3", className: "league-ncaa" },
-    Summer: { name: "Cal Ripken", className: "league-summer" },
     Independent: { name: "USPBL", className: "league-independent" },
   };
 
@@ -260,10 +255,10 @@ export async function renderStatsSection(container, section, config) {
 
   const thead = createElement("thead");
   const headerRow = createElement("tr");
-  const headers = ["Year", "Organization", "Levels", "W", "L", "ERA", "G", "SV", "IP", "H", "SO", "BB", "WHIP"];
+  const headers = ["Year", "Org", "Levels", "W", "L", "ERA", "G", "SV", "IP", "H", "SO", "BB", "WHIP"];
   headers.forEach((header) => {
     const th = createElement("th", { textContent: header });
-    if (header === "Organization") th.dataset.column = "team";
+    if (header === "Org") th.dataset.column = "team";
     if (header === "Levels") th.dataset.column = "levels";
     headerRow.appendChild(th);
   });
@@ -328,7 +323,7 @@ export async function renderStatsSection(container, section, config) {
   table.appendChild(tbody);
 
   const tfoot = createElement("tfoot");
-  const footerCategoryOrder = ["College", "Summer", "Independent", "Minors"];
+  const footerCategoryOrder = ["College", "Independent", "Minors"];
   footerCategoryOrder.forEach((category) => {
     const careerRow = careerRows[category];
     if (!careerRow) return;
@@ -373,7 +368,7 @@ export async function renderStatsSection(container, section, config) {
     const teamHeader = thead.querySelector('th[data-column="team"]');
     const levelsHeader = thead.querySelector('th[data-column="levels"]');
     if (teamHeader) {
-      teamHeader.textContent = selectedCategory === "Minors" ? "Organization" : "Team";
+      teamHeader.textContent = selectedCategory === "Minors" ? "Org" : "Team";
     }
     if (levelsHeader) {
       levelsHeader.textContent = selectedCategory === "Minors" ? "Levels" : "League";

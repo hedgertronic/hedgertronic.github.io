@@ -896,7 +896,7 @@ footer:empty {
     }
 
     .stats-table th:nth-child(2),
-    .stats-table td:nth-child(2) { width: 170px; }
+    .stats-table td:nth-child(2) { width: 70px; }
 
     .stats-table th:nth-child(3),
     .stats-table td:nth-child(3) { width: 120px; }

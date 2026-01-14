@@ -587,7 +587,7 @@ body {
 .stats-table th:nth-child(1),
 .stats-table td:nth-child(1) { width: 40px; }  /* Year */
 .stats-table th:nth-child(2),
-.stats-table td:nth-child(2) { width: 200px; } /* Org/Team */
+.stats-table td:nth-child(2) { width: 70px; } /* Org/Team */
 .stats-table th:nth-child(3),
 .stats-table td:nth-child(3) { width: 140px; } /* Levels/League - wider for multiple badges */
 .stats-table th:nth-child(n+4),
@@ -2941,7 +2941,7 @@ footer:empty {
     }
 
     .stats-table th:nth-child(2),
-    .stats-table td:nth-child(2) { width: 170px; }
+    .stats-table td:nth-child(2) { width: 70px; }
 
     .stats-table th:nth-child(3),
     .stats-table td:nth-child(3) { width: 120px; }
