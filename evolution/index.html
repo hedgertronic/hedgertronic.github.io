@@ -73,6 +73,21 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/css/resume.css">
     <link rel="stylesheet" href="/css/evolution.css">
+    <script>
+        // Preload theme-specific headshot for faster LCP (uses config from above)
+        (function() {
+            var cfg = window.__themeConfig;
+            var theme = window.__currentTheme || "hopkins";
+            var headshot = cfg.headshots[theme] || cfg.headshots.hopkins;
+            var link = document.createElement("link");
+            link.rel = "preload";
+            link.as = "image";
+            link.href = headshot;
+            link.fetchPriority = "high";
+            document.head.appendChild(link);
+            window.__themeHeadshot = headshot;
+        })();
+    </script>
 </head>
 <body class="evolution-page" style="background-color: #0a0e1a;">
     <script>
@@ -115,9 +130,8 @@
                          fetchpriority="high">
                     <script>
                         // Update headshot src immediately after element exists
-                        if (window.__themeConfig && window.__currentTheme) {
-                            var headshot = window.__themeConfig.headshots[window.__currentTheme];
-                            if (headshot) document.getElementById("hero-headshot-img").src = headshot;
+                        if (window.__themeHeadshot) {
+                            document.getElementById("hero-headshot-img").src = window.__themeHeadshot;
                         }
                     </script>
                     <h1 class="hero-name">Josh Hejka</h1>
