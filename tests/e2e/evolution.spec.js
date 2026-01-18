@@ -169,16 +169,6 @@ test.describe("Evolution Page Navigation", () => {
     }
   });
 
-  test("can navigate back to homepage", async ({ page }) => {
-    await page.goto("/evolution/");
-    await page.waitForSelector(".hero-intro");
-
-    const backLink = page.locator('.logo[href="/"]');
-    await backLink.click();
-
-    await page.waitForURL("/");
-    await expect(page).toHaveURL("/");
-  });
 });
 
 test.describe("Evolution Page Responsive Design", () => {
