@@ -5,6 +5,11 @@
     min-height: 100vh;
 }
 
+/* More breathing room when scrolling to sections */
+.evolution-page .content-section {
+    scroll-margin-top: 60px;
+}
+
 
 /* Evolution page navbar title */
 .evolution-page header nav.container {
@@ -55,6 +60,7 @@
     margin-top: 2rem;
     cursor: pointer;
     animation: bounce 2s infinite;
+    text-decoration: none;
 }
 
 .scroll-down-arrow svg {
@@ -80,13 +86,31 @@
     }
 }
 
+.evolution-page-title-prefix,
+.evolution-page-title-suffix {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.evolution-page-title-prefix {
+    margin-bottom: 0.35rem;
+}
+
+.evolution-page-title-suffix {
+    margin-top: 0.35rem;
+}
+
 .evolution-page-title h2 {
     font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin: 0;
-    background: linear-gradient(135deg, var(--accent-primary) 0%, color-mix(in srgb, var(--accent-primary) 60%, var(--text-primary)) 50%, var(--accent-primary) 100%);
+    background: linear-gradient(135deg, #d4af37 0%, #f5d67a 50%, #d4af37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -236,13 +260,63 @@
 
 /* Description under the year */
 .hero-year-description {
-    font-size: 1.4rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--section-color, var(--section-field));
     margin: 0;
     text-align: center;
+    background: linear-gradient(135deg, #d4af37 0%, #f5d67a 50%, #d4af37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Focus metrics under the description */
+.hero-focus-metrics {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.hero-focus-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.hero-focus-year {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.hero-focus-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.hero-focus-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.hero-focus-arrow {
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #d4af37 0%, #f5d67a 50%, #d4af37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Video button in hero section */
@@ -438,6 +512,7 @@
     .hero-year-left {
         order: 1;
         max-width: 100%;
+        gap: 1rem;
     }
 
     .hero-video-pair {
@@ -454,7 +529,16 @@
 
     .hero-year-description {
         font-size: 1.2rem;
+        letter-spacing: 0.06em;
         max-width: 320px;
+    }
+
+    .hero-focus-metrics {
+        gap: 1rem;
+    }
+
+    .hero-focus-value {
+        font-size: 1.5rem;
     }
 
     .hero-year-video-wrapper {
@@ -487,12 +571,20 @@
         font-size: clamp(3.5rem, 20vw, 5rem);
     }
 
-    .hero-year-description {
-        font-size: 1.1rem;
-    }
-
     .hero-year-text {
         gap: 1rem;
+    }
+
+    .hero-focus-metrics {
+        gap: 0.75rem;
+    }
+
+    .hero-focus-value {
+        font-size: 1.25rem;
+    }
+
+    .hero-focus-arrow {
+        font-size: 1rem;
     }
 
     .hero-year-video-wrapper {
@@ -1377,6 +1469,19 @@ body.modal-open {
 }
 
 @media (max-width: 800px) {
+    .evolution-page-title-prefix,
+    .evolution-page-title-suffix {
+        font-size: 0.65rem;
+    }
+
+    .evolution-page-title-prefix {
+        margin-bottom: 0.25rem;
+    }
+
+    .evolution-page-title-suffix {
+        margin-top: 0.25rem;
+    }
+
     .evolution-page-title h2 {
         font-size: 1.2rem;
         letter-spacing: 0.06em;
@@ -1384,11 +1489,6 @@ body.modal-open {
 
     .nav-page-title {
         font-size: 0.85rem;
-    }
-
-    /* Hide name on mobile, keep headshot */
-    .evolution-page header .logo-text {
-        display: none;
     }
 
     /* Section header mobile styles */
@@ -1546,4 +1646,12 @@ body.modal-open {
     .leaderboard-highlight:hover {
         background: color-mix(in srgb, var(--section-color, var(--section-field)) 15%, var(--bg-secondary));
     }
+}
+
+/* Disabled theme button for "[Your Team]" */
+.theme-btn-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+    white-space: nowrap;
 }

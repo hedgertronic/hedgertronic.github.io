@@ -53,6 +53,44 @@
     ]
   },
   {
+    "title": "Other Low Slot FB Velos",
+    "unit": "mph",
+    "hideRanks": true,
+    "entries": [
+      {
+        "name": "Adam Cimber",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "85.3"
+      },
+      {
+        "name": "Josh Hejka",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "84.3",
+        "highlight": true
+      },
+      {
+        "name": "Alek Jacob",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "84.2"
+      },
+      {
+        "name": "Joe Smith",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "83.6"
+      },
+      {
+        "name": "Tyler Rogers",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "83.5"
+      }
+    ]
+  },
+  {
     "title": "Breaking Ball IVB",
     "unit": "inches",
     "entries": [
@@ -91,44 +129,6 @@
         "pitch": "SL",
         "pitchClass": "pitch-slider",
         "value": "8.8"
-      }
-    ]
-  },
-  {
-    "title": "Other Low Slot FB Velos",
-    "unit": "mph",
-    "hideRanks": true,
-    "entries": [
-      {
-        "name": "Adam Cimber",
-        "pitch": "SI",
-        "pitchClass": "pitch-sinker",
-        "value": "85.3"
-      },
-      {
-        "name": "Josh Hejka",
-        "pitch": "SI",
-        "pitchClass": "pitch-sinker",
-        "value": "84.3",
-        "highlight": true
-      },
-      {
-        "name": "Alek Jacob",
-        "pitch": "SI",
-        "pitchClass": "pitch-sinker",
-        "value": "84.2"
-      },
-      {
-        "name": "Joe Smith",
-        "pitch": "SI",
-        "pitchClass": "pitch-sinker",
-        "value": "83.6"
-      },
-      {
-        "name": "Tyler Rogers",
-        "pitch": "SI",
-        "pitchClass": "pitch-sinker",
-        "value": "83.5"
       }
     ]
   }

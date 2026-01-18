@@ -60,7 +60,10 @@ function createIconWrapper(iconName) {
 }
 
 export function createScrollArrow(targetSectionId) {
-  const scrollArrow = createElement("div", { className: "scroll-down-arrow" });
+  const scrollArrow = createElement("a", {
+    className: "scroll-down-arrow",
+    href: `#${targetSectionId}`,
+  });
   const arrowSvg = createSVGElement("svg", {
     width: "24",
     height: "24",
@@ -74,13 +77,6 @@ export function createScrollArrow(targetSectionId) {
   arrowSvg.appendChild(createSVGElement("path", { d: "M12 5v14" }));
   arrowSvg.appendChild(createSVGElement("path", { d: "m19 12-7 7-7-7" }));
   scrollArrow.appendChild(arrowSvg);
-
-  scrollArrow.addEventListener("click", () => {
-    const sectionEl = document.getElementById(targetSectionId);
-    if (sectionEl) {
-      sectionEl.scrollIntoView({ behavior: "smooth" });
-    }
-  });
 
   return scrollArrow;
 }
@@ -1139,6 +1135,9 @@ function renderVideoProgressionSubsection(subsection, container) {
     className: "content-grid video-progression-grid",
   });
 
+  const metricKey = subsection.metricKey || "releaseHeight";
+  const metricUnit = subsection.metricUnit || "ft";
+
   subsection.videos.forEach((video) => {
     const videoCard = createElement("div", { className: "video-progression-card" });
 
@@ -1151,7 +1150,8 @@ function renderVideoProgressionSubsection(subsection, container) {
         textContent: video.year,
       })
     );
-    if (video.releaseHeight) {
+    const metricValue = video[metricKey];
+    if (metricValue) {
       badge.appendChild(
         createElement("span", {
           className: "badge-separator",
@@ -1161,7 +1161,7 @@ function renderVideoProgressionSubsection(subsection, container) {
       badge.appendChild(
         createElement("span", {
           className: "badge-height",
-          textContent: `${video.releaseHeight} ft`,
+          textContent: `${metricValue} ${metricUnit}`,
         })
       );
     }
@@ -1494,6 +1494,46 @@ export async function renderSection(section, container, index) {
           textContent: section.description,
         })
       );
+    }
+
+    if (section.focusMetrics) {
+      const metricsContainer = createElement("div", {
+        className: "hero-focus-metrics",
+      });
+
+      section.focusMetrics.forEach((metric, index) => {
+        if (index > 0) {
+          metricsContainer.appendChild(
+            createElement("span", {
+              className: "hero-focus-arrow",
+              textContent: "→",
+            })
+          );
+        }
+
+        const metricEl = createElement("div", { className: "hero-focus-metric" });
+        metricEl.appendChild(
+          createElement("div", {
+            className: "hero-focus-year",
+            textContent: metric.year,
+          })
+        );
+        metricEl.appendChild(
+          createElement("div", {
+            className: "hero-focus-value",
+            textContent: metric.value,
+          })
+        );
+        metricEl.appendChild(
+          createElement("div", {
+            className: "hero-focus-label",
+            textContent: metric.label,
+          })
+        );
+        metricsContainer.appendChild(metricEl);
+      });
+
+      leftColumn.appendChild(metricsContainer);
     }
 
     showcase.appendChild(leftColumn);

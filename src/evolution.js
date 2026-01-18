@@ -34,6 +34,19 @@ async function initEvolutionPage() {
     }
 
     renderFooter(siteConfig);
+
+    // Add "[Your Team]" button to theme switcher (evolution page only)
+    const themeSwitcherButtons = document.querySelector(
+      ".theme-switcher-buttons"
+    );
+    if (themeSwitcherButtons) {
+      const yourTeamBtn = document.createElement("button");
+      yourTeamBtn.className = "theme-btn theme-btn-disabled";
+      yourTeamBtn.textContent = "[Your Team]";
+      yourTeamBtn.disabled = true;
+      themeSwitcherButtons.appendChild(yourTeamBtn);
+    }
+
     updateLogoHeadshot(siteConfig);
     initThemeSwitcher();
 

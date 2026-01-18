@@ -1,20 +1,24 @@
 {
   "page": {
     "title": "Evolution",
-    "heroTitle": "Pitching Evolution",
+    "heroTitle": "Evolution",
     "description": "My Throwing Evolution - Tracking pitch development and training progress."
   },
   "sections": [
     {
       "id": "year-2026",
       "title": "2026",
-      "accentColor": "#f97316",
+      "accentColor": "#f5d67a",
       "heroSection": true,
       "heroVideo": {
         "vimeoId": "1155714020",
         "vertical": true
       },
       "description": "Chasing the lowest arm slot in baseball",
+      "focusMetrics": [
+        { "year": "2025", "value": "3.5", "label": "rel ht" },
+        { "year": "2026", "value": "2.2", "label": "rel ht" }
+      ],
       "video": {
         "vimeoId": "1155603520",
         "buttonText": "Watch Full Video",
@@ -36,27 +40,15 @@
           "dataFile": "data/evolution-leaderboards.json"
         },
         {
-          "id": "how-i-trained",
-          "title": "How I Trained",
-          "type": "training",
-          "dataFile": "data/field-training.json"
-        }
-      ]
-    },
-    {
-      "id": "pitching-evolution",
-      "title": "Career Overview",
-      "accentColor": "#fbbf24",
-      "centeredTitle": true,
-      "subsections": [
-        {
           "id": "release-height-progression",
           "title": "Release Height Progression",
           "type": "video-progression",
+          "metricKey": "releaseHeight",
+          "metricUnit": "ft",
           "videos": [
             {
               "year": "2026",
-              "releaseHeight": "2.0",
+              "releaseHeight": "2.2",
               "vimeoId": "1155733369",
               "description": "Embracing the lowest arm slot of my career. Currently hovering around the 2-foot release height mark which would be the second-lowest in MLB behind Tyler Rogers, allowing me to generate outlier shapes and angles."
             },
@@ -100,6 +92,12 @@
               "url": "https://www.fangraphs.com/players/joshua-hejka/sa3011152/stats/pitching"
             }
           ]
+        },
+        {
+          "id": "how-i-trained",
+          "title": "How I Trained",
+          "type": "training",
+          "dataFile": "data/field-training.json"
         }
       ]
     }

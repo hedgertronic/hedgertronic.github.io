@@ -1029,6 +1029,15 @@ footer:empty {
         flex-wrap: wrap;
         justify-content: center;
     }
+
+    .theme-switcher-buttons {
+        gap: 0.35rem;
+    }
+
+    .theme-btn {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
 }
 
 /* =============================================================================
