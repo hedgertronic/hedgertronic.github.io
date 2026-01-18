@@ -159,30 +159,35 @@
 
 /* Cinematic hero layout with video and year */
 .hero-year-showcase {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto 1fr;
-    gap: 1.5rem 3rem;
+    display: flex;
+    gap: 3rem;
     margin-bottom: 3rem;
     position: relative;
-    align-items: start;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
 }
 
-/* Year title positioning */
-.hero-year-showcase > .hero-year-title {
-    grid-column: 1;
-    grid-row: 1;
+/* Left column: year title and description */
+.hero-year-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 0;
+    max-width: 400px;
 }
 
-/* Text column: description, button */
+/* Text column: description, button (legacy, now in left column) */
 .hero-year-text {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1.25rem;
     max-width: 480px;
-    grid-column: 1;
-    grid-row: 2;
 }
 
 /* Video spans both rows on desktop */
@@ -231,10 +236,13 @@
 
 /* Description under the year */
 .hero-year-description {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--section-color, var(--section-field));
     margin: 0;
+    text-align: center;
 }
 
 /* Video button in hero section */
@@ -249,7 +257,8 @@
 
 .hero-year-video-wrapper {
     position: relative;
-    width: 280px;
+    width: min(280px, 20vw);
+    min-width: 160px;
     aspect-ratio: 9 / 16;
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -276,6 +285,17 @@
     height: 100%;
     border: none;
     pointer-events: none; /* Allow clicks to pass through to overlay */
+}
+
+.hero-video-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+    transition: opacity 0.5s ease-out;
 }
 
 /* Play overlay for click-to-expand */
@@ -324,6 +344,52 @@
     transform: scale(1);
 }
 
+/* Video pair - highlight and full video side by side */
+.hero-video-pair {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-start;
+    flex-shrink: 1;
+}
+
+.hero-video-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.hero-video-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hero-video-clickable {
+    cursor: pointer;
+}
+
+.hero-video-expand-overlay {
+    background: transparent;
+}
+
+.hero-video-expand-overlay svg {
+    opacity: 0.8;
+    transform: scale(1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.hero-video-clickable:hover .hero-video-expand-overlay {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.hero-video-clickable:hover .hero-video-expand-overlay svg {
+    opacity: 1;
+    transform: scale(1.1);
+}
 
 /* Hero section doesn't need the standard section header */
 .hero-year-section .section-header {
@@ -364,26 +430,22 @@
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .hero-year-showcase {
-        display: flex;
         flex-direction: column;
         align-items: center;
         gap: 2rem;
     }
 
-    /* Reorder: year (1), video (2), text (3) */
-    .hero-year-showcase > .hero-year-title {
+    .hero-year-left {
         order: 1;
+        max-width: 100%;
     }
 
-    .hero-year-video {
+    .hero-video-pair {
         order: 2;
     }
 
-    .hero-year-text {
-        order: 3;
-        align-items: flex-start;
-        text-align: left;
-        max-width: 100%;
+    .hero-year-description {
+        max-width: 500px;
     }
 
     .hero-year-title {
@@ -391,12 +453,20 @@
     }
 
     .hero-year-description {
-        font-size: 0.95rem;
-        max-width: 500px;
+        font-size: 1.2rem;
+        max-width: 320px;
     }
 
     .hero-year-video-wrapper {
-        width: min(70vw, 380px);
+        width: min(42vw, 260px);
+    }
+
+    .hero-video-pair {
+        gap: 1rem;
+    }
+
+    .hero-video-label {
+        font-size: 0.75rem;
     }
 
     /* Mobile animation uses vertical direction */
@@ -418,7 +488,7 @@
     }
 
     .hero-year-description {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
     }
 
     .hero-year-text {
@@ -426,7 +496,11 @@
     }
 
     .hero-year-video-wrapper {
-        width: min(75vw, 340px);
+        width: min(40vw, 200px);
+    }
+
+    .hero-video-pair {
+        gap: 0.75rem;
     }
 
     .hero-year-showcase {
@@ -450,6 +524,13 @@
     .hero-year-video-wrapper.paused .hero-video-play-overlay svg {
         display: block;
         opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Always show expand icon on full video */
+    .hero-video-expand-overlay svg {
+        display: block;
+        opacity: 0.9;
         transform: scale(1);
     }
 }
@@ -776,9 +857,6 @@
 /* Prevent scrolling when modal is open */
 body.modal-open {
     overflow: hidden;
-    position: fixed;
-    width: 100%;
-    height: 100%;
 }
 
 .video-modal-backdrop {
@@ -809,6 +887,10 @@ body.modal-open {
     max-width: 400px;
 }
 
+.video-modal-content--square {
+    max-width: 500px;
+}
+
 .video-modal-wrapper {
     position: relative;
     width: 100%;
@@ -818,6 +900,10 @@ body.modal-open {
 
 .video-modal-content--vertical .video-modal-wrapper {
     padding-bottom: 177.78%; /* 9:16 */
+}
+
+.video-modal-content--square .video-modal-wrapper {
+    padding-bottom: 100%; /* 1:1 */
 }
 
 .video-modal-wrapper iframe {
@@ -831,14 +917,15 @@ body.modal-open {
 
 .video-modal-close {
     position: absolute;
-    top: -40px;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
     border-radius: 50%;
-    color: var(--text-secondary);
+    color: #fff;
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
@@ -849,9 +936,8 @@ body.modal-open {
 }
 
 .video-modal-close:hover {
-    background: var(--section-color, var(--section-field));
-    border-color: var(--section-color, var(--section-field));
-    color: var(--bg-primary);
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .evolution-page .subsection-header {
@@ -1021,6 +1107,10 @@ body.modal-open {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.video-progression-wrapper.clickable {
+    cursor: pointer;
+}
+
 .video-progression-wrapper:hover {
     border-color: var(--section-color, var(--section-field));
     transform: translateY(-4px);
@@ -1076,32 +1166,22 @@ body.modal-open {
     transform: scale(0.95);
 }
 
-/* When paused, always show play icon */
-.video-progression-wrapper.paused .video-progression-play-overlay {
+/* Clickable videos always show play icon */
+.video-progression-wrapper.clickable .video-progression-play-overlay {
     background: rgba(0, 0, 0, 0.3);
 }
 
-.video-progression-wrapper.paused .video-progression-play-overlay svg {
+.video-progression-wrapper.clickable .video-progression-play-overlay svg {
     opacity: 1;
     transform: scale(1);
 }
 
-/* Always show play icon when paused (all devices) */
-.video-progression-wrapper.paused .video-progression-play-overlay svg {
-    opacity: 1;
-    transform: scale(1);
+.video-progression-wrapper.clickable:hover .video-progression-play-overlay {
+    background: rgba(0, 0, 0, 0.2);
 }
 
-/* Touch devices: only show play icon when paused */
-@media (hover: none) {
-    .video-progression-play-overlay svg {
-        opacity: 0;
-    }
-
-    .video-progression-wrapper.paused .video-progression-play-overlay svg {
-        opacity: 1;
-        transform: scale(1);
-    }
+.video-progression-wrapper.clickable:hover .video-progression-play-overlay svg {
+    transform: scale(1.1);
 }
 
 .video-placeholder {
@@ -1420,10 +1500,15 @@ body.modal-open {
         max-height: 80vh;
     }
 
+    .video-modal-content--square {
+        max-width: 90vw;
+    }
+
     .video-modal-close {
-        top: -36px;
-        width: 28px;
-        height: 28px;
+        top: 8px;
+        left: 8px;
+        width: 32px;
+        height: 32px;
         font-size: 1.25rem;
     }
 }

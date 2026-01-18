@@ -14,22 +14,122 @@
     "title": "VAA",
     "unit": "degrees",
     "entries": [
-      { "rank": 1, "name": "Tyler Rogers", "pitch": "SL", "pitchClass": "pitch-slider", "value": "-2.5" },
-      { "rank": 2, "name": "Josh Hejka", "pitch": "SL", "pitchClass": "pitch-slider", "value": "-2.6", "highlight": true },
-      { "rank": 3, "name": "Kevin Kelly", "pitch": "FF", "pitchClass": "pitch-four-seam", "value": "-2.8" },
-      { "rank": 4, "name": "Ryan Thompson", "pitch": "FF", "pitchClass": "pitch-four-seam", "value": "-3.0" },
-      { "rank": 5, "name": "Tim Hill", "pitch": "FF", "pitchClass": "pitch-four-seam", "value": "-3.2" }
+      {
+        "rank": 1,
+        "name": "Tyler Rogers",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "-2.5"
+      },
+      {
+        "rank": 2,
+        "name": "Josh Hejka",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "-2.6",
+        "highlight": true
+      },
+      {
+        "rank": 3,
+        "name": "Kevin Kelly",
+        "pitch": "FF",
+        "pitchClass": "pitch-four-seam",
+        "value": "-2.8"
+      },
+      {
+        "rank": 4,
+        "name": "Ryan Thompson",
+        "pitch": "FF",
+        "pitchClass": "pitch-four-seam",
+        "value": "-3.0"
+      },
+      {
+        "rank": 5,
+        "name": "Tim Hill",
+        "pitch": "FF",
+        "pitchClass": "pitch-four-seam",
+        "value": "-3.2"
+      }
     ]
   },
   {
     "title": "Breaking Ball IVB",
     "unit": "inches",
     "entries": [
-      { "rank": 1, "name": "Josh Hejka", "pitch": "SL", "pitchClass": "pitch-slider", "value": "16.5", "highlight": true },
-      { "rank": 2, "name": "Tyler Rogers", "pitch": "SL", "pitchClass": "pitch-slider", "value": "13.9" },
-      { "rank": 3, "name": "Shawn Armstrong", "pitch": "SW", "pitchClass": "pitch-sweeper", "value": "9.9" },
-      { "rank": 4, "name": "Robbie Ray", "pitch": "SL", "pitchClass": "pitch-slider", "value": "9.2" },
-      { "rank": 5, "name": "Ryan Thompson", "pitch": "SL", "pitchClass": "pitch-slider", "value": "8.8" }
+      {
+        "rank": 1,
+        "name": "Josh Hejka",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "16.5",
+        "highlight": true
+      },
+      {
+        "rank": 2,
+        "name": "Tyler Rogers",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "13.9"
+      },
+      {
+        "rank": 3,
+        "name": "Shawn Armstrong",
+        "pitch": "SW",
+        "pitchClass": "pitch-sweeper",
+        "value": "9.9"
+      },
+      {
+        "rank": 4,
+        "name": "Robbie Ray",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "9.2"
+      },
+      {
+        "rank": 5,
+        "name": "Ryan Thompson",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "8.8"
+      }
+    ]
+  },
+  {
+    "title": "Other Low Slot FB Velos",
+    "unit": "mph",
+    "hideRanks": true,
+    "entries": [
+      {
+        "name": "Adam Cimber",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "85.3"
+      },
+      {
+        "name": "Josh Hejka",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "84.3",
+        "highlight": true
+      },
+      {
+        "name": "Alek Jacob",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "84.2"
+      },
+      {
+        "name": "Joe Smith",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "83.6"
+      },
+      {
+        "name": "Tyler Rogers",
+        "pitch": "SI",
+        "pitchClass": "pitch-sinker",
+        "value": "83.5"
+      }
     ]
   }
 ]

@@ -599,7 +599,8 @@ function renderLeaderboardCard(leaderboard) {
   );
   card.appendChild(header);
 
-  const list = createElement("ol", { className: "leaderboard-list" });
+  const listClass = leaderboard.hideRanks ? "leaderboard-list no-ranks" : "leaderboard-list";
+  const list = createElement("ol", { className: listClass });
 
   leaderboard.entries.forEach((entry) => {
     const itemClass = entry.highlight
@@ -607,12 +608,14 @@ function renderLeaderboardCard(leaderboard) {
       : "leaderboard-item";
     const item = createElement("li", { className: itemClass });
 
-    item.appendChild(
-      createElement("span", {
-        className: "leaderboard-rank",
-        textContent: entry.rank,
-      })
-    );
+    if (!leaderboard.hideRanks && entry.rank) {
+      item.appendChild(
+        createElement("span", {
+          className: "leaderboard-rank",
+          textContent: entry.rank,
+        })
+      );
+    }
     item.appendChild(
       createElement("span", { className: "leaderboard-name", textContent: entry.name })
     );
@@ -1170,13 +1173,12 @@ function renderVideoProgressionSubsection(subsection, container) {
     });
 
     if (video.vimeoId && !video.vimeoId.startsWith("PLACEHOLDER")) {
-      let isPlaying = false;
-
       const iframe = createElement("iframe");
-      iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?controls=0&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+      iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
       iframe.setAttribute("frameborder", "0");
       iframe.setAttribute("allow", "autoplay; fullscreen; picture-in-picture");
       iframe.setAttribute("allowfullscreen", "");
+      iframe.setAttribute("loading", "lazy");
       videoWrapper.appendChild(iframe);
 
       const playOverlay = createElement("div", {
@@ -1192,36 +1194,71 @@ function renderVideoProgressionSubsection(subsection, container) {
       playOverlay.appendChild(playIcon);
       videoWrapper.appendChild(playOverlay);
 
-      videoWrapper.classList.add("paused");
+      videoWrapper.classList.add("clickable");
 
-      window.addEventListener("message", (e) => {
-        if (e.origin !== "https://player.vimeo.com") return;
-        try {
-          const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-          if (e.source !== iframe.contentWindow) return;
-          if (data.event === "ended") {
-            isPlaying = false;
-            videoWrapper.classList.add("paused");
-          }
-        } catch (err) {
-          // Ignore parse errors
+      // Create modal
+      const modal = createElement("div", { className: "video-modal" });
+      const backdrop = createElement("div", { className: "video-modal-backdrop" });
+      const content = createElement("div", {
+        className: "video-modal-content video-modal-content--square",
+      });
+
+      const closeBtn = createElement("button", {
+        className: "video-modal-close",
+        textContent: "\u00D7",
+      });
+
+      const modalWrapper = createElement("div", { className: "video-modal-wrapper" });
+
+      content.appendChild(closeBtn);
+      content.appendChild(modalWrapper);
+      modal.appendChild(backdrop);
+      modal.appendChild(content);
+
+      let modalIframe = null;
+
+      const openModal = () => {
+        if (!modalIframe) {
+          modalIframe = createElement("iframe");
+          modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+          modalIframe.setAttribute("frameborder", "0");
+          modalIframe.setAttribute(
+            "allow",
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          );
+          modalIframe.setAttribute("allowfullscreen", "");
+          modalWrapper.appendChild(modalIframe);
+        } else {
+          modalIframe.contentWindow.postMessage(
+            JSON.stringify({ method: "play" }),
+            "*"
+          );
+        }
+        modal.classList.add("active");
+        document.body.classList.add("modal-open");
+      };
+
+      const closeModal = () => {
+        modal.classList.remove("active");
+        document.body.classList.remove("modal-open");
+        if (modalIframe) {
+          modalIframe.contentWindow.postMessage(
+            JSON.stringify({ method: "pause" }),
+            "*"
+          );
+        }
+      };
+
+      videoWrapper.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      backdrop.addEventListener("click", closeModal);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+          closeModal();
         }
       });
 
-      const togglePlayPause = () => {
-        const command = isPlaying ? "pause" : "play";
-        iframe.contentWindow.postMessage(JSON.stringify({ method: command }), "*");
-        isPlaying = !isPlaying;
-        videoWrapper.classList.toggle("paused", !isPlaying);
-      };
-      videoWrapper.addEventListener("click", togglePlayPause);
-
-      iframe.addEventListener("load", () => {
-        iframe.contentWindow.postMessage(
-          JSON.stringify({ method: "addEventListener", value: "ended" }),
-          "*"
-        );
-      });
+      document.body.appendChild(modal);
     } else {
       const placeholder = createElement("div", { className: "video-placeholder" });
       placeholder.appendChild(
@@ -1440,17 +1477,18 @@ export async function renderSection(section, container, index) {
   if (section.heroSection && section.heroVideo) {
     const showcase = createElement("div", { className: "hero-year-showcase" });
 
+    // Left column: year title and description
+    const leftColumn = createElement("div", { className: "hero-year-left" });
+
     const yearTitle = createElement("h2", {
       className: "hero-year-title",
       textContent: section.title,
     });
     yearTitle.dataset.year = section.title;
-    showcase.appendChild(yearTitle);
-
-    const textColumn = createElement("div", { className: "hero-year-text" });
+    leftColumn.appendChild(yearTitle);
 
     if (section.description) {
-      textColumn.appendChild(
+      leftColumn.appendChild(
         createElement("p", {
           className: "hero-year-description",
           textContent: section.description,
@@ -1458,160 +1496,136 @@ export async function renderSection(section, container, index) {
       );
     }
 
-    if (section.video) {
-      const videoButton = createElement("button", {
-        className: "video-button hero-year-video-button",
-        textContent: section.video.buttonText || "Watch Video",
+    showcase.appendChild(leftColumn);
+
+    // Video pair container for highlight and full video side by side
+    const videoPair = createElement("div", { className: "hero-video-pair" });
+
+    // Helper to create a video card with modal
+    const createVideoCard = (label, vimeoId, isVertical) => {
+      const card = createElement("div", { className: "hero-video-card" });
+      const labelEl = createElement("div", {
+        className: "hero-video-label",
+        textContent: label,
+      });
+      card.appendChild(labelEl);
+
+      const wrapper = createElement("div", {
+        className: "hero-year-video-wrapper hero-video-clickable",
       });
 
-      const playBtnIcon = createSVGElement("svg", {
-        width: "16",
-        height: "16",
+      const iframe = createElement("iframe");
+      iframe.src = `https://player.vimeo.com/video/${vimeoId}?loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
+      iframe.setAttribute("frameborder", "0");
+      iframe.setAttribute("allow", "autoplay; fullscreen; picture-in-picture");
+      iframe.setAttribute("allowfullscreen", "");
+      iframe.setAttribute("loading", "lazy");
+      wrapper.appendChild(iframe);
+
+      const playOverlay = createElement("div", {
+        className: "hero-video-play-overlay hero-video-expand-overlay",
+      });
+      const playIcon = createSVGElement("svg", {
+        width: "48",
+        height: "48",
         viewBox: "0 0 24 24",
         fill: "currentColor",
       });
-      playBtnIcon.appendChild(createSVGElement("path", { d: "M8 5v14l11-7z" }));
-      videoButton.insertBefore(playBtnIcon, videoButton.firstChild);
+      playIcon.appendChild(createSVGElement("path", { d: "M8 5v14l11-7z" }));
+      playOverlay.appendChild(playIcon);
+      wrapper.appendChild(playOverlay);
 
-      textColumn.appendChild(videoButton);
-    }
+      card.appendChild(wrapper);
 
-    showcase.appendChild(textColumn);
+      // Create modal
+      const modal = createElement("div", { className: "video-modal" });
+      const backdrop = createElement("div", { className: "video-modal-backdrop" });
+      const content = createElement("div", {
+        className: isVertical
+          ? "video-modal-content video-modal-content--vertical"
+          : "video-modal-content",
+      });
 
-    const videoContainer = createElement("div", { className: "hero-year-video" });
-    const videoWrapper = createElement("div", {
-      className: "hero-year-video-wrapper",
-    });
+      const closeBtn = createElement("button", {
+        className: "video-modal-close",
+        textContent: "\u00D7",
+      });
 
-    const iframe = createElement("iframe");
-    iframe.src = `https://player.vimeo.com/video/${section.heroVideo.vimeoId}?background=1&autoplay=1&loop=1&muted=1&autopause=0`;
-    iframe.setAttribute("frameborder", "0");
-    iframe.setAttribute("allow", "autoplay; fullscreen; picture-in-picture");
-    iframe.setAttribute("allowfullscreen", "");
-    iframe.setAttribute("loading", "eager");
+      const modalWrapper = createElement("div", { className: "video-modal-wrapper" });
 
-    videoWrapper.appendChild(iframe);
+      content.appendChild(closeBtn);
+      content.appendChild(modalWrapper);
+      modal.appendChild(backdrop);
+      modal.appendChild(content);
 
-    const playOverlay = createElement("div", {
-      className: "hero-video-play-overlay",
-    });
-    const playIcon = createSVGElement("svg", {
-      width: "48",
-      height: "48",
-      viewBox: "0 0 24 24",
-      fill: "currentColor",
-    });
-    playIcon.appendChild(createSVGElement("path", { d: "M8 5v14l11-7z" }));
-    playOverlay.appendChild(playIcon);
-    videoWrapper.appendChild(playOverlay);
+      let modalIframe = null;
 
-    videoContainer.appendChild(videoWrapper);
-    showcase.appendChild(videoContainer);
+      const openModal = () => {
+        if (!modalIframe) {
+          modalIframe = createElement("iframe");
+          modalIframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+          modalIframe.setAttribute("frameborder", "0");
+          modalIframe.setAttribute(
+            "allow",
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          );
+          modalIframe.setAttribute("allowfullscreen", "");
+          modalWrapper.appendChild(modalIframe);
+        } else {
+          modalIframe.contentWindow.postMessage(
+            JSON.stringify({ method: "play" }),
+            "*"
+          );
+        }
+        modal.classList.add("active");
+        document.body.classList.add("modal-open");
+      };
 
-    containerDiv.appendChild(showcase);
+      const closeModal = () => {
+        modal.classList.remove("active");
+        document.body.classList.remove("modal-open");
+        if (modalIframe) {
+          modalIframe.contentWindow.postMessage(
+            JSON.stringify({ method: "pause" }),
+            "*"
+          );
+        }
+      };
 
-    let isPlaying = true;
+      wrapper.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      backdrop.addEventListener("click", closeModal);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+          closeModal();
+        }
+      });
 
-    const togglePlayPause = () => {
-      const command = isPlaying ? "pause" : "play";
-      iframe.contentWindow.postMessage(JSON.stringify({ method: command }), "*");
-      isPlaying = !isPlaying;
-      videoWrapper.classList.toggle("paused", !isPlaying);
+      document.body.appendChild(modal);
+
+      return card;
     };
 
-    videoWrapper.addEventListener("click", togglePlayPause);
+    // Highlight video card
+    const highlightCard = createVideoCard(
+      "Highlight",
+      section.heroVideo.vimeoId,
+      section.heroVideo.vertical
+    );
+    videoPair.appendChild(highlightCard);
 
+    // Full video card
     if (section.video) {
-      const videoButton = textColumn.querySelector(".hero-year-video-button");
-      if (videoButton) {
-        const liveModal = createElement("div", { className: "video-modal" });
-        const liveBackdrop = createElement("div", {
-          className: "video-modal-backdrop",
-        });
-        const liveContent = createElement("div", {
-          className: section.video.vertical
-            ? "video-modal-content video-modal-content--vertical"
-            : "video-modal-content",
-        });
-
-        const liveCloseBtn = createElement("button", {
-          className: "video-modal-close",
-          textContent: "\u00D7",
-        });
-
-        const liveVideoWrapper = createElement("div", {
-          className: "video-modal-wrapper",
-        });
-
-        liveContent.appendChild(liveCloseBtn);
-        liveContent.appendChild(liveVideoWrapper);
-        liveModal.appendChild(liveBackdrop);
-        liveModal.appendChild(liveContent);
-
-        let liveIframe = null;
-
-        const openLiveModal = () => {
-          if (!liveIframe) {
-            liveIframe = createElement("iframe");
-            if (section.video.vimeoId) {
-              liveIframe.src = `https://player.vimeo.com/video/${section.video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
-            } else if (section.video.youtubeId) {
-              liveIframe.src = `https://www.youtube.com/embed/${section.video.youtubeId}?autoplay=1&loop=1`;
-            }
-            liveIframe.setAttribute("frameborder", "0");
-            liveIframe.setAttribute(
-              "allow",
-              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            );
-            liveIframe.setAttribute("allowfullscreen", "");
-            liveVideoWrapper.appendChild(liveIframe);
-          } else {
-            if (section.video.vimeoId) {
-              liveIframe.contentWindow.postMessage(
-                JSON.stringify({ method: "play" }),
-                "*"
-              );
-            } else if (section.video.youtubeId) {
-              liveIframe.contentWindow.postMessage(
-                JSON.stringify({ event: "command", func: "playVideo" }),
-                "*"
-              );
-            }
-          }
-          liveModal.classList.add("active");
-          document.body.classList.add("modal-open");
-        };
-
-        const closeLiveModal = () => {
-          liveModal.classList.remove("active");
-          document.body.classList.remove("modal-open");
-          if (liveIframe) {
-            if (section.video.vimeoId) {
-              liveIframe.contentWindow.postMessage(
-                JSON.stringify({ method: "pause" }),
-                "*"
-              );
-            } else if (section.video.youtubeId) {
-              liveIframe.contentWindow.postMessage(
-                JSON.stringify({ event: "command", func: "pauseVideo" }),
-                "*"
-              );
-            }
-          }
-        };
-
-        videoButton.addEventListener("click", openLiveModal);
-        liveCloseBtn.addEventListener("click", closeLiveModal);
-        liveBackdrop.addEventListener("click", closeLiveModal);
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && liveModal.classList.contains("active")) {
-            closeLiveModal();
-          }
-        });
-
-        document.body.appendChild(liveModal);
-      }
+      const fullCard = createVideoCard(
+        "Full Video",
+        section.video.vimeoId,
+        section.video.vertical
+      );
+      videoPair.appendChild(fullCard);
     }
+
+    showcase.appendChild(videoPair);
+    containerDiv.appendChild(showcase);
   } else if (section.heroVideo) {
     const heroVideoContainer = createElement("div", {
       className: section.heroVideo.vertical
