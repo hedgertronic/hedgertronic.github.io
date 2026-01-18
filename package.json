@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:js": "esbuild src/main.js --bundle --minify --sourcemap --outfile=script.js && esbuild src/resume.js --bundle --minify --sourcemap --outfile=resume/script.js",
+    "build:js": "esbuild src/main.js --bundle --minify --sourcemap --outfile=script.js && esbuild src/resume.js --bundle --minify --sourcemap --outfile=resume/script.js && esbuild src/evolution.js --bundle --minify --sourcemap --outfile=evolution/script.js",
     "build:css": "cat css/base.css css/components.css css/sections.css css/layout.css > styles.css",
     "build": "npm run build:js && npm run build:css",
-    "dev": "esbuild src/main.js --bundle --sourcemap --outfile=script.js --watch & esbuild src/resume.js --bundle --sourcemap --outfile=resume/script.js --watch",
+    "dev": "esbuild src/main.js --bundle --sourcemap --outfile=script.js --watch & esbuild src/resume.js --bundle --sourcemap --outfile=resume/script.js --watch & esbuild src/evolution.js --bundle --sourcemap --outfile=evolution/script.js --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
