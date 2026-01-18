@@ -7,10 +7,12 @@
 }
 
 .resume-header {
-    background: var(--bg-header);
+    background: var(--bg-primary);
     border-bottom: 1px solid var(--border-color);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
 }
 
@@ -67,7 +69,7 @@
 }
 
 .resume-main {
-    padding: 3rem 0 4rem;
+    padding: 7rem 0 4rem; /* Extra top padding to account for fixed header */
 }
 
 /* Hide resume content until JS builds it and adds .rendered class */
