@@ -31,7 +31,7 @@
         },
         {
           "id": "mlb-comparison",
-          "title": "MLB Comparison",
+          "title": "MLB Comparisons",
           "type": "leaderboards",
           "dataFile": "data/evolution-leaderboards.json"
         },
