@@ -21,7 +21,6 @@ async function initSite() {
     initNavigation();
     initScrollReveal();
 
-    // Recache layout values now that all dynamic content is loaded
     if (window.__recacheLayoutValues) {
       window.__recacheLayoutValues();
     }
@@ -31,29 +30,18 @@ async function initSite() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Ensure page starts at top on reload (fixes mobile scroll restoration)
   if (history.scrollRestoration) {
     history.scrollRestoration = "manual";
   }
   window.scrollTo(0, 0);
 
-  if (!document.body.classList.contains("resume-page")) {
+  if (!document.body.classList.contains("resume-page") && !document.body.classList.contains("evolution-page")) {
     await initSite();
     initHeadshotClickAnimation(600); // scaleIn is 0.5s with 0.1s delay
   }
 });
 
-// Export for ES module consumers
 export { initHeadshotClickAnimation };
 export { renderHeroIntro, renderFooter };
 export { initThemeSwitcher };
 export { loadSiteConfig, getSiteConfig };
-
-// Expose functions globally for the resume page (which uses a separate script)
-window.createElement = createElement;
-window.createIconElement = createIconElement;
-window.renderHeroIntro = renderHeroIntro;
-window.renderFooter = renderFooter;
-window.initThemeSwitcher = initThemeSwitcher;
-window.initHeadshotClickAnimation = initHeadshotClickAnimation;
-window.loadSiteConfig = loadSiteConfig;

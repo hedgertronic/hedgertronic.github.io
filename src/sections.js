@@ -10,7 +10,6 @@ import { displayProjects, displayContent, displayTweets, displayError } from "./
 export async function renderSections(config) {
   const main = document.querySelector("main");
 
-  // Start all section renders in parallel for faster loading
   const sectionPromises = config.sections.map(async (section, index) => {
     const sectionEl = createElement("section", {
       id: section.id,
@@ -28,7 +27,6 @@ export async function renderSections(config) {
     return sectionEl;
   });
 
-  // Wait for all sections to complete, then append in order
   const sections = await Promise.all(sectionPromises);
   sections.forEach((sectionEl) => main.appendChild(sectionEl));
 }
@@ -408,6 +406,12 @@ export async function renderStatsSection(container, section, config) {
         const trainingSubsection = createElement("div", { className: "subsection" });
         const trainingHeader = createElement("div", { className: "subsection-header" });
         trainingHeader.appendChild(createElement("h3", { textContent: "My Training" }));
+        const viewTrainingLink = createElement("a", {
+          href: "/evolution",
+          className: "view-all-link",
+          textContent: "View Evolution",
+        });
+        trainingHeader.appendChild(viewTrainingLink);
         trainingSubsection.appendChild(trainingHeader);
 
         const trainingGrid = createElement("div", { className: "content-grid" });

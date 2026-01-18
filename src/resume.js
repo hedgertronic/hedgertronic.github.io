@@ -1,37 +1,12 @@
 /**
- * =============================================================================
- * RESUME PAGE SCRIPT
- * =============================================================================
- *
- * Handles rendering of the resume page from JSON data.
- *
- * DEPENDENCIES (from script.js):
- * - createElement()      - DOM element factory
- * - createIconElement()  - Icon span factory
- * - renderFooter()       - Footer with theme switcher
- * - initThemeSwitcher()  - Theme toggle functionality
- *
- * DATA SOURCES:
- * - /data/resume.json    - Resume content (experience, education, skills)
- * - /data/site.json      - Profile info and social links
- *
- * =============================================================================
+ * Resume page entry point.
  */
 
-function updateLogoHeadshot(config) {
-    const logoHeadshot = document.getElementById('logo-headshot');
-    if (!logoHeadshot || !config?.profile?.headshots) return;
+import { loadSiteConfig } from "./data.js";
+import { createElement } from "./dom.js";
+import { renderHeroIntro, renderFooter, updateLogoHeadshot } from "./hero.js";
+import { initThemeSwitcher, initHeadshotClickAnimation } from "./interactivity.js";
 
-    const theme = localStorage.getItem('theme') || 'hopkins';
-    const headshot = config.profile.headshots[theme] || config.profile.headshot;
-    if (headshot) {
-        logoHeadshot.src = headshot;
-    }
-}
-
-/**
- * Initialize the resume page by loading data and rendering content.
- */
 async function initResume() {
     try {
         const response = await fetch('/data/resume.json');
@@ -41,8 +16,6 @@ async function initResume() {
 
         renderResume(resume, siteConfig);
         renderFooter(siteConfig);
-
-        // Update logo headshot in header to match current theme
         updateLogoHeadshot(siteConfig);
 
         initThemeSwitcher();
@@ -59,20 +32,11 @@ async function initResume() {
     }
 }
 
-/**
- * Render resume content into the page.
- * Creates hero section, experience, education, skills, and projects.
- *
- * @param {Object} resume - Resume data from resume.json
- * @param {Object} siteConfig - Site config from site.json (for profile/socials)
- */
 function renderResume(resume, siteConfig) {
     const container = document.getElementById('resume-content');
     if (!container) return;
 
     container.textContent = '';
-
-    // Render hero intro using shared function from main script.js
     renderHeroIntro(container, siteConfig, {
         extraClass: 'resume-hero-intro',
         excludePlatforms: ['resume'],
@@ -142,7 +106,6 @@ function renderResume(resume, siteConfig) {
     projSection.appendChild(createElement('h2', { className: 'resume-section-title', textContent: 'Projects' }));
 
     resume.projects.forEach(proj => {
-        // Make whole card a link if URL exists, otherwise use div
         const projEl = proj.url
             ? createElement('a', {
                 href: proj.url,
@@ -175,8 +138,6 @@ function renderResume(resume, siteConfig) {
 
     mainGrid.appendChild(rightCol);
     container.appendChild(mainGrid);
-
-    // Trigger animations now that all content is built
     container.classList.add('rendered');
 }
 

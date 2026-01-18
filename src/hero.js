@@ -12,6 +12,12 @@ export function getThemedHeadshot(config) {
   return config.profile.headshot;
 }
 
+export function updateLogoHeadshot(config) {
+  const logoHeadshot = document.getElementById("logo-headshot");
+  if (!logoHeadshot || !config?.profile?.headshots) return;
+  logoHeadshot.src = getThemedHeadshot(config);
+}
+
 /**
  * Renders the hero intro section (headshot, name, bio, social links).
  * Shared between homepage and resume page to keep them in sync.

@@ -25,7 +25,6 @@ export function initThemeSwitcher() {
     // iOS 26 Safari samples body background-color for toolbar tint (ignores theme-color meta)
     document.body.style.backgroundColor = themeColors[theme] || themeColors.hopkins;
 
-    // Update headshots based on theme
     if (siteConfig && siteConfig.profile.headshots) {
       const headshot = siteConfig.profile.headshots[theme] || siteConfig.profile.headshot;
       document.querySelectorAll(".hero-headshot, .logo-headshot").forEach((img) => {
@@ -152,15 +151,10 @@ export function initNavigation() {
   }, 0);
 }
 
-/**
- * Initialize headshot click animation.
- * Shared between homepage and resume page.
- */
 export function initHeadshotClickAnimation(readyDelay = 600) {
   const headshot = document.querySelector(".hero-headshot");
   if (!headshot) return;
 
-  // Mark as ready for click animation after initial scaleIn completes
   setTimeout(() => {
     headshot.classList.add("animation-ready");
   }, readyDelay);
