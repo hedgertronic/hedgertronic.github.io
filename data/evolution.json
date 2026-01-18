@@ -1,0 +1,107 @@
+{
+  "page": {
+    "title": "Evolution",
+    "heroTitle": "Pitching Evolution",
+    "description": "My Throwing Evolution - Tracking pitch development and training progress."
+  },
+  "sections": [
+    {
+      "id": "year-2026",
+      "title": "2026",
+      "accentColor": "#f97316",
+      "heroSection": true,
+      "heroVideo": {
+        "vimeoId": "1155714020",
+        "vertical": true
+      },
+      "description": "Pursuing the lowest arm slot possible. Currently hovering around the 2-foot release height mark which would be the second-lowest in MLB behind Tyler Rogers, allowing me to generate outlier shapes and angles. This is after raising my arm slot in 2025, leading to flatter shapes, less deception, and the worst results of my career.",
+      "video": {
+        "vimeoId": "1155603520",
+        "buttonText": "Watch Full Video",
+        "vertical": true
+      },
+      "subsections": [
+        {
+          "id": "arsenal-overview",
+          "title": "Arsenal Overview",
+          "type": "arsenal",
+          "dataFile": "assets/documents/trackman-master.csv",
+          "viewAllUrl": "/assets/documents/trackman-master.csv",
+          "viewAllLabel": "View Raw Data"
+        },
+        {
+          "id": "mlb-comparison",
+          "title": "MLB Comparison",
+          "type": "leaderboards",
+          "dataFile": "data/evolution-leaderboards.json"
+        },
+        {
+          "id": "how-i-trained",
+          "title": "How I Trained",
+          "type": "training",
+          "dataFile": "data/field-training.json"
+        }
+      ]
+    },
+    {
+      "id": "pitching-evolution",
+      "title": "Career Overview",
+      "accentColor": "#fbbf24",
+      "centeredTitle": true,
+      "subsections": [
+        {
+          "id": "release-height-progression",
+          "title": "Release Height Progression",
+          "type": "video-progression",
+          "videos": [
+            {
+              "year": "2026",
+              "releaseHeight": "2.0",
+              "vimeoId": "1155733369",
+              "description": "Embracing the lowest slot of my career with outlier shapes and angles."
+            },
+            {
+              "year": "2025",
+              "releaseHeight": "3.5",
+              "vimeoId": "1155727266",
+              "description": "Raised my slot in an attempt to throw harder, but ended up decreasing my effectiveness due to flatter shapes and less deception."
+            },
+            {
+              "year": "2024",
+              "releaseHeight": "3.2",
+              "vimeoId": "1155727181",
+              "description": "My first year back from Tommy John surgery. My slot settled in a bit higher than pre-surgery but my velocity was up and I had an effective year."
+            },
+            {
+              "year": "2022",
+              "releaseHeight": "2.7",
+              "vimeoId": "1155726916",
+              "description": "The addition of my rising slider led to a decrease in my release height. I had an effective year with the addition of the new pitch."
+            }
+          ]
+        },
+        {
+          "id": "career-stats",
+          "title": "Career Stats",
+          "type": "stats",
+          "statsFile": "assets/documents/career_stats.csv",
+          "statsHighlights": ["ERA", "W-L", "G", "IP", "SO", "WHIP"],
+          "statsLinks": [
+            {
+              "name": "MiLB",
+              "url": "https://www.milb.com/player/josh-hejka-691196"
+            },
+            {
+              "name": "BBRef",
+              "url": "https://www.baseball-reference.com/register/player.fcgi?id=hejka-000jos"
+            },
+            {
+              "name": "FanGraphs",
+              "url": "https://www.fangraphs.com/players/joshua-hejka/sa3011152/stats/pitching"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
