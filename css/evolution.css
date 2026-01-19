@@ -680,17 +680,20 @@
     }
 
     .hero-focus-metrics {
-        flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.65rem;
     }
 
     .hero-focus-group {
-        padding: 0.4rem 0.6rem;
+        padding: 0.35rem 0.75rem;
         gap: 0.5rem;
     }
 
     .hero-focus-standalone {
-        padding: 0.4rem 0.6rem;
+        padding: 0.35rem 0.75rem;
+    }
+
+    .hero-focus-year {
+        font-size: 0.6rem;
     }
 
     .hero-focus-tooltip {
@@ -699,11 +702,15 @@
     }
 
     .hero-focus-value {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
+    }
+
+    .hero-focus-label {
+        font-size: 0.55rem;
     }
 
     .hero-focus-arrow {
-        font-size: 1rem;
+        font-size: 0.85rem;
     }
 
     .hero-year-video-wrapper {
