@@ -151,7 +151,7 @@ export function initNavigation() {
   }, 0);
 }
 
-export function initHeadshotClickAnimation(readyDelay = 600) {
+export function initHeadshotClickAnimation(readyDelay = 600, linkUrl = null) {
   const headshot = document.querySelector(".hero-headshot");
   if (!headshot) return;
 
@@ -161,6 +161,12 @@ export function initHeadshotClickAnimation(readyDelay = 600) {
 
   headshot.addEventListener("click", () => {
     if (!headshot.classList.contains("animation-ready")) return;
+
+    // If linkUrl provided, navigate instead of animating
+    if (linkUrl) {
+      window.location.href = linkUrl;
+      return;
+    }
 
     headshot.classList.remove("clicked", "transitioning-out");
     // Force reflow to restart animation

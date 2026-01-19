@@ -267,7 +267,7 @@ async function initEvolutionPage() {
       initNavigation();
     }
 
-    initHeadshotClickAnimation(400);
+    initHeadshotClickAnimation(400, "/");
   } catch (error) {
     console.error("Error initializing evolution page:", error);
   }

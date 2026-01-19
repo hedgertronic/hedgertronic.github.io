@@ -657,6 +657,14 @@ async function renderArsenalSubsection(subsection, container) {
 
   subsectionDiv.appendChild(header);
 
+  if (subsection.description) {
+    const description = createElement("p", {
+      className: "subsection-description",
+      textContent: subsection.description,
+    });
+    subsectionDiv.appendChild(description);
+  }
+
   const grid = createElement("div", { className: "evolution-grid" });
 
   const tableWrapper = createElement("div", {
