@@ -11,6 +11,48 @@
     ]
   },
   {
+    "title": "Breaking Ball IVB",
+    "unit": "inches",
+    "entries": [
+      {
+        "rank": 1,
+        "name": "Josh Hejka",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "16.5",
+        "highlight": true
+      },
+      {
+        "rank": 2,
+        "name": "Tyler Rogers",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "13.9"
+      },
+      {
+        "rank": 3,
+        "name": "Shawn Armstrong",
+        "pitch": "SW",
+        "pitchClass": "pitch-sweeper",
+        "value": "9.9"
+      },
+      {
+        "rank": 4,
+        "name": "Robbie Ray",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "9.2"
+      },
+      {
+        "rank": 5,
+        "name": "Ryan Thompson",
+        "pitch": "SL",
+        "pitchClass": "pitch-slider",
+        "value": "8.8"
+      }
+    ]
+  },
+  {
     "title": "VAA",
     "unit": "degrees",
     "entries": [
@@ -87,48 +129,6 @@
         "pitch": "SI",
         "pitchClass": "pitch-sinker",
         "value": "83.5"
-      }
-    ]
-  },
-  {
-    "title": "Breaking Ball IVB",
-    "unit": "inches",
-    "entries": [
-      {
-        "rank": 1,
-        "name": "Josh Hejka",
-        "pitch": "SL",
-        "pitchClass": "pitch-slider",
-        "value": "16.5",
-        "highlight": true
-      },
-      {
-        "rank": 2,
-        "name": "Tyler Rogers",
-        "pitch": "SL",
-        "pitchClass": "pitch-slider",
-        "value": "13.9"
-      },
-      {
-        "rank": 3,
-        "name": "Shawn Armstrong",
-        "pitch": "SW",
-        "pitchClass": "pitch-sweeper",
-        "value": "9.9"
-      },
-      {
-        "rank": 4,
-        "name": "Robbie Ray",
-        "pitch": "SL",
-        "pitchClass": "pitch-slider",
-        "value": "9.2"
-      },
-      {
-        "rank": 5,
-        "name": "Ryan Thompson",
-        "pitch": "SL",
-        "pitchClass": "pitch-slider",
-        "value": "8.8"
       }
     ]
   }
