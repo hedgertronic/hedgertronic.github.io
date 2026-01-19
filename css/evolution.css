@@ -340,7 +340,6 @@
 
 .hero-focus-arrow {
     font-size: 1.25rem;
-    margin-top: 0.5rem;
     background: linear-gradient(135deg, #d4af37 0%, #f5d67a 50%, #d4af37 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
