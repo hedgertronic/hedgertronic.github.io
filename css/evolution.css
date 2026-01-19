@@ -844,9 +844,8 @@
 }
 
 .leaderboard-card {
-    flex: 0 0 300px;
-    min-width: 280px;
-    max-width: 340px;
+    width: 320px;
+    flex-shrink: 0;
     scroll-snap-align: start;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -1242,8 +1241,9 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    flex: 0 0 320px;
-    min-width: 280px;
+    width: 320px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
 }
 
 .training-card-label {
@@ -1258,6 +1258,7 @@ body.modal-open {
 .training-card-container .training-card-link,
 .training-card-container .training-card {
     flex: none;
+    width: 100%;
     min-width: 0;
 }
 
@@ -1267,8 +1268,8 @@ body.modal-open {
 }
 
 .video-progression-card {
-    flex: 0 0 320px;
-    min-width: 280px;
+    width: 320px;
+    flex-shrink: 0;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
@@ -1414,14 +1415,21 @@ body.modal-open {
     padding: 1rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 800px) {
     .video-progression-card {
         flex: 0 0 300px;
         min-width: 280px;
+        width: auto;
     }
 
     .video-progression-badge {
         font-size: 1rem;
+    }
+
+    .training-card-container {
+        flex: 0 0 300px;
+        min-width: 280px;
+        width: auto;
     }
 }
 
@@ -1674,9 +1682,16 @@ body.modal-open {
     }
 
     /* Leaderboard mobile styles */
+    .leaderboard-grid {
+        gap: 1rem;
+        padding: 0.75rem 1rem 1rem 1rem;
+        margin: -0.75rem -1rem -0.75rem -1rem;
+    }
+
     .leaderboard-card {
         flex: 0 0 300px;
         min-width: 280px;
+        width: auto;
         padding: 1rem;
     }
 
