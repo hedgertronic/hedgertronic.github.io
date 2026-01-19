@@ -27,7 +27,7 @@
       "heroVideo": {
         "vimeoId": "1155714020",
         "vertical": true,
-        "label": "Rising Slider"
+        "label": "Slider Highlight"
       },
       "description": "Outlier shapes, angles, and results",
       "focusMetrics": [
@@ -57,7 +57,7 @@
         "vimeoId": "1155603520",
         "buttonText": "Watch Full Video",
         "vertical": true,
-        "label": "Full Video"
+        "label": "Full At-Bats"
       },
       "subsections": [
         {

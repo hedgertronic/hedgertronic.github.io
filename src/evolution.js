@@ -120,17 +120,17 @@ async function initEvolutionPage() {
         const content = document.createElement("div");
         content.className = "comparison-modal-content";
 
-        const closeBtn = document.createElement("button");
-        closeBtn.className = "comparison-modal-close";
-        closeBtn.textContent = "×";
-        content.appendChild(closeBtn);
-
         const label = document.createElement("div");
         label.className = "comparison-modal-label";
         content.appendChild(label);
 
         const imageContainer = document.createElement("div");
         imageContainer.className = "comparison-modal-image-container";
+
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "comparison-modal-close";
+        closeBtn.textContent = "×";
+        imageContainer.appendChild(closeBtn);
 
         const prevBtn = document.createElement("button");
         prevBtn.className = "comparison-modal-nav comparison-modal-nav--prev";
@@ -152,8 +152,8 @@ async function initEvolutionPage() {
 
         const updateNavButtons = (index) => {
           // Hide prev on first item, hide next on last item
-          prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
-          nextBtn.style.visibility = index === items.length - 1 ? "hidden" : "visible";
+          prevBtn.style.display = index === 0 ? "none" : "flex";
+          nextBtn.style.display = index === items.length - 1 ? "none" : "flex";
         };
 
         const updateModalContent = (index) => {

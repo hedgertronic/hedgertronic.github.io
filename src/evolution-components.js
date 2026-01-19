@@ -1145,7 +1145,7 @@ function renderVideoProgressionSubsection(subsection, container) {
 
   // Create shared modal for all videos
   let currentModalIndex = 0;
-  let modalIframe = null;
+  const modalIframes = []; // Array of iframes, one per video
 
   const modal = createElement("div", { className: "video-modal" });
   const backdrop = createElement("div", { className: "video-modal-backdrop" });
@@ -1183,7 +1183,8 @@ function renderVideoProgressionSubsection(subsection, container) {
   // Modal description
   const modalDescription = createElement("p", { className: "video-modal-description" });
 
-  content.appendChild(closeBtn);
+  // Append close button to video wrapper so it's positioned on the video
+  modalWrapper.appendChild(closeBtn);
   content.appendChild(modalLabel);
   content.appendChild(modalBody);
   content.appendChild(modalDescription);
@@ -1191,11 +1192,48 @@ function renderVideoProgressionSubsection(subsection, container) {
   modal.appendChild(content);
 
   const updateNavButtons = (index) => {
-    prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
-    nextBtn.style.visibility = index === validVideos.length - 1 ? "hidden" : "visible";
+    prevBtn.style.display = index === 0 ? "none" : "flex";
+    nextBtn.style.display = index === validVideos.length - 1 ? "none" : "flex";
   };
 
-  const updateModalContent = (index) => {
+  // Get or create iframe for a specific video index
+  const getOrCreateIframe = (index) => {
+    if (!modalIframes[index]) {
+      const video = validVideos[index];
+      const iframe = createElement("iframe");
+      iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+      iframe.setAttribute("frameborder", "0");
+      iframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+      );
+      iframe.setAttribute("allowfullscreen", "");
+      iframe.style.display = "none";
+      modalWrapper.appendChild(iframe);
+      modalIframes[index] = iframe;
+    }
+    return modalIframes[index];
+  };
+
+  const showVideo = (index) => {
+    // Hide all iframes and pause them
+    modalIframes.forEach((iframe, i) => {
+      if (iframe) {
+        iframe.style.display = i === index ? "block" : "none";
+        if (i !== index) {
+          iframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+        }
+      }
+    });
+
+    // Show and play the current video
+    const iframe = getOrCreateIframe(index);
+    iframe.style.display = "block";
+    iframe.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
+  };
+
+  const updateModalContent = (index, autoplay = true) => {
+    const prevIndex = currentModalIndex;
     currentModalIndex = index;
     const video = validVideos[index];
     const metricValue = video[metricKey];
@@ -1221,9 +1259,9 @@ function renderVideoProgressionSubsection(subsection, container) {
     modalDescription.textContent = video.description || "";
     modalDescription.style.display = video.description ? "block" : "none";
 
-    // Update video
-    if (modalIframe) {
-      modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+    // Switch video (pause old, show/play new)
+    if (autoplay) {
+      showVideo(index);
     }
 
     updateNavButtons(index);
@@ -1231,21 +1269,8 @@ function renderVideoProgressionSubsection(subsection, container) {
 
   const openModal = (index) => {
     currentModalIndex = index;
-    const video = validVideos[index];
-
-    if (!modalIframe) {
-      modalIframe = createElement("iframe");
-      modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
-      modalIframe.setAttribute("frameborder", "0");
-      modalIframe.setAttribute(
-        "allow",
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-      );
-      modalIframe.setAttribute("allowfullscreen", "");
-      modalWrapper.appendChild(modalIframe);
-    }
-
-    updateModalContent(index);
+    getOrCreateIframe(index); // Ensure iframe exists
+    updateModalContent(index, true);
     modal.classList.add("active");
     document.body.classList.add("modal-open");
   };
@@ -1253,8 +1278,10 @@ function renderVideoProgressionSubsection(subsection, container) {
   const closeModal = () => {
     modal.classList.remove("active");
     document.body.classList.remove("modal-open");
-    if (modalIframe) {
-      modalIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+    // Pause current video
+    const currentIframe = modalIframes[currentModalIndex];
+    if (currentIframe) {
+      currentIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
     }
   };
 
@@ -1272,6 +1299,12 @@ function renderVideoProgressionSubsection(subsection, container) {
 
   closeBtn.addEventListener("click", closeModal);
   backdrop.addEventListener("click", closeModal);
+  // Close when clicking on transparent content area (not children)
+  content.addEventListener("click", (e) => {
+    if (e.target === content || e.target === modalBody) {
+      closeModal();
+    }
+  });
 
   const handleKeydown = (e) => {
     if (!modal.classList.contains("active")) return;
@@ -1708,8 +1741,164 @@ export async function renderSection(section, container, index) {
     // Video pair container for highlight and full video side by side
     const videoPair = createElement("div", { className: "hero-video-pair" });
 
-    // Helper to create a video card with modal
-    const createVideoCard = (label, vimeoId, isVertical) => {
+    // Collect videos for shared modal navigation
+    const heroVideos = [
+      {
+        label: section.heroVideo.label || "Highlight",
+        vimeoId: section.heroVideo.vimeoId,
+        isVertical: section.heroVideo.vertical,
+      },
+    ];
+    if (section.video) {
+      heroVideos.push({
+        label: section.video.label || "Full Video",
+        vimeoId: section.video.vimeoId,
+        isVertical: section.video.vertical,
+      });
+    }
+
+    // Create shared modal for hero videos
+    let currentHeroIndex = 0;
+    const heroModalIframes = []; // Array of iframes, one per video
+
+    const heroModal = createElement("div", { className: "video-modal" });
+    const heroBackdrop = createElement("div", { className: "video-modal-backdrop" });
+    const heroContent = createElement("div", {
+      className: "video-modal-content video-modal-content--vertical",
+    });
+
+    const heroCloseBtn = createElement("button", {
+      className: "video-modal-close",
+      textContent: "\u00D7",
+    });
+
+    // Navigation and video container
+    const heroModalBody = createElement("div", { className: "video-modal-body" });
+
+    const heroPrevBtn = createElement("button", {
+      className: "video-modal-nav video-modal-nav--prev",
+      textContent: "\u2039",
+    });
+
+    const heroModalWrapper = createElement("div", { className: "video-modal-wrapper" });
+
+    const heroNextBtn = createElement("button", {
+      className: "video-modal-nav video-modal-nav--next",
+      textContent: "\u203A",
+    });
+
+    heroModalBody.appendChild(heroPrevBtn);
+    heroModalBody.appendChild(heroModalWrapper);
+    heroModalBody.appendChild(heroNextBtn);
+
+    // Append close button to video wrapper so it's positioned on the video
+    heroModalWrapper.appendChild(heroCloseBtn);
+    heroContent.appendChild(heroModalBody);
+    heroModal.appendChild(heroBackdrop);
+    heroModal.appendChild(heroContent);
+
+    const updateHeroNavButtons = (index) => {
+      heroPrevBtn.style.display = index === 0 ? "none" : "flex";
+      heroNextBtn.style.display = index === heroVideos.length - 1 ? "none" : "flex";
+    };
+
+    // Get or create iframe for a specific video index
+    const getOrCreateHeroIframe = (index) => {
+      if (!heroModalIframes[index]) {
+        const video = heroVideos[index];
+        const iframe = createElement("iframe");
+        iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+        iframe.setAttribute("frameborder", "0");
+        iframe.setAttribute(
+          "allow",
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        );
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.style.display = "none";
+        heroModalWrapper.appendChild(iframe);
+        heroModalIframes[index] = iframe;
+      }
+      return heroModalIframes[index];
+    };
+
+    const showHeroVideo = (index) => {
+      // Hide all iframes and pause them
+      heroModalIframes.forEach((iframe, i) => {
+        if (iframe) {
+          iframe.style.display = i === index ? "block" : "none";
+          if (i !== index) {
+            iframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+          }
+        }
+      });
+
+      // Show and play the current video
+      const iframe = getOrCreateHeroIframe(index);
+      iframe.style.display = "block";
+      iframe.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
+    };
+
+    const updateHeroModalContent = (index) => {
+      currentHeroIndex = index;
+      showHeroVideo(index);
+      updateHeroNavButtons(index);
+    };
+
+    const openHeroModal = (index) => {
+      currentHeroIndex = index;
+      getOrCreateHeroIframe(index); // Ensure iframe exists
+      updateHeroModalContent(index);
+      heroModal.classList.add("active");
+      document.body.classList.add("modal-open");
+    };
+
+    const closeHeroModal = () => {
+      heroModal.classList.remove("active");
+      document.body.classList.remove("modal-open");
+      // Pause current video
+      const currentIframe = heroModalIframes[currentHeroIndex];
+      if (currentIframe) {
+        currentIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+      }
+    };
+
+    heroPrevBtn.addEventListener("click", () => {
+      if (currentHeroIndex > 0) {
+        updateHeroModalContent(currentHeroIndex - 1);
+      }
+    });
+
+    heroNextBtn.addEventListener("click", () => {
+      if (currentHeroIndex < heroVideos.length - 1) {
+        updateHeroModalContent(currentHeroIndex + 1);
+      }
+    });
+
+    heroCloseBtn.addEventListener("click", closeHeroModal);
+    heroBackdrop.addEventListener("click", closeHeroModal);
+    // Close when clicking on transparent content area (not children)
+    heroContent.addEventListener("click", (e) => {
+      if (e.target === heroContent || e.target === heroModalBody) {
+        closeHeroModal();
+      }
+    });
+
+    const handleHeroKeydown = (e) => {
+      if (!heroModal.classList.contains("active")) return;
+      if (e.key === "Escape") closeHeroModal();
+      if (e.key === "ArrowLeft" && currentHeroIndex > 0) {
+        updateHeroModalContent(currentHeroIndex - 1);
+      }
+      if (e.key === "ArrowRight" && currentHeroIndex < heroVideos.length - 1) {
+        updateHeroModalContent(currentHeroIndex + 1);
+      }
+    };
+    document.addEventListener("keydown", handleHeroKeydown);
+
+    document.body.appendChild(heroModal);
+
+    // Helper to create a video card (preview only, uses shared modal)
+    const createVideoCard = (label, vimeoId, index) => {
       const card = createElement("div", { className: "hero-video-card" });
       const labelEl = createElement("div", {
         className: "hero-video-label",
@@ -1744,92 +1933,16 @@ export async function renderSection(section, container, index) {
 
       card.appendChild(wrapper);
 
-      // Create modal
-      const modal = createElement("div", { className: "video-modal" });
-      const backdrop = createElement("div", { className: "video-modal-backdrop" });
-      const content = createElement("div", {
-        className: isVertical
-          ? "video-modal-content video-modal-content--vertical"
-          : "video-modal-content",
-      });
-
-      const closeBtn = createElement("button", {
-        className: "video-modal-close",
-        textContent: "\u00D7",
-      });
-
-      const modalWrapper = createElement("div", { className: "video-modal-wrapper" });
-
-      content.appendChild(closeBtn);
-      content.appendChild(modalWrapper);
-      modal.appendChild(backdrop);
-      modal.appendChild(content);
-
-      let modalIframe = null;
-
-      const openModal = () => {
-        if (!modalIframe) {
-          modalIframe = createElement("iframe");
-          modalIframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
-          modalIframe.setAttribute("frameborder", "0");
-          modalIframe.setAttribute(
-            "allow",
-            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          );
-          modalIframe.setAttribute("allowfullscreen", "");
-          modalWrapper.appendChild(modalIframe);
-        } else {
-          modalIframe.contentWindow.postMessage(
-            JSON.stringify({ method: "play" }),
-            "*"
-          );
-        }
-        modal.classList.add("active");
-        document.body.classList.add("modal-open");
-      };
-
-      const closeModal = () => {
-        modal.classList.remove("active");
-        document.body.classList.remove("modal-open");
-        if (modalIframe) {
-          modalIframe.contentWindow.postMessage(
-            JSON.stringify({ method: "pause" }),
-            "*"
-          );
-        }
-      };
-
-      wrapper.addEventListener("click", openModal);
-      closeBtn.addEventListener("click", closeModal);
-      backdrop.addEventListener("click", closeModal);
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeModal();
-        }
-      });
-
-      document.body.appendChild(modal);
+      wrapper.addEventListener("click", () => openHeroModal(index));
 
       return card;
     };
 
-    // Highlight video card
-    const highlightCard = createVideoCard(
-      section.heroVideo.label || "Highlight",
-      section.heroVideo.vimeoId,
-      section.heroVideo.vertical
-    );
-    videoPair.appendChild(highlightCard);
-
-    // Full video card
-    if (section.video) {
-      const fullCard = createVideoCard(
-        section.video.label || "Full Video",
-        section.video.vimeoId,
-        section.video.vertical
-      );
-      videoPair.appendChild(fullCard);
-    }
+    // Create video cards
+    heroVideos.forEach((video, index) => {
+      const card = createVideoCard(video.label, video.vimeoId, index);
+      videoPair.appendChild(card);
+    });
 
     showcase.appendChild(videoPair);
     containerDiv.appendChild(showcase);
@@ -1918,11 +2031,7 @@ export async function renderSection(section, container, index) {
         modalIframe.setAttribute("allowfullscreen", "");
         modalVideoWrapper.appendChild(modalIframe);
       } else {
-        if (section.video.vimeoId) {
-          modalIframe.src = `https://player.vimeo.com/video/${section.video.vimeoId}?autoplay=1&loop=1`;
-        } else if (section.video.youtubeId) {
-          modalIframe.src = `https://www.youtube.com/embed/${section.video.youtubeId}?autoplay=1&loop=1`;
-        }
+        modalIframe.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
       }
       modal.classList.add("active");
       document.body.classList.add("modal-open");
@@ -1932,7 +2041,7 @@ export async function renderSection(section, container, index) {
       modal.classList.remove("active");
       document.body.classList.remove("modal-open");
       if (modalIframe) {
-        modalIframe.src = "";
+        modalIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
       }
     };
 

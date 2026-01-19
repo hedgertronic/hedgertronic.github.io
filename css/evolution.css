@@ -221,13 +221,13 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     color: var(--text-primary);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -242,24 +242,25 @@
 }
 
 .comparison-modal-nav--prev {
-    left: -60px;
+    left: -48px;
 }
 
 .comparison-modal-nav--next {
-    right: -60px;
+    right: -48px;
 }
 
 .comparison-modal-close {
     position: absolute;
-    top: -50px;
-    right: 0;
-    width: 40px;
-    height: 40px;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     color: var(--text-primary);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -274,17 +275,17 @@
 
 @media (max-width: 600px) {
     .comparison-modal-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
     }
 
     .comparison-modal-nav--prev {
-        left: -48px;
+        left: -40px;
     }
 
     .comparison-modal-nav--next {
-        right: -48px;
+        right: -40px;
     }
 
     .comparison-modal-label {
@@ -292,9 +293,10 @@
     }
 
     .comparison-modal-close {
-        top: -45px;
-        width: 36px;
-        height: 36px;
+        top: 8px;
+        left: 8px;
+        width: 32px;
+        height: 32px;
     }
 }
 
@@ -672,9 +674,9 @@
 
 .hero-year-video-wrapper {
     position: relative;
-    width: min(280px, 20vw);
+    width: min(240px, 22vw);
     min-width: 160px;
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 2 / 3;
     border-radius: var(--radius-lg);
     overflow: hidden;
     background: #000;
@@ -694,10 +696,11 @@
 
 .hero-year-video-wrapper iframe {
     position: absolute;
-    top: 0;
+    top: auto;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 118.52%; /* 9:16 video cropped to show bottom in 2:3 container */
     border: none;
     pointer-events: none; /* Allow clicks to pass through to overlay */
 }
@@ -918,7 +921,7 @@
     }
 
     .hero-year-video-wrapper {
-        width: min(42vw, 260px);
+        width: min(38vw, 200px);
     }
 
     .hero-video-pair {
@@ -986,7 +989,7 @@
     }
 
     .hero-year-video-wrapper {
-        width: min(40vw, 200px);
+        width: min(36vw, 160px);
     }
 
     .hero-video-pair {
@@ -1374,6 +1377,12 @@ body.modal-open {
 
 .video-modal-content--vertical {
     max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+    border: none;
+    overflow: visible;
 }
 
 .video-modal-content--square {
@@ -1388,7 +1397,22 @@ body.modal-open {
 }
 
 .video-modal-content--vertical .video-modal-wrapper {
-    padding-bottom: 177.78%; /* 9:16 */
+    width: 45vh;
+    max-width: 350px;
+    padding-bottom: 0;
+    aspect-ratio: 9 / 16;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Vertical modal: X button at top left of the video */
+.video-modal-content--vertical .video-modal-close {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: auto;
+    z-index: 20;
 }
 
 .video-modal-content--square .video-modal-wrapper {
@@ -1427,18 +1451,13 @@ body.modal-open {
     height: 100%;
 }
 
+/* Progression modal: X button at top left of the square video */
 .video-modal-content--progression .video-modal-close {
     position: absolute;
-    top: -50px;
-    left: auto;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid var(--border-color);
-}
-
-.video-modal-content--progression .video-modal-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--text-primary);
+    top: 12px;
+    left: 12px;
+    right: auto;
+    z-index: 20;
 }
 
 .video-modal-label {
@@ -1475,13 +1494,13 @@ body.modal-open {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     color: var(--text-primary);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1497,11 +1516,11 @@ body.modal-open {
 }
 
 .video-modal-nav--prev {
-    left: -60px;
+    left: -48px;
 }
 
 .video-modal-nav--next {
-    right: -60px;
+    right: -48px;
 }
 
 .video-modal-description {
@@ -1520,17 +1539,17 @@ body.modal-open {
     }
 
     .video-modal-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
     }
 
     .video-modal-nav--prev {
-        left: -50px;
+        left: -40px;
     }
 
     .video-modal-nav--next {
-        right: -50px;
+        right: -40px;
     }
 
     .video-modal-label {
@@ -1549,9 +1568,9 @@ body.modal-open {
     }
 
     .video-modal-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 1.25rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
         background: rgba(0, 0, 0, 0.7);
     }
 
@@ -1563,8 +1582,9 @@ body.modal-open {
         right: 0.75rem;
     }
 
-    .video-modal-content--progression .video-modal-close {
-        top: -42px;
+    .video-modal-close {
+        top: 8px;
+        left: 8px;
         width: 32px;
         height: 32px;
     }
@@ -1586,8 +1606,8 @@ body.modal-open {
     z-index: 10;
     width: 36px;
     height: 36px;
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     color: #fff;
     font-size: 1.5rem;
@@ -1600,7 +1620,8 @@ body.modal-open {
 }
 
 .video-modal-close:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--text-primary);
     color: #fff;
 }
 
@@ -2177,6 +2198,8 @@ body.modal-open {
     }
 
     .video-modal-content--vertical .video-modal-wrapper {
+        width: 75vw;
+        max-width: none;
         max-height: 80vh;
     }
 
