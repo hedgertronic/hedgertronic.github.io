@@ -234,10 +234,25 @@ async function initEvolutionPage() {
       renderEvolutionHeroNav(heroNav, evolutionConfig.sections);
     }
 
-    const pageTitleDiv = document.querySelector(".evolution-page-title");
-    if (pageTitleDiv && evolutionConfig.sections.length > 0) {
-      const scrollArrow = createScrollArrow(evolutionConfig.sections[0].id);
-      pageTitleDiv.appendChild(scrollArrow);
+    const pageTitleArrow = document.querySelector(".evolution-page-title-arrow");
+    if (pageTitleArrow) {
+      // Create arrow SVG (inside a span, not anchor, since it's inside an <a> tag)
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", "24");
+      svg.setAttribute("height", "24");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("fill", "none");
+      svg.setAttribute("stroke", "currentColor");
+      svg.setAttribute("stroke-width", "2");
+      svg.setAttribute("stroke-linecap", "round");
+      svg.setAttribute("stroke-linejoin", "round");
+      const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path1.setAttribute("d", "M12 5v14");
+      const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path2.setAttribute("d", "m19 12-7 7-7-7");
+      svg.appendChild(path1);
+      svg.appendChild(path2);
+      pageTitleArrow.appendChild(svg);
     }
 
     const main = document.querySelector("main");
