@@ -937,7 +937,8 @@
     }
 
     .hero-year-video-wrapper {
-        width: min(38vw, 200px);
+        width: calc((100vw - 3.5rem) / 2);
+        max-width: 240px;
     }
 
     .hero-video-pair {
@@ -1005,7 +1006,8 @@
     }
 
     .hero-year-video-wrapper {
-        width: min(36vw, 160px);
+        width: calc((100vw - 3.25rem) / 2);
+        max-width: 200px;
     }
 
     .hero-video-pair {
