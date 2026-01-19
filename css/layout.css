@@ -430,6 +430,34 @@ nav.container {
     box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-primary) 12%, transparent);
 }
 
+/* Evolution CTA button - styled like resume-cta but with gold */
+.hero-intro .social-links a.evolution-cta {
+    --evolution-gold: #d4af37;
+    width: auto;
+    padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: color-mix(in srgb, var(--evolution-gold) 8%, transparent);
+    border-color: color-mix(in srgb, var(--evolution-gold) 50%, var(--border-color));
+    color: color-mix(in srgb, var(--evolution-gold) 85%, var(--text-primary));
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+}
+
+.hero-intro .social-links a.evolution-cta::before {
+    background: var(--evolution-gold);
+}
+
+.hero-intro .social-links a.evolution-cta:hover {
+    background: color-mix(in srgb, var(--evolution-gold) 15%, transparent);
+    border-color: var(--evolution-gold);
+    color: var(--evolution-gold);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--evolution-gold) 12%, transparent);
+}
+
 .hero-nav {
     display: flex;
     flex-wrap: wrap;
@@ -794,46 +822,67 @@ footer:empty {
         display: none;
     }
 
-    /* Fluid hero sizing - scales with viewport height, max values at 700px */
+    /* Fluid hero sizing - scales with viewport height, starts shrinking at 800px */
     .hero-intro {
-        margin-bottom: clamp(1rem, calc(2.5rem - (700px - 100svh) * 0.16), 2.5rem);
+        margin-bottom: clamp(0.75rem, calc(1.75rem - (800px - 100svh) * 0.08), 1.75rem);
     }
 
     .hero-headshot {
-        width: clamp(56px, calc(90px - (700px - 100svh) * 0.23), 90px);
-        height: clamp(56px, calc(90px - (700px - 100svh) * 0.23), 90px);
-        margin-bottom: clamp(0.5rem, calc(1.25rem - (700px - 100svh) * 0.08), 1.25rem);
+        width: clamp(52px, calc(90px - (800px - 100svh) * 0.16), 90px);
+        height: clamp(52px, calc(90px - (800px - 100svh) * 0.16), 90px);
+        margin-bottom: clamp(0.5rem, calc(1.25rem - (800px - 100svh) * 0.06), 1.25rem);
         animation-delay: 0s;
     }
 
     .hero-name {
-        font-size: clamp(1.5rem, calc(2rem - (700px - 100svh) * 0.053), 2rem);
-        margin-bottom: clamp(0.35rem, calc(0.75rem - (700px - 100svh) * 0.043), 0.75rem);
+        font-size: clamp(1.4rem, calc(2rem - (800px - 100svh) * 0.04), 2rem);
+        margin-bottom: clamp(0.3rem, calc(0.75rem - (800px - 100svh) * 0.03), 0.75rem);
         animation-delay: 0.1s;
     }
 
     .hero-description {
-        font-size: clamp(0.8rem, calc(0.95rem - (700px - 100svh) * 0.016), 0.95rem);
-        margin-bottom: clamp(0.75rem, calc(1.5rem - (700px - 100svh) * 0.08), 1.5rem);
+        font-size: clamp(0.78rem, calc(0.95rem - (800px - 100svh) * 0.011), 0.95rem);
+        margin-bottom: clamp(0.6rem, calc(1.5rem - (800px - 100svh) * 0.06), 1.5rem);
         line-height: 1.7;
         animation-delay: 0.15s;
     }
 
     .hero-intro .social-links {
         animation-delay: 0.2s;
-        min-height: clamp(30px, calc(36px - (700px - 100svh) * 0.04), 36px);
+        justify-content: center;
+        min-height: clamp(28px, calc(36px - (800px - 100svh) * 0.032), 36px);
+    }
+
+    /* Two rows when Evolution button present (homepage) */
+    .hero-intro .social-links:has(.evolution-cta) {
+        min-height: clamp(54px, calc(72px - (800px - 100svh) * 0.06), 72px);
+        row-gap: clamp(0.25rem, calc(0.5rem - (800px - 100svh) * 0.016), 0.5rem);
     }
 
     .hero-intro .social-links a {
-        width: clamp(30px, calc(36px - (700px - 100svh) * 0.04), 36px);
-        height: clamp(30px, calc(36px - (700px - 100svh) * 0.04), 36px);
+        width: clamp(28px, calc(36px - (800px - 100svh) * 0.032), 36px);
+        height: clamp(28px, calc(36px - (800px - 100svh) * 0.032), 36px);
     }
 
-    .hero-intro .social-links a.resume-cta {
+    /* CTA button sizing on mobile */
+    .hero-intro .social-links a.resume-cta,
+    .hero-intro .social-links a.evolution-cta {
         width: auto;
-        height: clamp(30px, calc(36px - (700px - 100svh) * 0.04), 36px);
+        height: clamp(28px, calc(36px - (800px - 100svh) * 0.032), 36px);
         padding: 0 0.65rem;
-        font-size: clamp(0.7rem, calc(0.8rem - (700px - 100svh) * 0.011), 0.8rem);
+        font-size: clamp(0.68rem, calc(0.8rem - (800px - 100svh) * 0.008), 0.8rem);
+    }
+
+    /* Only force second row when Evolution button is present (homepage) */
+    .hero-intro .social-links:has(.evolution-cta)::before {
+        content: '';
+        flex-basis: 100%;
+        order: 1;
+    }
+
+    .hero-intro .social-links:has(.evolution-cta) a.resume-cta,
+    .hero-intro .social-links:has(.evolution-cta) a.evolution-cta {
+        order: 2;
     }
 
     /* Hero nav on mobile - stack vertically, full width capsules */
@@ -841,12 +890,12 @@ footer:empty {
         flex-direction: column;
         align-items: stretch;
         max-width: 100%;
-        gap: clamp(0.25rem, calc(0.5rem - (700px - 100svh) * 0.027), 0.5rem);
+        gap: clamp(0.2rem, calc(0.5rem - (800px - 100svh) * 0.02), 0.5rem);
     }
 
     .hero-nav-item {
         justify-content: flex-start;
-        padding: clamp(0.3rem, calc(0.55rem - (700px - 100svh) * 0.027), 0.55rem) 1rem clamp(0.3rem, calc(0.55rem - (700px - 100svh) * 0.027), 0.55rem) 0.65rem;
+        padding: clamp(0.25rem, calc(0.55rem - (800px - 100svh) * 0.02), 0.55rem) 1rem clamp(0.25rem, calc(0.55rem - (800px - 100svh) * 0.02), 0.55rem) 0.65rem;
         width: 100%;
     }
 
@@ -859,21 +908,21 @@ footer:empty {
     }
 
     .hero-nav-icon {
-        width: clamp(26px, calc(36px - (700px - 100svh) * 0.067), 36px);
-        height: clamp(26px, calc(36px - (700px - 100svh) * 0.067), 36px);
+        width: clamp(24px, calc(36px - (800px - 100svh) * 0.05), 36px);
+        height: clamp(24px, calc(36px - (800px - 100svh) * 0.05), 36px);
     }
 
     .hero-nav-icon svg {
-        width: clamp(14px, calc(16px - (700px - 100svh) * 0.013), 16px);
-        height: clamp(14px, calc(16px - (700px - 100svh) * 0.013), 16px);
+        width: clamp(13px, calc(16px - (800px - 100svh) * 0.01), 16px);
+        height: clamp(13px, calc(16px - (800px - 100svh) * 0.01), 16px);
     }
 
     .hero-nav-label {
-        font-size: clamp(0.75rem, calc(0.85rem - (700px - 100svh) * 0.011), 0.85rem);
+        font-size: clamp(0.72rem, calc(0.85rem - (800px - 100svh) * 0.009), 0.85rem);
     }
 
     .hero-nav-subtitle {
-        font-size: clamp(0.65rem, calc(0.75rem - (700px - 100svh) * 0.011), 0.75rem);
+        font-size: clamp(0.62rem, calc(0.75rem - (800px - 100svh) * 0.009), 0.75rem);
     }
 
     .content-section {
@@ -1164,6 +1213,13 @@ footer:empty {
     .hero-intro .social-links a.resume-cta:hover,
     .hero-intro .social-links a.resume-cta:focus {
         background: color-mix(in srgb, var(--accent-primary) 8%, transparent);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .hero-intro .social-links a.evolution-cta:hover,
+    .hero-intro .social-links a.evolution-cta:focus {
+        background: color-mix(in srgb, var(--evolution-gold) 8%, transparent);
         box-shadow: none;
         transform: none;
     }

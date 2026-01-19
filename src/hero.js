@@ -183,6 +183,18 @@ export function renderHero(config) {
     reuseExisting: true,
   });
 
+  // Add Evolution CTA button to social links (homepage only)
+  const socialLinks = container.querySelector(".social-links");
+  let evolutionCta = socialLinks?.querySelector(".evolution-cta");
+  if (socialLinks && !evolutionCta) {
+    evolutionCta = createElement("a", {
+      href: "/evolution/",
+      className: "evolution-cta",
+    });
+    evolutionCta.textContent = "Evolution";
+    socialLinks.appendChild(evolutionCta);
+  }
+
   // Reuse existing hero-nav from HTML, or create if missing
   let heroNav = container.querySelector(".hero-nav");
   if (!heroNav) {
