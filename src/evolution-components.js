@@ -1501,17 +1501,93 @@ export async function renderSection(section, container, index) {
         className: "hero-focus-metrics",
       });
 
-      section.focusMetrics.forEach((metric, index) => {
-        if (index > 0) {
-          metricsContainer.appendChild(
-            createElement("span", {
-              className: "hero-focus-arrow",
-              textContent: "→",
+      // Group non-standalone metrics together (e.g., release height comparison)
+      const groupedMetrics = section.focusMetrics.filter((m) => !m.standalone);
+      const standaloneMetrics = section.focusMetrics.filter((m) => m.standalone);
+
+      // Check if device supports hover (desktop)
+      const supportsHover = window.matchMedia("(hover: hover)").matches;
+
+      // Helper to close all tooltips
+      const closeAllTooltips = () => {
+        document.querySelectorAll(".hero-focus-tooltip.active").forEach((t) => {
+          t.classList.remove("active");
+        });
+      };
+
+      // Helper to create tooltip functionality
+      const addTooltip = (element, text) => {
+        if (!text) return;
+        element.classList.add("has-tooltip");
+        const tooltip = createElement("div", {
+          className: "hero-focus-tooltip",
+          textContent: text,
+        });
+        element.appendChild(tooltip);
+
+        // Only add click handler for mobile (non-hover devices)
+        if (!supportsHover) {
+          element.addEventListener("click", (e) => {
+            e.stopPropagation();
+            // Close any other open tooltips
+            document.querySelectorAll(".hero-focus-tooltip.active").forEach((t) => {
+              if (t !== tooltip) t.classList.remove("active");
+            });
+            tooltip.classList.toggle("active");
+          });
+        }
+      };
+
+      // Mobile: close tooltips on click outside or scroll
+      if (!supportsHover) {
+        document.addEventListener("click", closeAllTooltips);
+        window.addEventListener("scroll", closeAllTooltips, { passive: true });
+      }
+
+      if (groupedMetrics.length > 0) {
+        const group = createElement("div", { className: "hero-focus-group" });
+        let groupNote = null;
+        groupedMetrics.forEach((metric, index) => {
+          if (index > 0) {
+            group.appendChild(
+              createElement("span", {
+                className: "hero-focus-arrow",
+                textContent: "→",
+              })
+            );
+          }
+          const metricEl = createElement("div", { className: "hero-focus-metric" });
+          metricEl.appendChild(
+            createElement("div", {
+              className: "hero-focus-year",
+              textContent: metric.year,
             })
           );
-        }
+          metricEl.appendChild(
+            createElement("div", {
+              className: "hero-focus-value",
+              textContent: metric.value,
+            })
+          );
+          metricEl.appendChild(
+            createElement("div", {
+              className: "hero-focus-label",
+              textContent: metric.label,
+            })
+          );
+          group.appendChild(metricEl);
+          if (metric.groupNote) {
+            groupNote = metric.groupNote;
+          }
+        });
+        addTooltip(group, groupNote);
+        metricsContainer.appendChild(group);
+      }
 
-        const metricEl = createElement("div", { className: "hero-focus-metric" });
+      standaloneMetrics.forEach((metric) => {
+        const metricEl = createElement("div", {
+          className: "hero-focus-metric hero-focus-standalone",
+        });
         metricEl.appendChild(
           createElement("div", {
             className: "hero-focus-year",
@@ -1530,6 +1606,7 @@ export async function renderSection(section, container, index) {
             textContent: metric.label,
           })
         );
+        addTooltip(metricEl, metric.note);
         metricsContainer.appendChild(metricEl);
       });
 
@@ -1648,7 +1725,7 @@ export async function renderSection(section, container, index) {
 
     // Highlight video card
     const highlightCard = createVideoCard(
-      "Highlight",
+      section.heroVideo.label || "Highlight",
       section.heroVideo.vimeoId,
       section.heroVideo.vertical
     );
@@ -1657,7 +1734,7 @@ export async function renderSection(section, container, index) {
     // Full video card
     if (section.video) {
       const fullCard = createVideoCard(
-        "Full Video",
+        section.video.label || "Full Video",
         section.video.vimeoId,
         section.video.vertical
       );

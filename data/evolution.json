@@ -12,17 +12,38 @@
       "heroSection": true,
       "heroVideo": {
         "vimeoId": "1155714020",
-        "vertical": true
+        "vertical": true,
+        "label": "Rising Slider"
       },
-      "description": "Chasing the lowest arm slot in baseball",
+      "description": "Outlier shapes, angles, and results",
       "focusMetrics": [
         { "year": "2025", "value": "3.5", "label": "rel ht" },
-        { "year": "2026", "value": "2.2", "label": "rel ht" }
+        {
+          "year": "2026",
+          "value": "2.2",
+          "label": "rel ht",
+          "groupNote": "The second lowest arm slot in pro baseball"
+        },
+        {
+          "year": "2022-25",
+          "value": "29.3%",
+          "label": "K + PU%",
+          "standalone": true,
+          "note": "Since the introduction of my rising slider"
+        },
+        {
+          "year": "2019-25",
+          "value": "6.9%",
+          "label": "BB%",
+          "note": "Over the course of my career",
+          "standalone": true
+        }
       ],
       "video": {
         "vimeoId": "1155603520",
         "buttonText": "Watch Full Video",
-        "vertical": true
+        "vertical": true,
+        "label": "Full Video"
       },
       "subsections": [
         {
