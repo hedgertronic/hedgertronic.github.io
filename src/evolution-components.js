@@ -1138,14 +1138,14 @@ function renderVideoProgressionSubsection(subsection, container) {
   const metricKey = subsection.metricKey || "releaseHeight";
   const metricUnit = subsection.metricUnit || "ft";
 
-  // Filter valid videos for modal navigation
-  const validVideos = subsection.videos.filter(
-    (v) => v.vimeoId && !v.vimeoId.startsWith("PLACEHOLDER")
+  // Filter valid items for modal navigation (images or videos)
+  const validItems = subsection.videos.filter(
+    (v) => v.image || (v.vimeoId && !v.vimeoId.startsWith("PLACEHOLDER"))
   );
 
-  // Create shared modal for all videos
+  // Create shared modal for all items
   let currentModalIndex = 0;
-  const modalIframes = []; // Array of iframes, one per video
+  const modalMedia = []; // Array of media elements (images or iframes)
 
   const modal = createElement("div", { className: "video-modal" });
   const backdrop = createElement("div", { className: "video-modal-backdrop" });
@@ -1161,7 +1161,7 @@ function renderVideoProgressionSubsection(subsection, container) {
   // Modal label (year · height)
   const modalLabel = createElement("div", { className: "video-modal-label" });
 
-  // Navigation and video container
+  // Navigation and media container
   const modalBody = createElement("div", { className: "video-modal-body" });
 
   const prevBtn = createElement("button", {
@@ -1183,7 +1183,7 @@ function renderVideoProgressionSubsection(subsection, container) {
   // Modal description
   const modalDescription = createElement("p", { className: "video-modal-description" });
 
-  // Append close button to video wrapper so it's positioned on the video
+  // Append close button to wrapper so it's positioned on the media
   modalWrapper.appendChild(closeBtn);
   content.appendChild(modalLabel);
   content.appendChild(modalBody);
@@ -1193,55 +1193,66 @@ function renderVideoProgressionSubsection(subsection, container) {
 
   const updateNavButtons = (index) => {
     prevBtn.style.display = index === 0 ? "none" : "flex";
-    nextBtn.style.display = index === validVideos.length - 1 ? "none" : "flex";
+    nextBtn.style.display = index === validItems.length - 1 ? "none" : "flex";
   };
 
-  // Get or create iframe for a specific video index
-  const getOrCreateIframe = (index) => {
-    if (!modalIframes[index]) {
-      const video = validVideos[index];
-      const iframe = createElement("iframe");
-      iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
-      iframe.setAttribute("frameborder", "0");
-      iframe.setAttribute(
-        "allow",
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-      );
-      iframe.setAttribute("allowfullscreen", "");
-      iframe.style.display = "none";
-      modalWrapper.appendChild(iframe);
-      modalIframes[index] = iframe;
+  // Get or create media element for a specific index
+  const getOrCreateMedia = (index) => {
+    if (!modalMedia[index]) {
+      const item = validItems[index];
+      if (item.image) {
+        const img = createElement("img", {
+          src: item.image,
+          alt: `${item.year} release height progression`,
+        });
+        img.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;";
+        modalWrapper.appendChild(img);
+        modalMedia[index] = { type: "image", element: img };
+      } else {
+        const iframe = createElement("iframe");
+        iframe.src = `https://player.vimeo.com/video/${item.vimeoId}?loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+        iframe.setAttribute("frameborder", "0");
+        iframe.setAttribute(
+          "allow",
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        );
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.style.display = "none";
+        modalWrapper.appendChild(iframe);
+        modalMedia[index] = { type: "video", element: iframe };
+      }
     }
-    return modalIframes[index];
+    return modalMedia[index];
   };
 
-  const showVideo = (index) => {
-    // Hide all iframes and pause them
-    modalIframes.forEach((iframe, i) => {
-      if (iframe) {
-        iframe.style.display = i === index ? "block" : "none";
-        if (i !== index) {
-          iframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+  const showMedia = (index) => {
+    // Hide all media and pause videos
+    modalMedia.forEach((media, i) => {
+      if (media) {
+        media.element.style.display = i === index ? "block" : "none";
+        if (i !== index && media.type === "video") {
+          media.element.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
         }
       }
     });
 
-    // Show and play the current video
-    const iframe = getOrCreateIframe(index);
-    iframe.style.display = "block";
-    iframe.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
+    // Show current media
+    const media = getOrCreateMedia(index);
+    media.element.style.display = "block";
+    if (media.type === "video") {
+      media.element.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
+    }
   };
 
-  const updateModalContent = (index, autoplay = true) => {
-    const prevIndex = currentModalIndex;
+  const updateModalContent = (index) => {
     currentModalIndex = index;
-    const video = validVideos[index];
-    const metricValue = video[metricKey];
+    const item = validItems[index];
+    const metricValue = item[metricKey];
 
     // Update label
     modalLabel.textContent = "";
     modalLabel.appendChild(
-      createElement("span", { className: "badge-year", textContent: video.year })
+      createElement("span", { className: "badge-year", textContent: item.year })
     );
     if (metricValue) {
       modalLabel.appendChild(
@@ -1256,32 +1267,32 @@ function renderVideoProgressionSubsection(subsection, container) {
     }
 
     // Update description
-    modalDescription.textContent = video.description || "";
-    modalDescription.style.display = video.description ? "block" : "none";
+    modalDescription.textContent = item.description || "";
+    modalDescription.style.display = item.description ? "block" : "none";
 
-    // Switch video (pause old, show/play new)
-    if (autoplay) {
-      showVideo(index);
-    }
+    // Show media
+    showMedia(index);
 
     updateNavButtons(index);
   };
 
   const openModal = (index) => {
     currentModalIndex = index;
-    getOrCreateIframe(index); // Ensure iframe exists
-    updateModalContent(index, true);
+    getOrCreateMedia(index); // Ensure media exists
+    updateModalContent(index);
     modal.classList.add("active");
+    document.documentElement.classList.add("modal-open");
     document.body.classList.add("modal-open");
   };
 
   const closeModal = () => {
     modal.classList.remove("active");
+    document.documentElement.classList.remove("modal-open");
     document.body.classList.remove("modal-open");
-    // Pause current video
-    const currentIframe = modalIframes[currentModalIndex];
-    if (currentIframe) {
-      currentIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+    // Pause video if current media is a video
+    const currentMedia = modalMedia[currentModalIndex];
+    if (currentMedia && currentMedia.type === "video") {
+      currentMedia.element.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
     }
   };
 
@@ -1292,7 +1303,7 @@ function renderVideoProgressionSubsection(subsection, container) {
   });
 
   nextBtn.addEventListener("click", () => {
-    if (currentModalIndex < validVideos.length - 1) {
+    if (currentModalIndex < validItems.length - 1) {
       updateModalContent(currentModalIndex + 1);
     }
   });
@@ -1312,7 +1323,7 @@ function renderVideoProgressionSubsection(subsection, container) {
     if (e.key === "ArrowLeft" && currentModalIndex > 0) {
       updateModalContent(currentModalIndex - 1);
     }
-    if (e.key === "ArrowRight" && currentModalIndex < validVideos.length - 1) {
+    if (e.key === "ArrowRight" && currentModalIndex < validItems.length - 1) {
       updateModalContent(currentModalIndex + 1);
     }
   };
@@ -1320,7 +1331,7 @@ function renderVideoProgressionSubsection(subsection, container) {
 
   document.body.appendChild(modal);
 
-  // Create video cards
+  // Create cards
   subsection.videos.forEach((video, index) => {
     const videoCard = createElement("div", { className: "video-progression-card" });
 
@@ -1355,7 +1366,20 @@ function renderVideoProgressionSubsection(subsection, container) {
       className: "video-progression-wrapper",
     });
 
-    if (video.vimeoId && !video.vimeoId.startsWith("PLACEHOLDER")) {
+    if (video.image) {
+      const img = createElement("img", {
+        src: video.image,
+        alt: `${video.year} release height progression`,
+        loading: "lazy",
+      });
+      img.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;";
+      videoWrapper.appendChild(img);
+
+      // Make clickable for modal
+      videoWrapper.classList.add("clickable");
+      const validIndex = validItems.findIndex((v) => v.image === video.image);
+      videoWrapper.addEventListener("click", () => openModal(validIndex));
+    } else if (video.vimeoId && !video.vimeoId.startsWith("PLACEHOLDER")) {
       const iframe = createElement("iframe");
       iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
       iframe.setAttribute("frameborder", "0");
@@ -1379,8 +1403,8 @@ function renderVideoProgressionSubsection(subsection, container) {
 
       videoWrapper.classList.add("clickable");
 
-      // Find index in validVideos array
-      const validIndex = validVideos.findIndex((v) => v.vimeoId === video.vimeoId);
+      // Find index in validItems array
+      const validIndex = validItems.findIndex((v) => v.vimeoId === video.vimeoId);
       videoWrapper.addEventListener("click", () => openModal(validIndex));
     } else {
       const placeholder = createElement("div", { className: "video-placeholder" });
@@ -1849,11 +1873,13 @@ export async function renderSection(section, container, index) {
       getOrCreateHeroIframe(index); // Ensure iframe exists
       updateHeroModalContent(index);
       heroModal.classList.add("active");
+      document.documentElement.classList.add("modal-open");
       document.body.classList.add("modal-open");
     };
 
     const closeHeroModal = () => {
       heroModal.classList.remove("active");
+      document.documentElement.classList.remove("modal-open");
       document.body.classList.remove("modal-open");
       // Pause current video
       const currentIframe = heroModalIframes[currentHeroIndex];
@@ -2034,11 +2060,13 @@ export async function renderSection(section, container, index) {
         modalIframe.contentWindow.postMessage(JSON.stringify({ method: "play" }), "*");
       }
       modal.classList.add("active");
+      document.documentElement.classList.add("modal-open");
       document.body.classList.add("modal-open");
     });
 
     const closeModal = () => {
       modal.classList.remove("active");
+      document.documentElement.classList.remove("modal-open");
       document.body.classList.remove("modal-open");
       if (modalIframe) {
         modalIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");

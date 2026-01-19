@@ -93,7 +93,7 @@
 
 .hero-comparison-image {
     width: 240px;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: bottom;
     border-radius: var(--radius-md);
@@ -1363,8 +1363,11 @@
 }
 
 /* Prevent scrolling when modal is open */
+html.modal-open,
 body.modal-open {
     overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
 }
 
 .video-modal-backdrop {

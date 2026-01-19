@@ -188,11 +188,13 @@ async function initEvolutionPage() {
         const openComparisonModal = (index) => {
           updateModalContent(index);
           modal.classList.add("active");
+          document.documentElement.classList.add("modal-open");
           document.body.classList.add("modal-open");
         };
 
         const closeModal = () => {
           modal.classList.remove("active");
+          document.documentElement.classList.remove("modal-open");
           document.body.classList.remove("modal-open");
         };
 

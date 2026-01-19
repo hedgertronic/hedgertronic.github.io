@@ -7,14 +7,14 @@
       "before": {
         "label": "before",
         "value": "3.7 ft",
-        "image": "https://i.vimeocdn.com/video/2108599819-e2dd56e71ff23e34ced4344fd85c1881fd0b2b95c18f9d8299a4d154c50ce5ec-d_640",
+        "image": "/assets/images/slot/2025-slot.jpg",
         "imagePosition": "center"
       },
       "after": {
         "label": "after",
         "value": "2.2 ft",
-        "image": "https://i.vimeocdn.com/video/2109111551-9088e1fd7576c8ba1e274f2562fe862587b59479f0e859720d85c955b5ee7ce2-d_640",
-        "imagePosition": "bottom"
+        "image": "/assets/images/slot/2026-slot.jpg",
+        "imagePosition": "center"
       }
     }
   },
@@ -84,25 +84,25 @@
             {
               "year": "2026",
               "releaseHeight": "2.2",
-              "vimeoId": "1156120828",
+              "image": "/assets/images/slot/2026-slot.jpg",
               "description": "Embracing the lowest arm slot of my career. Currently hovering around the 2-foot release height mark which would be the second-lowest in MLB behind Tyler Rogers, allowing me to generate outlier shapes and angles."
             },
             {
               "year": "2025",
               "releaseHeight": "3.7",
-              "vimeoId": "1155727266",
+              "image": "/assets/images/slot/2025-slot.jpg",
               "description": "Raised my slot in an attempt to throw harder, but ended up decreasing my effectiveness due to flatter shapes and less deception, leading to the worst results of my career."
             },
             {
               "year": "2024",
               "releaseHeight": "3.5",
-              "vimeoId": "1155727181",
+              "image": "/assets/images/slot/2024-slot.jpg",
               "description": "My first year back from Tommy John surgery. My slot settled in a bit higher than pre-surgery but my velocity increased and I had an effective season across three levels of the minors."
             },
             {
               "year": "2022",
               "releaseHeight": "2.7",
-              "vimeoId": "1155726916",
+              "image": "/assets/images/slot/2022-slot.jpg",
               "description": "The addition of my rising slider, and trying to maximize IVB on the pitch, led to a decrease in my release height. The new pitch led to a huge jump in my strikeout rate."
             }
           ]
