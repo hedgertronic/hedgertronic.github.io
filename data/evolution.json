@@ -2,7 +2,21 @@
   "page": {
     "title": "Evolution",
     "heroTitle": "Evolution",
-    "description": "My Throwing Evolution - Tracking pitch development and training progress."
+    "description": "My Throwing Evolution - Tracking pitch development and training progress.",
+    "heroComparison": {
+      "before": {
+        "label": "before",
+        "value": "3.7 ft",
+        "image": "https://i.vimeocdn.com/video/2108599819-e2dd56e71ff23e34ced4344fd85c1881fd0b2b95c18f9d8299a4d154c50ce5ec-d_640",
+        "imagePosition": "center"
+      },
+      "after": {
+        "label": "after",
+        "value": "2.2 ft",
+        "image": "https://i.vimeocdn.com/video/2109111551-9088e1fd7576c8ba1e274f2562fe862587b59479f0e859720d85c955b5ee7ce2-d_640",
+        "imagePosition": "bottom"
+      }
+    }
   },
   "sections": [
     {
@@ -17,7 +31,7 @@
       },
       "description": "Outlier shapes, angles, and results",
       "focusMetrics": [
-        { "year": "2025", "value": "3.5", "label": "rel ht" },
+        { "year": "2025", "value": "3.7", "label": "rel ht" },
         {
           "year": "2026",
           "value": "2.2",
@@ -70,18 +84,18 @@
             {
               "year": "2026",
               "releaseHeight": "2.2",
-              "vimeoId": "1155733369",
+              "vimeoId": "1156120828",
               "description": "Embracing the lowest arm slot of my career. Currently hovering around the 2-foot release height mark which would be the second-lowest in MLB behind Tyler Rogers, allowing me to generate outlier shapes and angles."
             },
             {
               "year": "2025",
-              "releaseHeight": "3.5",
+              "releaseHeight": "3.7",
               "vimeoId": "1155727266",
               "description": "Raised my slot in an attempt to throw harder, but ended up decreasing my effectiveness due to flatter shapes and less deception, leading to the worst results of my career."
             },
             {
               "year": "2024",
-              "releaseHeight": "3.2",
+              "releaseHeight": "3.5",
               "vimeoId": "1155727181",
               "description": "My first year back from Tommy John surgery. My slot settled in a bit higher than pre-surgery but my velocity increased and I had an effective season across three levels of the minors."
             },

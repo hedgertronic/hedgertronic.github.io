@@ -1138,7 +1138,157 @@ function renderVideoProgressionSubsection(subsection, container) {
   const metricKey = subsection.metricKey || "releaseHeight";
   const metricUnit = subsection.metricUnit || "ft";
 
-  subsection.videos.forEach((video) => {
+  // Filter valid videos for modal navigation
+  const validVideos = subsection.videos.filter(
+    (v) => v.vimeoId && !v.vimeoId.startsWith("PLACEHOLDER")
+  );
+
+  // Create shared modal for all videos
+  let currentModalIndex = 0;
+  let modalIframe = null;
+
+  const modal = createElement("div", { className: "video-modal" });
+  const backdrop = createElement("div", { className: "video-modal-backdrop" });
+  const content = createElement("div", {
+    className: "video-modal-content video-modal-content--progression",
+  });
+
+  const closeBtn = createElement("button", {
+    className: "video-modal-close",
+    textContent: "\u00D7",
+  });
+
+  // Modal label (year · height)
+  const modalLabel = createElement("div", { className: "video-modal-label" });
+
+  // Navigation and video container
+  const modalBody = createElement("div", { className: "video-modal-body" });
+
+  const prevBtn = createElement("button", {
+    className: "video-modal-nav video-modal-nav--prev",
+    textContent: "\u2039",
+  });
+
+  const modalWrapper = createElement("div", { className: "video-modal-wrapper" });
+
+  const nextBtn = createElement("button", {
+    className: "video-modal-nav video-modal-nav--next",
+    textContent: "\u203A",
+  });
+
+  modalBody.appendChild(prevBtn);
+  modalBody.appendChild(modalWrapper);
+  modalBody.appendChild(nextBtn);
+
+  // Modal description
+  const modalDescription = createElement("p", { className: "video-modal-description" });
+
+  content.appendChild(closeBtn);
+  content.appendChild(modalLabel);
+  content.appendChild(modalBody);
+  content.appendChild(modalDescription);
+  modal.appendChild(backdrop);
+  modal.appendChild(content);
+
+  const updateNavButtons = (index) => {
+    prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
+    nextBtn.style.visibility = index === validVideos.length - 1 ? "hidden" : "visible";
+  };
+
+  const updateModalContent = (index) => {
+    currentModalIndex = index;
+    const video = validVideos[index];
+    const metricValue = video[metricKey];
+
+    // Update label
+    modalLabel.textContent = "";
+    modalLabel.appendChild(
+      createElement("span", { className: "badge-year", textContent: video.year })
+    );
+    if (metricValue) {
+      modalLabel.appendChild(
+        createElement("span", { className: "badge-separator", textContent: " \u00B7 " })
+      );
+      modalLabel.appendChild(
+        createElement("span", {
+          className: "badge-height",
+          textContent: `${metricValue} ${metricUnit}`,
+        })
+      );
+    }
+
+    // Update description
+    modalDescription.textContent = video.description || "";
+    modalDescription.style.display = video.description ? "block" : "none";
+
+    // Update video
+    if (modalIframe) {
+      modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+    }
+
+    updateNavButtons(index);
+  };
+
+  const openModal = (index) => {
+    currentModalIndex = index;
+    const video = validVideos[index];
+
+    if (!modalIframe) {
+      modalIframe = createElement("iframe");
+      modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
+      modalIframe.setAttribute("frameborder", "0");
+      modalIframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+      );
+      modalIframe.setAttribute("allowfullscreen", "");
+      modalWrapper.appendChild(modalIframe);
+    }
+
+    updateModalContent(index);
+    modal.classList.add("active");
+    document.body.classList.add("modal-open");
+  };
+
+  const closeModal = () => {
+    modal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+    if (modalIframe) {
+      modalIframe.contentWindow.postMessage(JSON.stringify({ method: "pause" }), "*");
+    }
+  };
+
+  prevBtn.addEventListener("click", () => {
+    if (currentModalIndex > 0) {
+      updateModalContent(currentModalIndex - 1);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentModalIndex < validVideos.length - 1) {
+      updateModalContent(currentModalIndex + 1);
+    }
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", closeModal);
+
+  const handleKeydown = (e) => {
+    if (!modal.classList.contains("active")) return;
+    if (e.key === "Escape") closeModal();
+    if (e.key === "ArrowLeft" && currentModalIndex > 0) {
+      updateModalContent(currentModalIndex - 1);
+    }
+    if (e.key === "ArrowRight" && currentModalIndex < validVideos.length - 1) {
+      updateModalContent(currentModalIndex + 1);
+    }
+  };
+  document.addEventListener("keydown", handleKeydown);
+
+  document.body.appendChild(modal);
+
+  // Create video cards
+  subsection.videos.forEach((video, index) => {
     const videoCard = createElement("div", { className: "video-progression-card" });
 
     const cardHeader = createElement("div", { className: "video-progression-header" });
@@ -1196,69 +1346,9 @@ function renderVideoProgressionSubsection(subsection, container) {
 
       videoWrapper.classList.add("clickable");
 
-      // Create modal
-      const modal = createElement("div", { className: "video-modal" });
-      const backdrop = createElement("div", { className: "video-modal-backdrop" });
-      const content = createElement("div", {
-        className: "video-modal-content video-modal-content--square",
-      });
-
-      const closeBtn = createElement("button", {
-        className: "video-modal-close",
-        textContent: "\u00D7",
-      });
-
-      const modalWrapper = createElement("div", { className: "video-modal-wrapper" });
-
-      content.appendChild(closeBtn);
-      content.appendChild(modalWrapper);
-      modal.appendChild(backdrop);
-      modal.appendChild(content);
-
-      let modalIframe = null;
-
-      const openModal = () => {
-        if (!modalIframe) {
-          modalIframe = createElement("iframe");
-          modalIframe.src = `https://player.vimeo.com/video/${video.vimeoId}?autoplay=1&loop=1&sidedock=0&title=0&byline=0&portrait=0&quality=auto`;
-          modalIframe.setAttribute("frameborder", "0");
-          modalIframe.setAttribute(
-            "allow",
-            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-          );
-          modalIframe.setAttribute("allowfullscreen", "");
-          modalWrapper.appendChild(modalIframe);
-        } else {
-          modalIframe.contentWindow.postMessage(
-            JSON.stringify({ method: "play" }),
-            "*"
-          );
-        }
-        modal.classList.add("active");
-        document.body.classList.add("modal-open");
-      };
-
-      const closeModal = () => {
-        modal.classList.remove("active");
-        document.body.classList.remove("modal-open");
-        if (modalIframe) {
-          modalIframe.contentWindow.postMessage(
-            JSON.stringify({ method: "pause" }),
-            "*"
-          );
-        }
-      };
-
-      videoWrapper.addEventListener("click", openModal);
-      closeBtn.addEventListener("click", closeModal);
-      backdrop.addEventListener("click", closeModal);
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeModal();
-        }
-      });
-
-      document.body.appendChild(modal);
+      // Find index in validVideos array
+      const validIndex = validVideos.findIndex((v) => v.vimeoId === video.vimeoId);
+      videoWrapper.addEventListener("click", () => openModal(validIndex));
     } else {
       const placeholder = createElement("div", { className: "video-placeholder" });
       placeholder.appendChild(

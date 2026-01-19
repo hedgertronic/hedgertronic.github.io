@@ -58,6 +58,177 @@ async function initEvolutionPage() {
     if (heroTitleEl) heroTitleEl.textContent = heroTitle;
     if (navTitleEl) navTitleEl.textContent = heroTitle;
 
+    // Render hero comparison if configured
+    const heroComparison = evolutionConfig.page?.heroComparison;
+    const comparisonContainer = document.querySelector(".hero-comparison");
+    if (heroComparison && comparisonContainer) {
+      const items = [];
+      const cards = [];
+      ["before", "after"].forEach((key, index) => {
+        const item = heroComparison[key];
+        if (!item) return;
+        items.push(item);
+
+        const card = document.createElement("div");
+        card.className = "hero-comparison-card";
+        card.dataset.index = index;
+
+        const labelTop = document.createElement("div");
+        labelTop.className = "hero-comparison-label-top";
+
+        const yearSpan = document.createElement("span");
+        yearSpan.className = "comparison-year";
+        yearSpan.textContent = item.label;
+        labelTop.appendChild(yearSpan);
+
+        const separator = document.createElement("span");
+        separator.className = "comparison-separator";
+        separator.textContent = "·";
+        labelTop.appendChild(separator);
+
+        const valueSpan = document.createElement("span");
+        valueSpan.className = "comparison-value";
+        valueSpan.textContent = item.value;
+        labelTop.appendChild(valueSpan);
+
+        card.appendChild(labelTop);
+
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.label;
+        img.className = "hero-comparison-image";
+        if (item.imagePosition === "center") {
+          img.classList.add("hero-comparison-image--center");
+        }
+        card.appendChild(img);
+
+        comparisonContainer.appendChild(card);
+        cards.push(card);
+      });
+
+      // Create modal
+      if (items.length === 2) {
+        let currentModalIndex = 0;
+
+        const modal = document.createElement("div");
+        modal.className = "comparison-modal";
+
+        const backdrop = document.createElement("div");
+        backdrop.className = "comparison-modal-backdrop";
+        modal.appendChild(backdrop);
+
+        const content = document.createElement("div");
+        content.className = "comparison-modal-content";
+
+        const closeBtn = document.createElement("button");
+        closeBtn.className = "comparison-modal-close";
+        closeBtn.textContent = "×";
+        content.appendChild(closeBtn);
+
+        const label = document.createElement("div");
+        label.className = "comparison-modal-label";
+        content.appendChild(label);
+
+        const imageContainer = document.createElement("div");
+        imageContainer.className = "comparison-modal-image-container";
+
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "comparison-modal-nav comparison-modal-nav--prev";
+        prevBtn.textContent = "‹";
+        imageContainer.appendChild(prevBtn);
+
+        const modalImg = document.createElement("img");
+        modalImg.className = "comparison-modal-image";
+        imageContainer.appendChild(modalImg);
+
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "comparison-modal-nav comparison-modal-nav--next";
+        nextBtn.textContent = "›";
+        imageContainer.appendChild(nextBtn);
+
+        content.appendChild(imageContainer);
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+
+        const updateNavButtons = (index) => {
+          // Hide prev on first item, hide next on last item
+          prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
+          nextBtn.style.visibility = index === items.length - 1 ? "hidden" : "visible";
+        };
+
+        const updateModalContent = (index) => {
+          currentModalIndex = index;
+          const item = items[index];
+          modalImg.src = item.image;
+          modalImg.alt = item.label;
+          modalImg.className = "comparison-modal-image";
+          if (item.imagePosition === "center") {
+            modalImg.classList.add("comparison-modal-image--center");
+          }
+
+          label.textContent = "";
+          const yearSpan = document.createElement("span");
+          yearSpan.className = "comparison-year";
+          yearSpan.textContent = item.label;
+          label.appendChild(yearSpan);
+
+          const sep = document.createElement("span");
+          sep.className = "comparison-separator";
+          sep.textContent = "·";
+          label.appendChild(sep);
+
+          const valSpan = document.createElement("span");
+          valSpan.className = "comparison-value";
+          valSpan.textContent = item.value;
+          label.appendChild(valSpan);
+
+          updateNavButtons(index);
+        };
+
+        const openComparisonModal = (index) => {
+          updateModalContent(index);
+          modal.classList.add("active");
+          document.body.classList.add("modal-open");
+        };
+
+        const closeModal = () => {
+          modal.classList.remove("active");
+          document.body.classList.remove("modal-open");
+        };
+
+        // Add click handlers to cards
+        cards.forEach((card, index) => {
+          card.addEventListener("click", () => openComparisonModal(index));
+        });
+
+        prevBtn.addEventListener("click", () => {
+          if (currentModalIndex > 0) {
+            updateModalContent(currentModalIndex - 1);
+          }
+        });
+
+        nextBtn.addEventListener("click", () => {
+          if (currentModalIndex < items.length - 1) {
+            updateModalContent(currentModalIndex + 1);
+          }
+        });
+
+        closeBtn.addEventListener("click", closeModal);
+        backdrop.addEventListener("click", closeModal);
+
+        document.addEventListener("keydown", (e) => {
+          if (!modal.classList.contains("active")) return;
+          if (e.key === "Escape") closeModal();
+          if (e.key === "ArrowLeft" && currentModalIndex > 0) {
+            updateModalContent(currentModalIndex - 1);
+          }
+          if (e.key === "ArrowRight" && currentModalIndex < items.length - 1) {
+            updateModalContent(currentModalIndex + 1);
+          }
+        });
+      }
+    }
+
     const heroNav = document.querySelector(".hero-nav");
     if (heroNav) {
       renderEvolutionHeroNav(heroNav, evolutionConfig.sections);
