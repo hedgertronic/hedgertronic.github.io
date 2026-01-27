@@ -25,9 +25,9 @@
       "accentColor": "#f5d67a",
       "heroSection": true,
       "heroVideo": {
-        "vimeoId": "1155714020",
+        "vimeoId": "1155603520",
         "vertical": true,
-        "label": "Slider Highlight"
+        "label": "Live At-Bats"
       },
       "description": "Outlier shapes, angles, and results",
       "focusMetrics": [
@@ -54,17 +54,17 @@
         }
       ],
       "video": {
-        "vimeoId": "1155603520",
+        "vimeoId": "1158928183",
         "buttonText": "Watch Full Video",
         "vertical": true,
-        "label": "Full At-Bats"
+        "label": "Pro Day"
       },
       "subsections": [
         {
           "id": "arsenal-overview",
           "title": "Arsenal Overview",
           "type": "arsenal",
-          "description": "Data collected on January 9th and 16th, 2026 during Live ABs at Driveline Tampa. Full Trackman data and footage of the Live ABs can be found above.",
+          "description": "Live AB data collected on January 9th and 16th, 2026 at Driveline Tampa. Pro Day data collected on January 24th, 2026. Full Trackman data and footage of the Live ABs and Pro Day can be found above.",
           "dataFile": "assets/documents/trackman-master.csv",
           "viewAllUrl": "/assets/documents/trackman-master.csv",
           "viewAllLabel": "View Raw Data"
