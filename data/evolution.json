@@ -12,8 +12,8 @@
       },
       "after": {
         "label": "after",
-        "value": "2.2 ft",
-        "image": "/assets/images/slot/2026-slot.jpg",
+        "value": "1.8 ft",
+        "image": "/assets/images/slot/2026-slot.jpg?v=2",
         "imagePosition": "center"
       }
     }
@@ -34,7 +34,7 @@
         { "year": "2025", "value": "3.7", "label": "rel ht" },
         {
           "year": "2026",
-          "value": "2.2",
+          "value": "2.1",
           "label": "rel ht",
           "groupNote": "The second lowest arm slot in pro baseball"
         },
@@ -84,8 +84,8 @@
           "videos": [
             {
               "year": "2026",
-              "releaseHeight": "2.2",
-              "image": "/assets/images/slot/2026-slot.jpg",
+              "releaseHeight": "1.8",
+              "image": "/assets/images/slot/2026-slot.jpg?v=2",
               "description": "Embracing the lowest arm slot of my career. Currently hovering around the 2-foot release height mark which would be the second-lowest in MLB behind Tyler Rogers, allowing me to generate outlier shapes and angles."
             },
             {

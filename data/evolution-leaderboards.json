@@ -4,7 +4,7 @@
     "unit": "feet",
     "entries": [
       { "rank": 1, "name": "Tyler Rogers", "value": "1.3" },
-      { "rank": 2, "name": "Josh Hejka", "value": "2.2", "highlight": true },
+      { "rank": 2, "name": "Josh Hejka", "value": "2.1", "highlight": true },
       { "rank": 3, "name": "Tim Hill", "value": "3.0" },
       { "rank": 4, "name": "Ryan Thompson", "value": "3.7" },
       { "rank": 5, "name": "Chase Lee", "value": "3.8" }
