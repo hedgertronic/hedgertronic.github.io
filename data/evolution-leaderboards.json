@@ -19,7 +19,7 @@
         "name": "Josh Hejka",
         "pitch": "SL",
         "pitchClass": "pitch-slider",
-        "value": "16.5",
+        "value": "15.8",
         "highlight": true
       },
       {
@@ -68,7 +68,7 @@
         "name": "Josh Hejka",
         "pitch": "SL",
         "pitchClass": "pitch-slider",
-        "value": "-2.6",
+        "value": "-2.7",
         "highlight": true
       },
       {
@@ -87,10 +87,11 @@
       },
       {
         "rank": 5,
-        "name": "Tim Hill",
+        "name": "Josh Hejka",
         "pitch": "FF",
         "pitchClass": "pitch-four-seam",
-        "value": "-3.2"
+        "value": "-3.1",
+        "highlight": true
       }
     ]
   },
@@ -109,7 +110,7 @@
         "name": "Josh Hejka",
         "pitch": "SI",
         "pitchClass": "pitch-sinker",
-        "value": "84.3",
+        "value": "84.4",
         "highlight": true
       },
       {
