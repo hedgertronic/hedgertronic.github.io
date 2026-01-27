@@ -208,6 +208,7 @@ function aggregateByPitchType(allPitches) {
     summary[type] = {
       count: data.count,
       velo: average(data.velo),
+      maxVelo: data.velo.length > 0 ? Math.max(...data.velo) : null,
       spin: average(data.spin),
       ivb: average(data.ivb),
       hb: average(data.hb),
@@ -522,6 +523,7 @@ function buildArsenalTable(summary, container) {
   const headers = [
     "Pitch",
     "Velo",
+    "Max",
     "Spin",
     "IVB",
     "HB",
@@ -562,6 +564,7 @@ function buildArsenalTable(summary, container) {
     row.appendChild(pitchCell);
 
     row.appendChild(createElement("td", { textContent: formatStat(data.velo, 1) }));
+    row.appendChild(createElement("td", { textContent: formatStat(data.maxVelo, 1) }));
     row.appendChild(createElement("td", { textContent: formatStat(data.spin, 0) }));
     row.appendChild(createElement("td", { textContent: formatStat(data.ivb, 1) }));
     row.appendChild(createElement("td", { textContent: formatStat(data.hb, 1) }));
