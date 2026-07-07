@@ -13,7 +13,7 @@
     "description": "Python client for the WHOOP API v2 with OAuth2 support.",
     "url": "https://github.com/hedgertronic/whoop",
     "language": "Python",
-    "stars": 99,
+    "stars": 100,
     "forks": 9
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "title": "fungo",
-    "description": "Python tools for baseball data from Statcast and the MLB Stats API.",
+    "description": "Python tools for baseball data from Statcast, the MLB Stats API, FanGraphs, and Baseball-Reference.",
     "url": "https://github.com/hedgertronic/fungo",
     "language": "Python",
     "stars": 1,
