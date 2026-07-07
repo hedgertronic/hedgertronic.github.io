@@ -69,7 +69,9 @@ export function initCarouselScrollDetection(carousel) {
     // 2px tolerance avoids false positives from sub-pixel rounding
     const hasScroll = scrollWidth > clientWidth + 2;
     const hasOverflowRight = hasScroll && scrollLeft < scrollWidth - clientWidth - 10;
-    const hasOverflowLeft = hasScroll && scrollLeft > 10;
+    // 24px: iOS scroll-snap settles carousels at ~16px (scroll-padding-left),
+    // which must not count as "scrolled away from the start"
+    const hasOverflowLeft = hasScroll && scrollLeft > 24;
 
     wrapper.classList.toggle("has-overflow-right", hasOverflowRight);
     wrapper.classList.toggle("has-overflow-left", hasOverflowLeft);
