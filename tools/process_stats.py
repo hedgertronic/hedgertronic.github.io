@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
-"""Process Baseball Reference stats CSV into the format used by the website.
+"""Process pitching stats CSVs into the format used by the website.
 
-This script reads bbref_stats.csv and generates career_stats.csv with:
-- Season aggregate rows for each category (College, Summer, Independent, Minors)
-- Individual team rows for level badge extraction
-- Career totals for each category
-- Level totals for minors (Rk+, A-, A+, AA, AAA)
+Primary input: assets/documents/bbref_stats.csv (Baseball Reference export).
+Secondary input: assets/documents/milb_api_stats.csv (fetched by tools/fetch/fetch_milb.py).
+
+When milb_api_stats.csv exists and is non-empty:
+  - Minors rows for (season, level) pairs covered by the API come from milb_api_stats.csv.
+  - bbref Minors rows for seasons/levels NOT covered by the API are kept to avoid
+    losing historical data (e.g. pre-restructuring Rookie-level stats).
+  - College, Summer, and Independent rows always come from bbref_stats.csv.
+
+When milb_api_stats.csv is absent or empty, all rows come from bbref_stats.csv.
+
+Output: assets/documents/career_stats.csv with:
+  - Season aggregate rows for each category (College, Summer, Independent, Minors)
+  - Individual team rows for level badge extraction
+  - Career totals for each category
+  - Level totals for minors (Rk+, A-, A+, AA, AAA)
 """
 
 import csv
@@ -15,6 +26,7 @@ from typing import NamedTuple
 
 PROJECT_ROOT = Path(__file__).parent.parent
 INPUT_FILE = PROJECT_ROOT / "assets" / "documents" / "bbref_stats.csv"
+MILB_API_FILE = PROJECT_ROOT / "assets" / "documents" / "milb_api_stats.csv"
 OUTPUT_FILE = PROJECT_ROOT / "assets" / "documents" / "career_stats.csv"
 
 # Output columns (matching existing format)
@@ -24,34 +36,36 @@ OUTPUT_COLUMNS = [
     "SO", "AVG", "WHIP", "GO/AO"
 ]
 
-# Level mappings from bbref to our format
+# Level mappings from bbref/milb-api codes to display format
 LEVEL_MAP = {
     "NCAA": "NCAA",
     "Smr": "Summer",
     "Ind": "Independent",
     "Rk": "Rk+",
     "A-": "A-",
+    "A": "A",
     "A+": "A+",
     "AA": "AA",
     "AAA": "AAA",
 }
 
-# Category for each level type (uses bbref level codes)
+# Category for each level type
 CATEGORY_MAP = {
     "NCAA": "College",
     "Smr": "Summer",
     "Ind": "Independent",
     "Rk": "Minors",
     "A-": "Minors",
+    "A": "Minors",
     "A+": "Minors",
     "AA": "Minors",
     "AAA": "Minors",
 }
 
-# Order for level totals output
-LEVEL_ORDER = ["Rk+", "A-", "A+", "AA", "AAA"]
+# Order for level totals output (lowest to highest)
+LEVEL_ORDER = ["Rk+", "A-", "A", "A+", "AA", "AAA"]
 
-# Team abbreviation mappings
+# Team abbreviation mappings (full name → short code used in output)
 TEAM_ABBREV = {
     "Johns Hopkins": "JHU",
     "Baltimore Dodgers": "BAL",
@@ -64,13 +78,15 @@ TEAM_ABBREV = {
     "Reading": "REA",
 }
 
-# Organization mappings
+# Organization abbreviation → display name
 ORG_MAP = {
     "NYM": "Mets",
     "PHI": "Phillies",
+    "TEX": "Rangers",
+    "MIA": "Marlins",
 }
 
-# Default org for non-affiliated categories
+# Default org display name for non-affiliated categories
 CATEGORY_ORG = {
     "College": "Johns Hopkins",
     "Summer": "Baltimore",
@@ -105,6 +121,11 @@ class StatsRow(NamedTuple):
     hbp: int
     bf: int
     whip: float
+    # Fields available from the MiLB API but not Baseball Reference
+    hld: int = 0
+    svo: int = 0
+    np: int = 0
+    goao: str = "-"
 
 
 def parse_ip(ip_str: str) -> float:
@@ -172,8 +193,43 @@ def calculate_avg(h: int, bf: int, bb: int, hbp: int) -> str:
     return f".{int(avg * 1000):03d}"
 
 
+def _parse_stats_row(row: dict, level_code: str, org: str, category: str) -> StatsRow:
+    """Build a StatsRow from a CSV row dict given pre-resolved level/org/category."""
+    return StatsRow(
+        year=row["Year"],
+        team=row.get("Tm", ""),
+        league=row.get("Lg", ""),
+        level=LEVEL_MAP[level_code],
+        category=category,
+        org=org,
+        w=safe_int(row.get("W")),
+        l=safe_int(row.get("L")),
+        era=safe_float(row.get("ERA")),
+        g=safe_int(row.get("G")),
+        gs=safe_int(row.get("GS")),
+        cg=safe_int(row.get("CG")),
+        sho=safe_int(row.get("SHO")),
+        sv=safe_int(row.get("SV")),
+        ip=parse_ip(row.get("IP", "0")),
+        h=safe_int(row.get("H")),
+        r=safe_int(row.get("R")),
+        er=safe_int(row.get("ER")),
+        hr=safe_int(row.get("HR")),
+        bb=safe_int(row.get("BB")),
+        ibb=safe_int(row.get("IBB")),
+        so=safe_int(row.get("SO")),
+        hbp=safe_int(row.get("HBP")),
+        bf=safe_int(row.get("BF")),
+        whip=safe_float(row.get("WHIP")),
+        hld=safe_int(row.get("HLD", "0")),
+        svo=safe_int(row.get("SVO", "0")),
+        np=safe_int(row.get("NP", "0")),
+        goao=row.get("GO/AO", "-") or "-",
+    )
+
+
 def read_bbref_stats() -> list[StatsRow]:
-    """Read and parse the bbref stats CSV."""
+    """Read and parse the Baseball Reference stats CSV."""
     rows = []
 
     with open(INPUT_FILE, newline='') as f:
@@ -183,7 +239,7 @@ def read_bbref_stats() -> list[StatsRow]:
             if not row.get("Year") or not row["Year"].strip():
                 continue
 
-            # Skip aggregate rows (we'll calculate our own)
+            # Skip aggregate rows (we calculate our own)
             team = row.get("Tm", "")
             if "Teams" in team or "teams" in team:
                 continue
@@ -192,7 +248,6 @@ def read_bbref_stats() -> list[StatsRow]:
             if level not in LEVEL_MAP:
                 continue
 
-            # Determine organization
             category = CATEGORY_MAP[level]
             aff = row.get("Aff", "").strip()
             if aff and aff in ORG_MAP:
@@ -200,40 +255,80 @@ def read_bbref_stats() -> list[StatsRow]:
             else:
                 org = CATEGORY_ORG.get(category, "-")
 
-            stats = StatsRow(
-                year=row["Year"],
-                team=team,
-                league=row.get("Lg", ""),
-                level=LEVEL_MAP[level],
-                category=category,
-                org=org,
-                w=safe_int(row.get("W")),
-                l=safe_int(row.get("L")),
-                era=safe_float(row.get("ERA")),
-                g=safe_int(row.get("G")),
-                gs=safe_int(row.get("GS")),
-                cg=safe_int(row.get("CG")),
-                sho=safe_int(row.get("SHO")),
-                sv=safe_int(row.get("SV")),
-                ip=parse_ip(row.get("IP", "0")),
-                h=safe_int(row.get("H")),
-                r=safe_int(row.get("R")),
-                er=safe_int(row.get("ER")),
-                hr=safe_int(row.get("HR")),
-                bb=safe_int(row.get("BB")),
-                ibb=safe_int(row.get("IBB")),
-                so=safe_int(row.get("SO")),
-                hbp=safe_int(row.get("HBP")),
-                bf=safe_int(row.get("BF")),
-                whip=safe_float(row.get("WHIP")),
-            )
-            rows.append(stats)
+            rows.append(_parse_stats_row(row, level, org, category))
 
     return rows
 
 
+def read_milb_stats() -> list[StatsRow]:
+    """Read and parse the MiLB API stats CSV.
+
+    Returns an empty list if the file is absent or contains no data rows.
+    """
+    if not MILB_API_FILE.exists():
+        return []
+
+    rows = []
+    with open(MILB_API_FILE, newline='') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if not row.get("Year") or not row["Year"].strip():
+                continue
+
+            level = row.get("Lev", "")
+            if level not in LEVEL_MAP:
+                continue
+
+            category = CATEGORY_MAP[level]
+            aff = row.get("Aff", "").strip()
+            if aff and aff in ORG_MAP:
+                org = ORG_MAP[aff]
+            else:
+                org = CATEGORY_ORG.get(category, "-")
+
+            rows.append(_parse_stats_row(row, level, org, category))
+
+    return rows
+
+
+def get_covered_seasons(milb_rows: list[StatsRow]) -> set[tuple[str, str]]:
+    """Return the set of (year, display_level) pairs present in MiLB API data.
+
+    Only levels that are genuinely covered by the API are returned. The caller
+    uses this set to decide which bbref Minors rows to drop — a bbref row whose
+    (year, level) appears here is a duplicate of API data.
+    """
+    return {(r.year, r.level) for r in milb_rows}
+
+
+def merge_bbref_milb_rows(
+    bbref_rows: list[StatsRow],
+    milb_rows: list[StatsRow],
+) -> list[StatsRow]:
+    """Combine bbref and MiLB API rows without double-counting.
+
+    Rules:
+      - Non-Minors rows (College, Summer, Independent) always come from bbref.
+      - For Minors rows, prefer milb_rows for any (year, level) covered by the API.
+      - bbref Minors rows for (year, level) pairs NOT in milb_rows are kept
+        (e.g., pre-restructuring Rookie-level stats the API no longer returns).
+    """
+    if not milb_rows:
+        return bbref_rows
+
+    covered = get_covered_seasons(milb_rows)
+
+    kept_bbref = [
+        r for r in bbref_rows
+        if r.category != "Minors" or (r.year, r.level) not in covered
+    ]
+    combined = kept_bbref + milb_rows
+    combined.sort(key=lambda r: r.year)
+    return combined
+
+
 def aggregate_stats(rows: list[StatsRow]) -> StatsRow:
-    """Aggregate multiple stat rows into a single row."""
+    """Aggregate multiple stat rows into a single summary row."""
     if not rows:
         raise ValueError("Cannot aggregate empty list")
 
@@ -250,7 +345,8 @@ def aggregate_stats(rows: list[StatsRow]) -> StatsRow:
         league="-",
         level=rows[0].category,
         category=rows[0].category,
-        org=rows[0].org,
+        # Multi-org seasons list each org once, slash-joined in order of appearance
+        org="/".join(dict.fromkeys(r.org for r in rows)),
         w=sum(r.w for r in rows),
         l=sum(r.l for r in rows),
         era=calculate_era(total_er, total_ip),
@@ -270,6 +366,10 @@ def aggregate_stats(rows: list[StatsRow]) -> StatsRow:
         hbp=total_hbp,
         bf=total_bf,
         whip=calculate_whip(total_h, total_bb, total_ip),
+        hld=sum(r.hld for r in rows),
+        svo=sum(r.svo for r in rows),
+        np=sum(r.np for r in rows),
+        goao="-",  # ratio not meaningful to sum across rows
     )
 
 
@@ -278,8 +378,6 @@ def format_output_row(stats: StatsRow, team_override: str = None,
                       org_override: str = None) -> dict:
     """Format a StatsRow into an output dictionary."""
     team = team_override or TEAM_ABBREV.get(stats.team, stats.team)
-
-    # Calculate AVG
     avg = calculate_avg(stats.h, stats.bf, stats.bb, stats.hbp)
 
     return {
@@ -295,32 +393,35 @@ def format_output_row(stats: StatsRow, team_override: str = None,
         "GS": stats.gs,
         "CG": stats.cg,
         "SHO": stats.sho,
-        "HLD": "-",  # Not in bbref data
+        "HLD": stats.hld if stats.hld else "-",
         "SV": stats.sv if stats.sv else "-",
-        "SVO": "-",  # Not in bbref data
+        "SVO": stats.svo if stats.svo else "-",
         "IP": format_ip(stats.ip),
         "H": stats.h,
         "R": stats.r,
         "ER": stats.er,
         "HR": stats.hr,
-        "NP": "-",  # Not in bbref data
+        "NP": stats.np if stats.np else "-",
         "HB": stats.hbp,
         "BB": stats.bb,
         "IBB": stats.ibb,
         "SO": stats.so,
         "AVG": avg,
         "WHIP": f"{stats.whip:.2f}",
-        "GO/AO": "-",  # Not in bbref data
+        "GO/AO": stats.goao,
     }
 
 
-def process_stats():
+def process_stats() -> None:
     """Main processing function."""
-    all_rows = read_bbref_stats()
+    bbref_rows = read_bbref_stats()
+    milb_rows = read_milb_stats()
+    all_rows = merge_bbref_milb_rows(bbref_rows, milb_rows)
+
     output_rows = []
 
     # Group by year and category
-    year_category_groups = defaultdict(list)
+    year_category_groups: dict = defaultdict(list)
     for row in all_rows:
         key = (row.year, row.category)
         year_category_groups[key].append(row)
@@ -329,7 +430,7 @@ def process_stats():
     years = sorted(set(r.year for r in all_rows))
     categories = ["College", "Summer", "Independent", "Minors"]
 
-    # Generate season rows (aggregate + individual)
+    # Generate season rows (aggregate + individual team rows)
     for year in years:
         for category in categories:
             key = (year, category)
@@ -338,16 +439,14 @@ def process_stats():
 
             rows = year_category_groups[key]
 
-            # Add aggregate row
             agg = aggregate_stats(rows)
             output_rows.append(format_output_row(agg))
 
-            # Add individual team rows
             for row in rows:
                 output_rows.append(format_output_row(row))
 
     # Generate career totals for each category
-    category_groups = defaultdict(list)
+    category_groups: dict = defaultdict(list)
     for row in all_rows:
         category_groups[row.category].append(row)
 
@@ -365,13 +464,12 @@ def process_stats():
             org_override="-"
         ))
 
-    # Generate level totals for minors
+    # Generate level totals for minors (lowest → highest)
     minors_rows = [r for r in all_rows if r.category == "Minors"]
-    level_groups = defaultdict(list)
+    level_groups: dict = defaultdict(list)
     for row in minors_rows:
         level_groups[row.level].append(row)
 
-    # Order levels from lowest to highest
     for level in LEVEL_ORDER:
         if level not in level_groups:
             continue
@@ -392,7 +490,9 @@ def process_stats():
         writer.writeheader()
         writer.writerows(output_rows)
 
-    print(f"Processed {len(all_rows)} individual rows")
+    if milb_rows:
+        print(f"Using MiLB API data ({len(milb_rows)} rows) for Minors")
+    print(f"Processed {len(all_rows)} individual rows total")
     print(f"Generated {len(output_rows)} output rows")
     print(f"Output written to {OUTPUT_FILE}")
 
