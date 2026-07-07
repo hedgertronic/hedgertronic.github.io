@@ -62,48 +62,64 @@ test.describe("Homepage", () => {
   });
 });
 
+// Helper: scroll to footer and wait for the theme trigger to be rendered by JS
+async function waitForThemeTrigger(page) {
+  // renderFooter runs after async data loading; wait for the trigger to exist
+  await page.waitForSelector(".theme-menu-trigger", { timeout: 10000 });
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(200);
+}
+
+// Helper: open the footer theme dropdown and wait for it to be visible.
+async function openThemeDropdown(page) {
+  await page.locator(".theme-menu-trigger").click();
+  await page.waitForFunction(() => {
+    const menu = document.querySelector(".theme-switcher .theme-menu");
+    return menu && !menu.hidden;
+  }, { timeout: 5000 });
+}
+
 test.describe("Theme Switching", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
     await page.waitForSelector(".hero-intro");
   });
 
-  test("has theme switcher in footer", async ({ page }) => {
-    // Scroll to footer where theme switcher is
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
-
-    const themeButtons = page.locator(".theme-btn");
-    await expect(themeButtons.first()).toBeVisible();
+  test("has theme picker trigger in footer", async ({ page }) => {
+    await waitForThemeTrigger(page);
+    const trigger = page.locator(".theme-menu-trigger");
+    await expect(trigger).toBeVisible();
   });
 
-  test("changes theme on button click", async ({ page }) => {
-    // Scroll to footer
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
+  test("opens dropdown with 6 theme options", async ({ page }) => {
+    await waitForThemeTrigger(page);
+    await openThemeDropdown(page);
 
-    // Get initial theme
+    const options = page.locator(".theme-switcher .theme-menu-option");
+    await expect(options).toHaveCount(6);
+  });
+
+  test("changes theme on dropdown option click", async ({ page }) => {
+    await waitForThemeTrigger(page);
+
     const initialTheme = await page.evaluate(() =>
       document.documentElement.getAttribute("data-theme")
     );
 
-    // Click a different theme button
-    const themeButtons = page.locator(".theme-btn");
-    const buttonCount = await themeButtons.count();
+    await openThemeDropdown(page);
 
-    // Find a button that isn't the active one
-    for (let i = 0; i < buttonCount; i++) {
-      const btn = themeButtons.nth(i);
-      const isActive = await btn.evaluate((el) =>
-        el.classList.contains("active")
-      );
-      if (!isActive) {
-        await btn.click();
+    const options = page.locator(".theme-switcher .theme-menu-option");
+    const count = await options.count();
+
+    for (let i = 0; i < count; i++) {
+      const opt = options.nth(i);
+      const themeId = await opt.getAttribute("data-theme");
+      if (themeId !== initialTheme) {
+        await opt.click();
         break;
       }
     }
 
-    // Theme should have changed
     const newTheme = await page.evaluate(() =>
       document.documentElement.getAttribute("data-theme")
     );
@@ -111,21 +127,26 @@ test.describe("Theme Switching", () => {
   });
 
   test("persists theme in localStorage", async ({ page }) => {
-    // Scroll to footer
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
+    await waitForThemeTrigger(page);
+    await openThemeDropdown(page);
 
-    // Click a theme button
-    const philliesBtn = page.locator('.theme-btn[data-theme="phillies"]');
-    if ((await philliesBtn.count()) > 0) {
-      await philliesBtn.click();
+    const philliesOption = page.locator('.theme-switcher .theme-menu-option[data-theme="phillies"]');
+    if ((await philliesOption.count()) > 0) {
+      await philliesOption.click();
 
-      // Check localStorage
       const storedTheme = await page.evaluate(() =>
         localStorage.getItem("theme")
       );
       expect(storedTheme).toBe("phillies");
     }
+  });
+
+  test("dropdown includes rangers and marlins themes", async ({ page }) => {
+    await waitForThemeTrigger(page);
+    await openThemeDropdown(page);
+
+    await expect(page.locator('.theme-switcher .theme-menu-option[data-theme="rangers"]')).toBeVisible();
+    await expect(page.locator('.theme-switcher .theme-menu-option[data-theme="marlins"]')).toBeVisible();
   });
 });
 

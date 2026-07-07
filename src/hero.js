@@ -3,9 +3,10 @@
  */
 
 import { createElement, createIconElement } from "./dom.js";
+import { buildHeroNavItem } from "./ui.js";
 
 export function getThemedHeadshot(config) {
-  const theme = localStorage.getItem("theme") || "hopkins";
+  const theme = localStorage.getItem("theme") || "marlins";
   if (config.profile.headshots && config.profile.headshots[theme]) {
     return config.profile.headshots[theme];
   }
@@ -183,18 +184,6 @@ export function renderHero(config) {
     reuseExisting: true,
   });
 
-  // Add Evolution CTA button to social links (homepage only)
-  const socialLinks = container.querySelector(".social-links");
-  let evolutionCta = socialLinks?.querySelector(".evolution-cta");
-  if (socialLinks && !evolutionCta) {
-    evolutionCta = createElement("a", {
-      href: "/evolution/",
-      className: "evolution-cta",
-    });
-    evolutionCta.textContent = "Evolution";
-    socialLinks.appendChild(evolutionCta);
-  }
-
   // Reuse existing hero-nav from HTML, or create if missing
   let heroNav = container.querySelector(".hero-nav");
   if (!heroNav) {
@@ -203,45 +192,8 @@ export function renderHero(config) {
   }
 
   config.sections.forEach((section) => {
-    const navLink = createElement("a", {
-      href: `#${section.id}`,
-      className: "hero-nav-item",
-    });
-    navLink.dataset.section = section.id;
-    navLink.style.setProperty("--section-accent", section.accentColor);
-
-    const iconDiv = createElement("div", { className: "hero-nav-icon" });
-    iconDiv.appendChild(createIconElement(section.icon));
-    navLink.appendChild(iconDiv);
-
-    const textDiv = createElement("div", { className: "hero-nav-text" });
     const label = HERO_NAV_LABELS[section.id] || section.title;
-    textDiv.appendChild(
-      createElement("span", {
-        className: "hero-nav-label",
-        textContent: label,
-      }),
-    );
-
-    if (section.subtitle) {
-      textDiv.appendChild(
-        createElement("span", {
-          className: "hero-nav-subtitle",
-          textContent: section.subtitle,
-        }),
-      );
-    }
-
-    navLink.appendChild(textDiv);
-
-    navLink.appendChild(
-      createElement("span", {
-        className: "hero-nav-arrow",
-        textContent: "\u2193",
-      }),
-    );
-
-    heroNav.appendChild(navLink);
+    heroNav.appendChild(buildHeroNavItem(section, { label }));
   });
 
   // Trigger animations now that JS has enhanced the hero
@@ -255,25 +207,19 @@ export function renderFooter(config) {
   const containerDiv = createElement("div", { className: "container" });
   const footerContent = createElement("div", { className: "footer-content" });
 
-  // Theme switcher
+  // Theme switcher — label above trigger button; dropdown built by initThemeSwitcher
   const themeSwitcher = createElement("div", { className: "theme-switcher" });
-  themeSwitcher.appendChild(
-    createElement("span", {
-      className: "theme-label",
-      textContent: "Team colors",
-    }),
-  );
-
-  const buttonContainer = createElement("div", { className: "theme-switcher-buttons" });
-  config.footer.themes.forEach((theme) => {
-    const btn = createElement("button", {
-      className: "theme-btn",
-      textContent: theme.label,
-    });
-    btn.dataset.theme = theme.id;
-    buttonContainer.appendChild(btn);
+  const switcherLabel = createElement("span", {
+    className: "theme-switcher-label",
+    textContent: "Team Colors",
   });
-  themeSwitcher.appendChild(buttonContainer);
+  const menuTrigger = createElement("button", {
+    className: "theme-menu-trigger",
+    type: "button",
+    textContent: "Team Colors ▾",
+  });
+  themeSwitcher.appendChild(switcherLabel);
+  themeSwitcher.appendChild(menuTrigger);
   footerContent.appendChild(themeSwitcher);
 
   containerDiv.appendChild(footerContent);

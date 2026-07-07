@@ -5,6 +5,7 @@
 import { ICONS } from "./icons.js";
 import { setTrustedHTML, createIconElement } from "./dom.js";
 import { initCarouselScrollDetection, displayEmptyState, formatDate, isWithinDays, sortByDate } from "./ui.js";
+import { renderCaption } from "./training-card.js";
 
 export function displayError(containerOrId) {
   const container =
@@ -295,26 +296,7 @@ export function createTweetCard(item, handle) {
 
   const textEl = document.createElement("p");
   textEl.className = "tweet-text";
-
-  // Truncate to 280 characters
-  let tweetText = item.text || item.title;
-  const isTruncated = tweetText.length > 280;
-  if (isTruncated) {
-    tweetText = tweetText.substring(0, 280).trim() + "...";
-  }
-
-  // Parse @mentions and create styled spans
-  const parts = tweetText.split(/(@\w+)/g);
-  parts.forEach((part) => {
-    if (part.startsWith("@")) {
-      const mention = document.createElement("span");
-      mention.className = "tweet-mention";
-      mention.textContent = part;
-      textEl.appendChild(mention);
-    } else {
-      textEl.appendChild(document.createTextNode(part));
-    }
-  });
+  renderCaption(textEl, item.text || item.title, "tweet-mention");
 
   content.appendChild(textEl);
   card.appendChild(content);

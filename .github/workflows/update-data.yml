@@ -1,0 +1,100 @@
+name: Update Fetched Data
+
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  issues: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install Python dependencies
+        run: uv sync
+
+      - name: Fetch GitHub repo stats
+        run: uv run python tools/fetch/fetch_github.py || true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Fetch tweet engagement stats
+        run: uv run python tools/fetch/fetch_tweets.py || true
+
+      - name: Fetch chess ratings
+        run: uv run python tools/fetch/fetch_chess.py || true
+
+      - name: Fetch Goodreads currently-reading book
+        run: uv run python tools/fetch/fetch_goodreads.py || true
+        env:
+          GOODREADS_USER_ID: ${{ secrets.GOODREADS_USER_ID }}
+
+      - name: Fetch Substack posts
+        run: uv run python tools/fetch/fetch_substack.py || true
+
+      - name: Fetch Spotify top album
+        id: spotify
+        run: uv run python tools/fetch/fetch_spotify.py || true
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+
+      - name: Open Spotify re-auth reminder issue
+        if: steps.spotify.outputs.spotify_reauth == 'true'
+        run: |
+          title="Spotify refresh token expired — re-authorization required"
+          if [ -z "$(gh issue list --state open --search "$title in:title" --limit 1)" ]; then
+            gh issue create --title "$title" --body "The daily data workflow hit Spotify's 6-month refresh-token expiry. Run \`uv run python tools/spotify_auth.py\` locally, then \`gh secret set SPOTIFY_REFRESH_TOKEN\`. The site keeps showing the last fetched album until then."
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Fetch MiLB pitching stats
+        run: uv run python tools/fetch/fetch_milb.py || true
+
+      - name: Process career stats CSV
+        run: uv run python tools/process_stats.py || true
+
+      - name: Stage changed data files
+        run: |
+          git add --ignore-errors \
+            data/lab-projects.json \
+            data/personal.json \
+            data/writing-shortform.json \
+            data/writing-longform.json \
+            assets/documents/milb_api_stats.csv \
+            assets/documents/career_stats.csv
+
+      - name: Check for staged changes
+        id: check_changes
+        run: |
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update fetched data"
+          git push
+
+      - name: Trigger deploy workflow
+        if: steps.check_changes.outputs.changed == 'true'
+        run: gh workflow run deploy.yml
+        env:
+          GH_TOKEN: ${{ github.token }}

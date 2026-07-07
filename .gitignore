@@ -42,6 +42,12 @@ build/
 
 # Generated files (built in CI)
 /styles.css
+/script.js
+/script.js.map
+/resume/script.js
+/resume/script.js.map
+/evolution/script.js
+/evolution/script.js.map
 assets/documents/resume.pdf
 assets/documents/career_stats.csv
 assets/images/og/og-image.png

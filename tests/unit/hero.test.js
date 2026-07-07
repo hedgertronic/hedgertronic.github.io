@@ -18,6 +18,8 @@ describe("getThemedHeadshot", () => {
         hopkins: "/assets/images/headshot-hopkins.jpg",
         mets: "/assets/images/headshot-mets.jpg",
         phillies: "/assets/images/headshot-phillies.jpg",
+        rangers: "/assets/images/headshot-dl.jpg",
+        marlins: "/assets/images/headshot-dl.jpg",
       },
     },
   };
@@ -28,9 +30,9 @@ describe("getThemedHeadshot", () => {
     expect(result).toBe("/assets/images/headshot-mets.jpg");
   });
 
-  it("returns hopkins headshot as default when no theme set", () => {
+  it("returns marlins headshot as default when no theme set", () => {
     const result = getThemedHeadshot(mockConfig);
-    expect(result).toBe("/assets/images/headshot-hopkins.jpg");
+    expect(result).toBe("/assets/images/headshot-dl.jpg");
   });
 
   it("returns driveline headshot when theme is driveline", () => {
@@ -86,6 +88,8 @@ describe("updateLogoHeadshot", () => {
         hopkins: "/assets/images/headshot-hopkins.jpg",
         mets: "/assets/images/headshot-mets.jpg",
         phillies: "/assets/images/headshot-phillies.jpg",
+        rangers: "/assets/images/headshot-dl.jpg",
+        marlins: "/assets/images/headshot-dl.jpg",
       },
     },
   };
@@ -96,9 +100,9 @@ describe("updateLogoHeadshot", () => {
     expect(logoImg.src).toContain("/assets/images/headshot-mets.jpg");
   });
 
-  it("uses hopkins theme by default", () => {
+  it("uses marlins theme by default", () => {
     updateLogoHeadshot(mockConfig);
-    expect(logoImg.src).toContain("/assets/images/headshot-hopkins.jpg");
+    expect(logoImg.src).toContain("/assets/images/headshot-dl.jpg");
   });
 
   it("does nothing when logo element not found", () => {

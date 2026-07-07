@@ -3,56 +3,83 @@
  */
 
 import { getSiteConfig } from "./data.js";
+import { buildThemeDropdown } from "./theme-menu.js";
 
 export function initThemeSwitcher() {
-  const buttons = document.querySelectorAll(".theme-btn");
-  const savedTheme = localStorage.getItem("theme") || "hopkins";
+  const savedTheme = localStorage.getItem("theme") || "marlins";
   const siteConfig = getSiteConfig();
   // Use global config set in HTML head, with fallback
   const themeColors = window.__themeConfig?.colors || {
     driveline: "#0a0a0a",
-    hopkins: "#0a0e1a",
-    mets: "#0a1428",
-    phillies: "#120a0c",
+    hopkins: "#0a0f17",
+    mets: "#0a1222",
+    phillies: "#170a0c",
+    rangers: "#0a1017",
+    marlins: "#0a1317",
   };
+
+  // syncActive callbacks for all mounted dropdowns — called on every theme change
+  const syncFunctions = [];
 
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-      metaThemeColor.setAttribute("content", themeColors[theme] || themeColors.hopkins);
+      metaThemeColor.setAttribute("content", themeColors[theme] || themeColors.marlins);
     }
     // iOS 26 Safari samples body background-color for toolbar tint (ignores theme-color meta)
-    document.body.style.backgroundColor = themeColors[theme] || themeColors.hopkins;
+    document.body.style.backgroundColor = themeColors[theme] || themeColors.marlins;
 
-    if (siteConfig && siteConfig.profile.headshots) {
+    if (siteConfig?.profile?.headshots) {
       const headshot = siteConfig.profile.headshots[theme] || siteConfig.profile.headshot;
       document.querySelectorAll(".hero-headshot, .logo-headshot").forEach((img) => {
         img.src = headshot;
       });
     }
+
+    // Sync active state in all mounted dropdown instances
+    syncFunctions.forEach((fn) => fn());
   }
 
   applyTheme(savedTheme);
 
-  buttons.forEach((btn) => {
-    if (btn.dataset.theme === savedTheme) {
-      btn.classList.add("active");
-    }
+  const themes = siteConfig?.footer?.themes || [];
 
-    btn.addEventListener("click", () => {
-      const theme = btn.dataset.theme;
-      applyTheme(theme);
-      localStorage.setItem("theme", theme);
+  function getActive() {
+    return document.documentElement.getAttribute("data-theme") || "marlins";
+  }
 
-      buttons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
+  function onSelect(t) {
+    applyTheme(t);
+    localStorage.setItem("theme", t);
+  }
+
+  // Footer dropdown
+  const themeSwitcher = document.querySelector(".theme-switcher");
+  const footerTrigger = themeSwitcher?.querySelector(".theme-menu-trigger");
+  if (themeSwitcher && footerTrigger) {
+    const { syncActive } = buildThemeDropdown(themeSwitcher, {
+      trigger: footerTrigger,
+      themes,
+      onSelect,
+      getActive,
     });
-  });
+    syncFunctions.push(syncActive);
+    syncActive();
+  }
+
 }
 
 export function initScrollReveal() {
   const sections = document.querySelectorAll(".content-section");
+
+  // Under reduced motion: reveal all sections immediately — the CSS already
+  // resets opacity/transform, but sections also need the "revealed" class so
+  // any JS that checks for it (e.g. entrance animations) sees the right state.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    sections.forEach((section) => section.classList.add("revealed"));
+    return;
+  }
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -77,12 +104,17 @@ export function initScrollReveal() {
 }
 
 export function initNavigation() {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", (e) => {
       e.preventDefault();
       const target = document.querySelector(anchor.getAttribute("href"));
       if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "instant" : "smooth",
+          block: "start",
+        });
       }
     });
   });
@@ -154,6 +186,17 @@ export function initNavigation() {
 export function initHeadshotClickAnimation(readyDelay = 600, linkUrl = null) {
   const headshot = document.querySelector(".hero-headshot");
   if (!headshot) return;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Under reduced motion: skip the delay and the bounce animation entirely
+  if (prefersReducedMotion) {
+    headshot.classList.add("animation-ready");
+    headshot.addEventListener("click", () => {
+      if (linkUrl) window.location.href = linkUrl;
+    });
+    return;
+  }
 
   setTimeout(() => {
     headshot.classList.add("animation-ready");

@@ -10,12 +10,9 @@ import {
   initNavigation,
   initHeadshotClickAnimation,
 } from "./interactivity.js";
-import {
-  loadEvolutionConfig,
-  renderEvolutionHeroNav,
-  renderSection,
-  createScrollArrow,
-} from "./evolution-components.js";
+import { loadEvolutionConfig, renderEvolutionHeroNav } from "./evolution-components.js";
+import { renderSection } from "./evolution-subsections.js";
+import { createSVGElement } from "./evolution-charts.js";
 
 async function initEvolutionPage() {
   try {
@@ -34,19 +31,6 @@ async function initEvolutionPage() {
     }
 
     renderFooter(siteConfig);
-
-    // Add "[Your Team]" button to theme switcher (evolution page only)
-    const themeSwitcherButtons = document.querySelector(
-      ".theme-switcher-buttons"
-    );
-    if (themeSwitcherButtons) {
-      const yourTeamBtn = document.createElement("button");
-      yourTeamBtn.className = "theme-btn theme-btn-disabled";
-      yourTeamBtn.textContent = "[Your Team]";
-      yourTeamBtn.disabled = true;
-      themeSwitcherButtons.appendChild(yourTeamBtn);
-    }
-
     updateLogoHeadshot(siteConfig);
     initThemeSwitcher();
 
@@ -151,7 +135,6 @@ async function initEvolutionPage() {
         document.body.appendChild(modal);
 
         const updateNavButtons = (index) => {
-          // Hide prev on first item, hide next on last item
           prevBtn.style.display = index === 0 ? "none" : "flex";
           nextBtn.style.display = index === items.length - 1 ? "none" : "flex";
         };
@@ -198,21 +181,16 @@ async function initEvolutionPage() {
           document.body.classList.remove("modal-open");
         };
 
-        // Add click handlers to cards
         cards.forEach((card, index) => {
           card.addEventListener("click", () => openComparisonModal(index));
         });
 
         prevBtn.addEventListener("click", () => {
-          if (currentModalIndex > 0) {
-            updateModalContent(currentModalIndex - 1);
-          }
+          if (currentModalIndex > 0) updateModalContent(currentModalIndex - 1);
         });
 
         nextBtn.addEventListener("click", () => {
-          if (currentModalIndex < items.length - 1) {
-            updateModalContent(currentModalIndex + 1);
-          }
+          if (currentModalIndex < items.length - 1) updateModalContent(currentModalIndex + 1);
         });
 
         closeBtn.addEventListener("click", closeModal);
@@ -238,30 +216,27 @@ async function initEvolutionPage() {
 
     const pageTitleArrow = document.querySelector(".evolution-page-title-arrow");
     if (pageTitleArrow) {
-      // Create arrow SVG (inside a span, not anchor, since it's inside an <a> tag)
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.setAttribute("width", "24");
-      svg.setAttribute("height", "24");
-      svg.setAttribute("viewBox", "0 0 24 24");
-      svg.setAttribute("fill", "none");
-      svg.setAttribute("stroke", "currentColor");
-      svg.setAttribute("stroke-width", "2");
-      svg.setAttribute("stroke-linecap", "round");
-      svg.setAttribute("stroke-linejoin", "round");
-      const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path1.setAttribute("d", "M12 5v14");
-      const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path2.setAttribute("d", "m19 12-7 7-7-7");
-      svg.appendChild(path1);
-      svg.appendChild(path2);
+      const svg = createSVGElement("svg", {
+        width: "24",
+        height: "24",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+      });
+      svg.appendChild(createSVGElement("path", { d: "M12 5v14" }));
+      svg.appendChild(createSVGElement("path", { d: "m19 12-7 7-7-7" }));
       pageTitleArrow.appendChild(svg);
     }
 
     const main = document.querySelector("main");
     if (main) {
-      for (let i = 0; i < evolutionConfig.sections.length; i++) {
-        await renderSection(evolutionConfig.sections[i], main, i);
-      }
+      // Fire all section renders concurrently; each appends synchronously to main in order
+      await Promise.all(
+        evolutionConfig.sections.map((section, i) => renderSection(section, main, i))
+      );
 
       initScrollReveal();
       initNavigation();

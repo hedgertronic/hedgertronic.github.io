@@ -390,26 +390,6 @@
     color: var(--text-muted);
 }
 
-/* Animated scroll down arrow */
-.scroll-down-arrow {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-    cursor: pointer;
-    animation: bounce 2s infinite;
-    text-decoration: none;
-}
-
-.scroll-down-arrow svg {
-    width: 32px;
-    height: 32px;
-    color: var(--text-muted);
-    transition: color 0.2s ease;
-}
-
-.scroll-down-arrow:hover svg {
-    color: var(--accent-primary);
-}
 
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
@@ -762,62 +742,7 @@
     pointer-events: none; /* Allow clicks to pass through to overlay */
 }
 
-.hero-video-poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    z-index: 1;
-    transition: opacity 0.5s ease-out;
-}
 
-/* Play overlay for click-to-expand */
-.hero-video-play-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 2;
-    background: transparent;
-    transition: background 0.3s ease;
-}
-
-.hero-video-play-overlay svg {
-    width: 56px;
-    height: 56px;
-    color: rgba(255, 255, 255, 0.9);
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.hero-year-video-wrapper:hover .hero-video-play-overlay {
-    background: rgba(0, 0, 0, 0.25);
-}
-
-.hero-year-video-wrapper:hover .hero-video-play-overlay svg {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.hero-video-play-overlay:active svg {
-    transform: scale(0.95);
-}
-
-/* When paused, always show play icon */
-.hero-year-video-wrapper.paused .hero-video-play-overlay {
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.hero-year-video-wrapper.paused .hero-video-play-overlay svg {
-    opacity: 1;
-    transform: scale(1);
-}
 
 /* Video pair - highlight and full video side by side */
 .hero-video-pair {
@@ -847,24 +772,6 @@
     cursor: pointer;
 }
 
-.hero-video-expand-overlay {
-    background: transparent;
-}
-
-.hero-video-expand-overlay svg {
-    opacity: 0.8;
-    transform: scale(1);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-}
-
-.hero-video-clickable:hover .hero-video-expand-overlay {
-    background: rgba(0, 0, 0, 0.15);
-}
-
-.hero-video-clickable:hover .hero-video-expand-overlay svg {
-    opacity: 1;
-    transform: scale(1.1);
-}
 
 /* Hero section doesn't need the standard section header */
 .hero-year-section .section-header {
@@ -1060,31 +967,6 @@
         margin-bottom: 2rem;
     }
 
-    .hero-video-play-overlay svg {
-        width: 44px;
-        height: 44px;
-    }
-}
-
-/* Touch devices: no play icon (no hover state) */
-@media (hover: none) {
-    .hero-video-play-overlay svg {
-        display: none;
-    }
-
-    /* Still show when paused */
-    .hero-year-video-wrapper.paused .hero-video-play-overlay svg {
-        display: block;
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    /* Always show expand icon on full video */
-    .hero-video-expand-overlay svg {
-        display: block;
-        opacity: 0.9;
-        transform: scale(1);
-    }
 }
 
 /* ========================================
@@ -1123,24 +1005,6 @@
     width: 100%;
     height: 100%;
     border: none;
-}
-
-/* Section description */
-.evolution-page .section-description {
-    font-size: 1.05rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    max-width: 700px;
-    margin-bottom: 2.5rem;
-}
-
-/* Subsection styles - matches homepage */
-.evolution-page .subsection {
-    margin-bottom: 4rem;
-}
-
-.evolution-page .subsection:last-child {
-    margin-bottom: 0;
 }
 
 /* Placeholder content for upcoming subsections */
@@ -1357,6 +1221,77 @@
     border-top: 1px solid var(--border-color);
 }
 
+/* ==========================================================================
+   Video Facade — lightweight poster + play-button placeholder that defers
+   iframe loading until user intent. Used in .video-wrapper and the hero
+   .hero-year-video-wrapper for both YouTube and Vimeo videos.
+   ========================================================================== */
+
+.video-facade {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+}
+
+.video-facade-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* When the poster image fails to load, hide it and show a gradient placeholder */
+.video-facade--no-poster .video-facade-poster {
+    display: none;
+}
+
+.video-facade--no-poster {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+}
+
+/* Play button — always visible, scales on hover */
+.video-facade-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1;
+}
+
+.video-facade-play svg {
+    width: 22px;
+    height: 22px;
+    /* Optical centering: the play triangle is slightly left-heavy */
+    margin-left: 3px;
+    flex-shrink: 0;
+}
+
+.video-facade:hover .video-facade-play {
+    background: rgba(0, 0, 0, 0.75);
+    border-color: #fff;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
 /* Video Button */
 .video-button {
     display: inline-flex;
@@ -1447,10 +1382,6 @@ body.modal-open {
     overflow: visible;
 }
 
-.video-modal-content--square {
-    max-width: 500px;
-}
-
 .video-modal-wrapper {
     position: relative;
     width: 100%;
@@ -1475,10 +1406,6 @@ body.modal-open {
     left: 12px;
     right: auto;
     z-index: 20;
-}
-
-.video-modal-content--square .video-modal-wrapper {
-    padding-bottom: 100%; /* 1:1 */
 }
 
 /* Progression modal with label, nav, and description */
@@ -1687,55 +1614,11 @@ body.modal-open {
     color: #fff;
 }
 
-.evolution-page .subsection-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.evolution-page .subsection-header h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-}
-
 .evolution-page .subsection-description {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 1.5rem;
     line-height: 1.5;
-}
-
-/* View Raw Data button - matches homepage view-all-link */
-.evolution-page .view-all-link {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--section-color, var(--section-field));
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.75rem;
-    border-radius: var(--radius-sm);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.evolution-page .view-all-link:hover {
-    gap: 0.5rem;
-    color: var(--section-color, var(--section-field));
-    background: color-mix(in srgb, var(--section-color, var(--section-field)) 10%, transparent);
-}
-
-.evolution-page .view-all-link::after {
-    content: '\2192';
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.evolution-page .view-all-link:hover::after {
-    transform: translateX(3px);
 }
 
 /* Evolution Grid Layout */
@@ -2026,16 +1909,6 @@ body.modal-open {
 }
 
 /* Pitch Type Badges - matches org-badge style */
-.pitch-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-sm);
-    transition: all 0.25s ease;
-}
-
 .stats-table tbody tr:hover .pitch-badge {
     transform: scale(1.05);
 }
@@ -2140,11 +2013,6 @@ body.modal-open {
     .evolution-page-title-prefix,
     .evolution-page-title h2 {
         font-size: 0.8rem;
-    }
-
-    .evolution-page-title .scroll-down-arrow svg {
-        width: 18px;
-        height: 18px;
     }
 
     .nav-page-title {
@@ -2265,10 +2133,6 @@ body.modal-open {
     .video-modal-content--vertical .video-modal-wrapper {
         width: 280px;
         max-width: 75vw;
-    }
-
-    .video-modal-content--square {
-        max-width: 90vw;
     }
 
     .video-modal-close {
