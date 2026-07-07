@@ -2134,28 +2134,65 @@ nav.container {
    ============================================================================= */
 
 .hero {
-    min-height: 100svh;
+    /* Fill the large viewport so the hero's backdrop extends under iOS
+       Safari's Liquid Glass toolbar; the extra bottom padding keeps the
+       content centered within the small (toolbar-visible) viewport. On
+       desktop lvh == svh, so this collapses to symmetric 2rem padding. */
+    min-height: 100lvh;
     display: grid;
     place-content: center;
-    padding: 2rem 0;
+    padding: 2rem 0 calc(100lvh - 100svh + 2rem);
     position: relative;
     overflow: hidden;
 }
 
-/* Duotone wash: primary tint from top-right, secondary from bottom-left,
-   fading through the base background — no hard edges */
+/* Hero-local duotone wash — the accent glow lives inside sections (here and
+   in footer::before), never as a viewport-pinned layer, which would flip the
+   Liquid Glass toolbar opaque on iOS 26.5. */
 .hero::before {
     content: '';
     position: absolute;
     inset: 0;
+    /* 19% ≈ two stacked 10% layers (1 − 0.9²): preserves the "double wash"
+       intensity from when a site-wide body wash layered under this one. */
     background:
         radial-gradient(140% 100% at 100% 0%,
-            color-mix(in srgb, var(--accent-primary) 10%, transparent) 0%,
+            color-mix(in srgb, var(--accent-primary) 19%, transparent) 0%,
             transparent 55%),
         radial-gradient(140% 100% at 0% 100%,
-            color-mix(in srgb, var(--accent-secondary-bright) 10%, transparent) 0%,
+            color-mix(in srgb, var(--accent-secondary-bright) 19%, transparent) 0%,
             transparent 55%);
+    /* Fade the glow to zero across the toolbar zone plus the overshoot —
+       full strength through the visible (small) viewport, dissipating
+       gradually behind the glass, gone exactly at the section boundary. This
+       makes the hero→section edge as invisible as every other section
+       boundary. On desktop lvh == svh and the overshoot is unset, so the
+       solid stop is 100% and no fade occurs. */
+    -webkit-mask-image: linear-gradient(to bottom,
+        #000 calc(100% - (100lvh - 100svh) - var(--hero-overshoot, 0px)),
+        transparent);
+    mask-image: linear-gradient(to bottom,
+        #000 calc(100% - (100lvh - 100svh) - var(--hero-overshoot, 0px)),
+        transparent);
     pointer-events: none;
+}
+
+/* Bridge the hero's fading glow into the first section's fill. Without this,
+   the glow bottoms out at the darker page background just before the lighter
+   .alt-bg section begins, and that dip reads as a thin dark bar. The gradient
+   ends at the exact composite .alt-bg renders (70% bg-secondary over the
+   page), so the boundary disappears. Height is zero on desktop. */
+.hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100lvh - 100svh + var(--hero-overshoot, 0px));
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+        transparent,
+        color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary)));
 }
 
 .hero-intro {
@@ -2543,10 +2580,32 @@ nav.container {
    ============================================================================= */
 
 footer {
+    /* No overflow: hidden here — the theme-switcher menu pops up beyond the
+       footer's box and must not be clipped. footer::before is inset: 0, so
+       nothing overflows anyway. */
+    position: relative;
     background: var(--bg-primary);
     border-top: 1px solid var(--border-color);
     padding: 3rem 0;
     padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+}
+
+/* Footer-local duotone wash: gives the Liquid Glass toolbar something to
+   tint at the end of the page. Glow corners point into the page end so
+   nothing hard-cuts at the footer's top border. Absolute inside the footer,
+   not viewport-pinned — fixed layers flip the toolbar opaque on iOS 26.5. */
+footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(140% 100% at 100% 100%,
+            color-mix(in srgb, var(--accent-primary) 10%, transparent) 0%,
+            transparent 55%),
+        radial-gradient(140% 100% at 0% 0%,
+            color-mix(in srgb, var(--accent-secondary-bright) 8%, transparent) 0%,
+            transparent 55%);
 }
 
 /* Hide footer until JS populates it to prevent CLS */
@@ -2555,6 +2614,9 @@ footer:empty {
 }
 
 .footer-content {
+    /* Above footer::before (absolutely positioned layers otherwise paint
+       over in-flow content). */
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2795,10 +2857,18 @@ footer:empty {
     }
 
     .hero {
-        min-height: 100svh;
+        /* On iOS 26, 100lvh still ends partway into the expanded toolbar —
+           the large viewport excludes the strip Safari reserves for its
+           collapsed pill (measured 66pt short of the physical bottom on an
+           iPhone 17 Pro). Overshoot past the screen bottom so the hero's
+           backdrop fills the entire glass area at load; the compensating
+           bottom padding absorbs the overshoot, keeping the content centered
+           within the small (toolbar-visible) viewport. */
+        --hero-overshoot: 80px;
+        min-height: calc(100lvh + var(--hero-overshoot));
         display: grid;
         place-content: center;
-        padding: 1.5rem 0;
+        padding: 1.5rem 0 calc(100lvh - 100svh + var(--hero-overshoot) + 1.5rem);
     }
 
     /* Fluid hero sizing - scales with viewport height, starts shrinking at 800px */
