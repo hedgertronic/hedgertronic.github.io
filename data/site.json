@@ -1,13 +1,16 @@
 {
+  "goodreadsUserId": "146868965",
   "profile": {
     "name": "Josh Hejka",
-    "bio": "Free-agent professional pitcher. Former member of the Mets and Phillies organizations. Current R&D analyst at Driveline Baseball.",
+    "bio": "Professional pitcher in the Marlins organization. Former member of the Mets, Phillies, and Rangers. Current R&D analyst at Driveline Baseball.",
     "headshot": "/assets/images/headshot/headshot-dl-sm.jpg",
     "headshots": {
       "driveline": "/assets/images/headshot/headshot-dl-sm.jpg",
       "hopkins": "/assets/images/headshot/headshot-dl-sm.jpg",
       "mets": "/assets/images/headshot/headshot-mets-sm.jpg",
-      "phillies": "/assets/images/headshot/headshot-phillies-sm.jpg"
+      "phillies": "/assets/images/headshot/headshot-phillies-sm.jpg",
+      "rangers": "/assets/images/headshot/headshot-dl-sm.jpg",
+      "marlins": "/assets/images/headshot/headshot-dl-sm.jpg"
     }
   },
   "socials": [
@@ -43,8 +46,8 @@
       "id": "field",
       "title": "On the Field",
       "subtitle": "Stats & video",
-      "accentColor": "#fbbf24",
-      "description": "Pitcher in the New York Mets (2019–2024) and Philadelphia Phillies (2025) organizations with experience across all levels of the minor leagues. Served as minor league player representative after contributing to the historic MLBPA unionization effort in 2022.",
+      "accentColor": "var(--section-field)",
+      "description": "Pitcher in the New York Mets (2019–2024), Philadelphia Phillies (2025), Texas Rangers (2026, Round Rock/Frisco), and Miami Marlins (2026, Jacksonville/Pensacola) organizations with experience across all levels of the minor leagues. Served as minor league player representative after contributing to the historic MLBPA unionization effort in 2022.",
       "icon": "baseball",
       "type": "stats",
       "statsFile": "assets/documents/career_stats.csv",
@@ -69,7 +72,7 @@
       "id": "lab",
       "title": "In the Lab",
       "subtitle": "Research & code",
-      "accentColor": "#22c55e",
+      "accentColor": "var(--section-lab)",
       "description": "Researcher at Driveline Baseball investigating topics such as pitch quality, biomechanics, and injury prevention. Has led or contributed to projects including state-of-the-art pitch and arsenal quality models, advanced pitch usage recommendation models, and a novel algorithm to aid the pitch design process. Additional contributor in software engineering iterating on an IMU-based wearable called PULSE that is used as a workload management tool by dozens of MLB organizations and college programs.",
       "icon": "code",
       "type": "content",
@@ -102,7 +105,7 @@
       "id": "writing",
       "title": "On the Page",
       "subtitle": "Articles & analysis",
-      "accentColor": "#a78bfa",
+      "accentColor": "var(--section-writing)",
       "description": "Author of Sliding Risers, a blog exploring player development, motor learning, and pitching through a data-driven lens. Previously featured author in BallNine and Metsmerized. Frequent Twitter threader.",
       "icon": "pen",
       "type": "content",
@@ -137,7 +140,7 @@
       "id": "media",
       "title": "In the Media",
       "subtitle": "Podcasts & interviews",
-      "accentColor": "#60a5fa",
+      "accentColor": "var(--section-media)",
       "description": "Co-host of the Driveline R&D Podcast, breaking down the modern game through a data-driven lens. Guest on The Layback Podcast and the Driveline Baseball Podcast. Featured in Mets Minors, BallNine, The New York Times, Sports Illustrated, and a player panel at the Wake Forest Player Development Seminar.",
       "icon": "microphone",
       "type": "content",
@@ -165,7 +168,7 @@
       "id": "offtheClock",
       "title": "Off the Clock",
       "subtitle": "Hobbies & interests",
-      "accentColor": "#f472b6",
+      "accentColor": "var(--section-offtheClock)",
       "description": "",
       "icon": "coffee",
       "type": "personal",
@@ -174,10 +177,12 @@
   ],
   "footer": {
     "themes": [
-      { "id": "hopkins", "label": "Hopkins" },
-      { "id": "mets", "label": "Mets" },
-      { "id": "phillies", "label": "Phillies" },
-      { "id": "driveline", "label": "Driveline" }
+      { "id": "hopkins", "label": "Hopkins", "color": "#68ace5", "secondary": "#f0f0f0" },
+      { "id": "mets", "label": "Mets", "color": "#ff5910", "secondary": "#002d72" },
+      { "id": "phillies", "label": "Phillies", "color": "#5b8ad8", "secondary": "#e81828" },
+      { "id": "rangers", "label": "Rangers", "color": "#e94f5c", "secondary": "#003278" },
+      { "id": "marlins", "label": "Marlins", "color": "#f85a4d", "secondary": "#00a3e0" },
+      { "id": "driveline", "label": "Driveline", "color": "#FFA300", "secondary": "#f0f0f0" }
     ]
   }
 }

@@ -3,33 +3,42 @@
     "title": "hedgertronic.github.io",
     "description": "This website!",
     "url": "https://github.com/hedgertronic/hedgertronic.github.io",
-    "language": "JavaScript",
+    "language": "CSS",
     "stars": 0,
-    "forks": 0
+    "forks": 0,
+    "descriptionLocked": true
   },
   {
     "title": "whoop",
-    "description": "Tools for acquiring and analyzing WHOOP API data.",
+    "description": "Python client for the WHOOP API v2 with OAuth2 support.",
     "url": "https://github.com/hedgertronic/whoop",
     "language": "Python",
-    "stars": 89,
-    "forks": 7
+    "stars": 99,
+    "forks": 9
   },
   {
     "title": "oura-ring",
-    "description": "Tools for acquiring and analyzing Oura API data.",
-    "url": "https://github.com/hedgertronic/whoop",
+    "description": "Python client for the Oura API v2 with OAuth2 support.",
+    "url": "https://github.com/hedgertronic/oura-ring",
     "language": "Python",
-    "stars": 72,
-    "forks": 11
+    "stars": 84,
+    "forks": 13
+  },
+  {
+    "title": "fungo",
+    "description": "Python tools for baseball data from Statcast and the MLB Stats API.",
+    "url": "https://github.com/hedgertronic/fungo",
+    "language": "Python",
+    "stars": 1,
+    "forks": 0
   },
   {
     "title": "pulse-throw",
     "description": "Tools for acquiring and analyzing PULSE API data.",
     "url": "https://github.com/hedgertronic/pulse-throw",
     "language": "Python",
-    "stars": 2,
-    "forks": 0
+    "stars": 3,
+    "forks": 1
   },
   {
     "title": "transform_accelerations",
