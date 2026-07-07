@@ -40,8 +40,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     initHeadshotClickAnimation(600); // scaleIn is 0.5s with 0.1s delay
   }
 });
-
-export { initHeadshotClickAnimation };
-export { renderHeroIntro, renderFooter };
-export { initThemeSwitcher };
-export { loadSiteConfig, getSiteConfig };
