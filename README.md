@@ -47,15 +47,22 @@ uv run pytest      # Python unit tests
 - **Theme switcher**: Four color schemes based on a "team colors" concept. Can choose Driveline, Hopkins, Mets, or Phillies to update website accent colors and my photo headshot.
 - **Automated workflows**: Resume webpage and PDF automatically generates from JSON file. Open Graph image automatically generates from hero section content and theme. Career stats automatically processed from Baseball Reference data.
 
-## Future Plans
+## Automated Data Pipeline
 
-Automatation of data fetching to reduce manual updates:
+A daily GitHub Actions workflow (`.github/workflows/update-data.yml`, cron `17 9 * * *`) fetches fresh data and commits changes to main, then triggers the deploy workflow to publish immediately.
 
-- **MiLB**: Pull career and season stats.
-- **Twitter/X**: Sync likes, retweets, and bookmarks for content curation.
-- **GitHub**: Fetch repo stats and descriptions.
-- **Instagram**: Pull cover images for training section.
-- **Substack**: Fetch new blog posts and cover images.
-- **Goodreads**: Get books that I am currently reading.
-- **Spotify**: Pull most listened to album over the recent past.
-- **USCF/Chess.com**: Update chess ratings.
+**Automated sources** (`tools/fetch/`):
+
+- **MiLB** (`fetch_milb.py`): Pulls per-team pitching stats from the MLB Stats API across all affiliated levels (AAA–Rk). Writes `assets/documents/milb_api_stats.csv`; `tools/process_stats.py` merges this with Baseball Reference data (college/summer/independent rows stay in bbref; milb rows replace bbref for covered seasons to avoid double-counting).
+- **Twitter/X** (`fetch_tweets.py`): Updates retweet, like, and bookmark counts in `data/writing-shortform.json` via the fxtwitter unofficial API.
+- **GitHub** (`fetch_github.py`): Syncs stars, forks, language, and description for repos in `data/lab-projects.json` via the GitHub REST API.
+- **Substack** (`fetch_substack.py`): Appends new posts from the RSS feed to `data/writing-longform.json`. New entries are appended; existing entries are never removed or reordered.
+- **Goodreads** (`fetch_goodreads.py`): Updates the currently-reading book in `data/personal.json` via the shelf RSS feed. Requires `GOODREADS_USER_ID` secret or a `goodreadsUserId` key in `data/site.json`.
+- **Chess.com / USCF** (`fetch_chess.py`): Refreshes rapid and regular ratings in `data/personal.json`.
+
+**Interactive helper** (`tools/add_training_post.py`): Assists with adding Instagram training posts — extracts the shortcode, compresses and copies the cover image, and prints a ready-to-paste JSON entry for `data/field-training.json`.
+
+**Not yet automated** (future work):
+
+- **Spotify**: Pull most-listened-to album — requires OAuth flow not feasible in CI.
+- **Instagram API**: Automated cover image fetching — Instagram's API requires app review and does not expose public post media to third parties.

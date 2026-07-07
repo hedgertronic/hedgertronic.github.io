@@ -96,28 +96,32 @@ test.describe("Evolution Page Theme Integration", () => {
     await page.waitForSelector(".hero-intro");
   });
 
-  test("has theme switcher in footer", async ({ page }) => {
+  test("has theme picker trigger in footer", async ({ page }) => {
+    await page.waitForSelector(".theme-menu-trigger", { timeout: 10000 });
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
 
-    const themeButtons = page.locator(".theme-btn");
-    const count = await themeButtons.count();
-
-    if (count > 0) {
-      await expect(themeButtons.first()).toBeVisible();
-    }
+    const trigger = page.locator(".theme-menu-trigger");
+    await expect(trigger).toBeVisible();
   });
 
   test("theme persists from homepage", async ({ page }) => {
     await page.goto("/");
     await page.waitForSelector(".hero-intro");
-
+    await page.waitForSelector(".theme-menu-trigger", { timeout: 10000 });
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
 
-    const philliesBtn = page.locator('.theme-btn[data-theme="phillies"]');
-    if ((await philliesBtn.count()) > 0) {
-      await philliesBtn.click();
+    await page.locator(".theme-menu-trigger").click();
+    await page.waitForFunction(() => {
+      const menu = document.querySelector(".theme-switcher .theme-menu");
+      return menu && !menu.hidden;
+    }, { timeout: 5000 });
+
+    // Scope to footer menu to target visible options only
+    const philliesOption = page.locator('.theme-switcher .theme-menu-option[data-theme="phillies"]');
+    if ((await philliesOption.count()) > 0) {
+      await philliesOption.click();
       await page.waitForTimeout(100);
     }
 
@@ -127,7 +131,6 @@ test.describe("Evolution Page Theme Integration", () => {
     const theme = await page.evaluate(() =>
       document.documentElement.getAttribute("data-theme")
     );
-
     const storedTheme = await page.evaluate(() =>
       localStorage.getItem("theme")
     );
@@ -138,14 +141,19 @@ test.describe("Evolution Page Theme Integration", () => {
   });
 
   test("headshot updates with theme", async ({ page }) => {
-    const initialSrc = await page.locator(".hero-headshot").getAttribute("src");
-
+    await page.waitForSelector(".theme-menu-trigger", { timeout: 10000 });
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
 
-    const metsBtn = page.locator('.theme-btn[data-theme="mets"]');
-    if ((await metsBtn.count()) > 0) {
-      await metsBtn.click();
+    await page.locator(".theme-menu-trigger").click();
+    await page.waitForFunction(() => {
+      const menu = document.querySelector(".theme-switcher .theme-menu");
+      return menu && !menu.hidden;
+    }, { timeout: 5000 });
+
+    const metsOption = page.locator('.theme-switcher .theme-menu-option[data-theme="mets"]');
+    if ((await metsOption.count()) > 0) {
+      await metsOption.click();
       await page.waitForTimeout(300);
 
       const newSrc = await page.locator(".hero-headshot").getAttribute("src");
