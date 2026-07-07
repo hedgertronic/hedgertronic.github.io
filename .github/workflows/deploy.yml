@@ -99,13 +99,79 @@ jobs:
       - name: Generate OG Image
         run: uv run python tools/generate_og_image.py
 
+      - name: Assemble site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp index.html CNAME styles.css script.js script.js.map _site/
+          cp -R resume _site/
+          cp -R evolution _site/
+          cp -R css _site/
+          cp -R data _site/
+          cp -R assets _site/
+
+      - name: Check references
+        run: |
+          python3 - << 'PYEOF'
+          import re, sys
+          from pathlib import Path
+
+          SITE_DIR = Path("_site")
+
+          # HTML: match href="/..." and src="/..." attribute values (skip protocol-relative //)
+          HTML_RE = re.compile(
+              r'(?:href|src)=["\']'
+              r'(/(?!/)[^"\'?#\s]*)'
+              r'(?:[?#][^"\']*)?["\']'
+          )
+
+          # JS: match static string literals like "/assets/...", "/data/...", "/css/..."
+          # Only checks simple literals — dynamic concatenations are not resolved
+          JS_RE = re.compile(
+              r'["\']'
+              r'(/(?:assets|data|css|styles\.css|script\.js)[^"\'?#\s]*)'
+              r'(?:[?#][^"\']*)?["\']'
+          )
+
+          errors = []
+
+          html_files = list(SITE_DIR.glob("**/*.html"))
+          if not html_files:
+              print("ERROR: No HTML files found in _site", file=sys.stderr)
+              sys.exit(1)
+
+          for html_file in html_files:
+              content = html_file.read_text(errors="replace")
+              for m in HTML_RE.finditer(content):
+                  path = m.group(1)
+                  target = SITE_DIR / path.lstrip("/")
+                  if not target.exists():
+                      errors.append(f"  {html_file.relative_to(SITE_DIR)}: missing {path}")
+
+          js_files = list(SITE_DIR.glob("**/*.js"))
+          for js_file in js_files:
+              content = js_file.read_text(errors="replace")
+              for m in JS_RE.finditer(content):
+                  path = m.group(1)
+                  target = SITE_DIR / path.lstrip("/")
+                  if not target.exists():
+                      errors.append(f"  {js_file.relative_to(SITE_DIR)}: missing {path}")
+
+          if errors:
+              print(f"Reference check FAILED — {len(errors)} missing file(s):")
+              for e in errors:
+                  print(e)
+              sys.exit(1)
+          print(f"Reference check OK — {len(html_files)} HTML + {len(js_files)} JS file(s), no missing local paths.")
+          PYEOF
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
   deploy:
     environment:
