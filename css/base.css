@@ -1,92 +1,11 @@
-/**
- * =============================================================================
- * MAIN STYLESHEET
- * =============================================================================
- *
- * TABLE OF CONTENTS
- * -----------------
- * 1. FONTS & VARIABLES ................... Line 82
- *    - @font-face declarations
- *    - CSS custom properties (colors, fonts, spacing)
- *    - Theme variations (hopkins, mets, phillies)
- *
- * 2. RESET & BASE ........................ Line 190
- *    - Box-sizing reset
- *    - Body defaults
- *    - Page background & grid overlay
- *
- * 3. LAYOUT .............................. Line 250
- *    - Container
- *    - Header & navigation
- *
- * 4. HERO SECTION ........................ Line 382
- *    - Hero layout & animations
- *    - Headshot & name
- *    - Social links
- *    - Hero navigation pills
- *
- * 5. BUTTONS & LINKS ..................... Line 725
- *    - Button styles (.btn-*)
- *    - Social link styles
- *
- * 6. CONTENT SECTIONS .................... Line 790
- *    - Section headers & icons
- *    - Section-specific colors
- *    - Topics/tags
- *
- * 7. STATS SECTION ....................... Line 966
- *    - Stats overview cards
- *    - Stats table
- *    - Level badges
- *
- * 8. TRAINING GRID ....................... Line 1202
- *    - Training card layout
- *    - Background images & overlays
- *
- * 9. TWEET CARDS ......................... Line 1382
- *    - Tweet grid layout
- *    - Tweet card styles
- *
- * 10. CONTENT CARDS ...................... Line 1669
- *     - Subsection headers
- *     - Content grid & carousel
- *     - Card base styles
- *     - Section-specific card colors
- *     - Project cards
- *     - Thumbnails
- *
- * 11. PERSONAL SECTION ................... Line 2045
- *     - Personal grid
- *     - Reading/listening cards
- *
- * 12. FOOTER ............................. Line 2181
- *     - Footer layout
- *     - Theme switcher
- *
- * 13. RESPONSIVE ......................... Line 2253
- *     - Tablet breakpoint (1024px)
- *     - Mobile breakpoint (800px)
- *
- * 14. UTILITIES .......................... Line 2537
- *     - Selection styles
- *     - Scrollbar customization
- *
- * 15. RESUME PAGE ........................ Line 2563
- *     - Resume header
- *     - Resume grid & sections
- *     - Resume items & skills
- *
- * 16. SHORT VIEWPORT ADAPTATIONS ......... Line 3208
- *     - Fluid sizing for small mobile screens
- *
- * 17. TOUCH DEVICE FIXES ................. Line 3222
- *     - Reset sticky hover states for touch devices
- *
- * =============================================================================
- */
+/* =============================================================================
+   BASE
+   Fonts, CSS custom properties (colors, typography, spacing, themes),
+   box-sizing reset, body defaults, page background, and selection utilities.
+   ============================================================================= */
 
 /* =============================================================================
-   1. FONTS & VARIABLES
+   FONTS & VARIABLES
    ============================================================================= */
 
 /* Self-hosted fonts */
@@ -122,18 +41,20 @@
     --bg-card-hover: #212838;
     --accent-primary: #60a5fa;
     --accent-secondary: #34d399;
-    --accent-warm: #fbbf24;
+    --accent-secondary-bright: #34d399;
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
     --border-color: #2a3444;
     --border-hover: #3d4a5c;
 
-    --section-field: #fbbf24;
-    --section-writing: #a78bfa;
-    --section-lab: #22c55e;
-    --section-media: #60a5fa;
-    --section-offtheClock: #f472b6;
+    /* Section accents alternate the theme's two team colors.
+       var() resolves at use time, so [data-theme] overrides flow through. */
+    --section-field: var(--accent-primary);
+    --section-lab: var(--accent-secondary-bright);
+    --section-writing: var(--accent-primary);
+    --section-media: var(--accent-secondary-bright);
+    --section-offtheClock: var(--accent-primary);
 
     --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-serif: 'Instrument Serif', Georgia, serif;
@@ -154,8 +75,9 @@
     --bg-header: rgba(10, 10, 10, 0.9);
     --bg-card: #1a1a1a;
     --bg-card-hover: #222222;
-    --accent-primary: #FFA300;
-    --accent-secondary: #cc8200;
+    --accent-primary: #FFA300;    /* Driveline Goldenrod #FFA300 — text accents, interactive */
+    --accent-secondary: #cc8200;  /* Darker gold — orbs, large surfaces */
+    --accent-secondary-bright: #f0f0f0;  /* White — Driveline is black/gold/white; foreground secondary */
     --text-primary: #ffffff;
     --text-secondary: #b0b0b0;
     --text-muted: #707070;
@@ -164,13 +86,14 @@
 }
 
 [data-theme="hopkins"] {
-    --bg-primary: #0a0e1a;
-    --bg-secondary: #0f1320;
-    --bg-header: rgba(10, 14, 26, 0.9);
-    --bg-card: #151a2e;
-    --bg-card-hover: #1a2038;
-    --accent-primary: #68ace5;
-    --accent-secondary: #4a90d9;
+    --bg-primary: #0a0f17;
+    --bg-secondary: #0e141d;
+    --bg-header: rgba(10, 15, 23, 0.9);
+    --bg-card: #151d28;
+    --bg-card-hover: #1b2432;
+    --accent-primary: #68ace5;    /* Spirit Blue #68ACE5 — text accents, interactive */
+    --accent-secondary: #002d72;  /* Heritage Blue #002D72 — orbs, large surfaces */
+    --accent-secondary-bright: #f0f0f0;  /* White — JHU is blue/white/black; foreground secondary */
     --text-primary: #e8f4ff;
     --text-secondary: #a0c4e8;
     --text-muted: #5a7090;
@@ -179,13 +102,14 @@
 }
 
 [data-theme="mets"] {
-    --bg-primary: #0a1428;
-    --bg-secondary: #0f1a30;
-    --bg-header: rgba(10, 20, 40, 0.9);
-    --bg-card: #152238;
-    --bg-card-hover: #1a2a45;
-    --accent-primary: #ff5910;
-    --accent-secondary: #002d72;
+    --bg-primary: #0a1222;
+    --bg-secondary: #0e172a;
+    --bg-header: rgba(10, 18, 34, 0.9);
+    --bg-card: #141f36;
+    --bg-card-hover: #1a263f;
+    --accent-primary: #ff5910;    /* Mets Orange #FF5910 — text accents, interactive */
+    --accent-secondary: #002d72;  /* Mets Blue #002D72 — orbs, large surfaces */
+    --accent-secondary-bright: #5b8ad8;  /* Mets Blue lifted for AA foreground use */
     --text-primary: #e8f0ff;
     --text-secondary: #8ba8d9;
     --text-muted: #5a7090;
@@ -194,13 +118,14 @@
 }
 
 [data-theme="phillies"] {
-    --bg-primary: #120a0c;
-    --bg-secondary: #1a1012;
-    --bg-header: rgba(18, 10, 12, 0.9);
-    --bg-card: #241419;
-    --bg-card-hover: #2e1a20;
-    --accent-primary: #e81828;
-    --accent-secondary: #002d72;
+    --bg-primary: #170a0c;
+    --bg-secondary: #1d0e10;
+    --bg-header: rgba(23, 10, 12, 0.9);
+    --bg-card: #281518;
+    --bg-card-hover: #321b1f;
+    --accent-primary: #5b8ad8;    /* Phillies Blue lifted — talking color contrasts the maroon room */
+    --accent-secondary: #e81828;  /* Phillies Red #E81828 — deep partner color */
+    --accent-secondary-bright: #ff3945;  /* Phillies Red lifted for AA foreground use */
     --text-primary: #ffeef0;
     --text-secondary: #d8a0a8;
     --text-muted: #886070;
@@ -208,8 +133,40 @@
     --border-hover: #5a3a45;
 }
 
+[data-theme="rangers"] {
+    --bg-primary: #0a1017;
+    --bg-secondary: #0e151d;
+    --bg-header: rgba(10, 16, 23, 0.9);
+    --bg-card: #151e28;
+    --bg-card-hover: #1b2532;
+    --accent-primary: #e94f5c;    /* Rangers Red lifted crimson — deeper than Marlins Caliente */
+    --accent-secondary: #003278;  /* Rangers Blue #003278 — deep partner color */
+    --accent-secondary-bright: #5d97d8;  /* Rangers Blue lifted for AA foreground use */
+    --text-primary: #e0ecff;
+    --text-secondary: #8ab0d4;
+    --text-muted: #507090;
+    --border-color: #253560;
+    --border-hover: #354578;
+}
+
+[data-theme="marlins"] {
+    --bg-primary: #0a1317;
+    --bg-secondary: #0e191d;
+    --bg-header: rgba(10, 19, 23, 0.9);
+    --bg-card: #152328;
+    --bg-card-hover: #1b2b32;
+    --accent-primary: #f85a4d;    /* Caliente Red lifted warm — coral vs Rangers crimson */
+    --accent-secondary: #00a3e0;  /* Miami Blue #00A3E0 — deep partner color */
+    --accent-secondary-bright: #00a3e0;  /* Miami Blue #00A3E0 — passes AA directly */
+    --text-primary: #e0fff8;
+    --text-secondary: #68c8b0;
+    --text-muted: #4a8474;
+    --border-color: #1a3d35;
+    --border-hover: #2a4d45;
+}
+
 /* =============================================================================
-   2. RESET & BASE
+   RESET & BASE
    ============================================================================= */
 
 *, *::before, *::after {
@@ -271,7 +228,7 @@ body {
 
 
 /* =============================================================================
-   14. UTILITIES
+   UTILITIES
    ============================================================================= */
 
 ::selection {
