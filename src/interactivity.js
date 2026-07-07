@@ -27,8 +27,13 @@ export function initThemeSwitcher() {
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", themeColors[theme] || themeColors.marlins);
     }
-    // iOS 26 Safari samples body background-color for toolbar tint (ignores theme-color meta)
-    document.body.style.backgroundColor = themeColors[theme] || themeColors.marlins;
+    // iOS 26 Safari samples the html/body background for Liquid Glass toolbar
+    // tint (theme-color meta is ignored). Keep both roots in sync so the tint
+    // and overscroll areas always match the active theme.
+    const themeBg = themeColors[theme] || themeColors.marlins;
+    document.documentElement.style.backgroundColor = themeBg;
+    document.body.style.backgroundColor = themeBg;
+    window.__currentColor = themeBg;
 
     if (siteConfig?.profile?.headshots) {
       const headshot = siteConfig.profile.headshots[theme] || siteConfig.profile.headshot;
