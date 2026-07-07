@@ -12,7 +12,9 @@
 }
 
 .content-section.alt-bg {
-    --scroll-fade-color: var(--bg-secondary);
+    /* Composite of the section's 70% overlay over the body color — the fade
+       must match the RENDERED background, or it paints visible rectangles. */
+    --scroll-fade-color: color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary));
 }
 
 .content-section > .container {
@@ -36,7 +38,10 @@
 }
 
 .content-section.alt-bg {
-    background: var(--bg-secondary);
+    /* Translucent so the body's grain and grid texture show through; an
+       opaque fill would mask them and read as a solid bar under Liquid
+       Glass when it slides beneath the toolbar. */
+    background: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
 }
 
 .section-header {

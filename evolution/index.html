@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0a1317">
     <script>
         // Single source of truth for theme configuration (matches homepage)
@@ -28,10 +29,10 @@
             document.documentElement.style.backgroundColor = color;
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute("content", color);
-            // Handle Safari bfcache restoration
+            // Handle Safari bfcache restoration (use the live theme color, not the load-time one)
             window.addEventListener("pageshow", function(e) {
                 if (e.persisted) {
-                    document.documentElement.style.backgroundColor = color;
+                    document.documentElement.style.backgroundColor = window.__currentColor || color;
                 }
             });
         })();
@@ -66,13 +67,16 @@
     <link rel="icon" type="image/png" href="/assets/images/favicons/favicon-32.png?v=12" sizes="32x32">
     <link rel="apple-touch-icon" href="/assets/images/favicons/apple-touch-icon.png?v=12">
     <style>
-        /* Critical CSS: prevent background flash before external CSS loads */
-        html, body, .page-background { background-color: #0a1317; }
-        [data-theme="driveline"], [data-theme="driveline"] .page-background { background-color: #0a0a0a; }
-        [data-theme="mets"], [data-theme="mets"] .page-background { background-color: #0a1222; }
-        [data-theme="phillies"], [data-theme="phillies"] .page-background { background-color: #170a0c; }
-        [data-theme="rangers"], [data-theme="rangers"] .page-background { background-color: #0a1017; }
-        [data-theme="hopkins"], [data-theme="hopkins"] .page-background { background-color: #0a0f17; }
+        /* Critical CSS: prevent background flash before external CSS loads.
+           The page background lives on html/body (not a fixed overlay) so iOS
+           26 Safari can sample it for Liquid Glass toolbar tint and extend it
+           into the toolbar and overscroll areas. */
+        html, body { background-color: #0a1317; }
+        [data-theme="driveline"], [data-theme="driveline"] body { background-color: #0a0a0a; }
+        [data-theme="mets"], [data-theme="mets"] body { background-color: #0a1222; }
+        [data-theme="phillies"], [data-theme="phillies"] body { background-color: #170a0c; }
+        [data-theme="rangers"], [data-theme="rangers"] body { background-color: #0a1017; }
+        [data-theme="hopkins"], [data-theme="hopkins"] body { background-color: #0a0f17; }
     </style>
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/css/resume.css">
@@ -83,8 +87,6 @@
         // Immediately apply theme background to body (uses cached value from head)
         document.body.style.backgroundColor = window.__currentColor || "#0a1317";
     </script>
-    <div class="page-background"></div>
-    <div class="grid-overlay"></div>
     <header>
         <nav class="container">
             <a href="/" class="logo">
