@@ -2162,37 +2162,7 @@ nav.container {
         radial-gradient(140% 100% at 0% 100%,
             color-mix(in srgb, var(--accent-secondary-bright) 19%, transparent) 0%,
             transparent 55%);
-    /* Fade the glow to zero across the toolbar zone plus the overshoot —
-       full strength through the visible (small) viewport, dissipating
-       gradually behind the glass, gone exactly at the section boundary. This
-       makes the hero→section edge as invisible as every other section
-       boundary. On desktop lvh == svh and the overshoot is unset, so the
-       solid stop is 100% and no fade occurs. */
-    -webkit-mask-image: linear-gradient(to bottom,
-        #000 calc(100% - (100lvh - 100svh) - var(--hero-overshoot, 0px)),
-        transparent);
-    mask-image: linear-gradient(to bottom,
-        #000 calc(100% - (100lvh - 100svh) - var(--hero-overshoot, 0px)),
-        transparent);
     pointer-events: none;
-}
-
-/* Bridge the hero's fading glow into the first section's fill. Without this,
-   the glow bottoms out at the darker page background just before the lighter
-   .alt-bg section begins, and that dip reads as a thin dark bar. The gradient
-   ends at the exact composite .alt-bg renders (70% bg-secondary over the
-   page), so the boundary disappears. Height is zero on desktop. */
-.hero::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: calc(100lvh - 100svh + var(--hero-overshoot, 0px));
-    pointer-events: none;
-    background: linear-gradient(to bottom,
-        transparent,
-        color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-primary)));
 }
 
 .hero-intro {
@@ -3557,4 +3527,3 @@ footer:empty {
         transition: none;
     }
 }
-
