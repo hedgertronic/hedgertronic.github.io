@@ -21,7 +21,7 @@
     "description": "Python client for the Oura API v2 with OAuth2 support.",
     "url": "https://github.com/hedgertronic/oura-ring",
     "language": "Python",
-    "stars": 86,
+    "stars": 87,
     "forks": 13
   },
   {
