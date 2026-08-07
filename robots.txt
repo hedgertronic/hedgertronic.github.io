@@ -1,0 +1,3 @@
+# hedgertronic.com
+User-agent: *
+Allow: /
