@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-maintained: hedgertronic.com is a static site with four indexable
+     pages. Hot Stove lives on a Cloudflare Worker under the same domain, so
+     it belongs in this sitemap even though it deploys from another repo.
+     Add a <url> entry here when a new page or game ships. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://hedgertronic.com/</loc>
+  </url>
+  <url>
+    <loc>https://hedgertronic.com/resume/</loc>
+  </url>
+  <url>
+    <loc>https://hedgertronic.com/evolution/</loc>
+  </url>
+  <url>
+    <loc>https://hedgertronic.com/games/hot-stove/</loc>
+  </url>
+</urlset>

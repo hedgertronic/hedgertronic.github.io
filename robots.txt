@@ -1,3 +1,5 @@
 # hedgertronic.com
 User-agent: *
 Allow: /
+
+Sitemap: https://hedgertronic.com/sitemap.xml
