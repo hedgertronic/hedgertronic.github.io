@@ -387,6 +387,12 @@
     position: relative;
 }
 
+/* A card that ends with its title (the game cards) drops the title's
+   trailing margin so the bottom padding matches the top. */
+.content-card h3:last-child {
+    margin-bottom: 0;
+}
+
 .content-card:hover h3 {
     color: var(--text-primary);
 }
@@ -495,6 +501,11 @@
     letter-spacing: -0.01em;
     flex-shrink: 0;
 }
+
+.project-card .thumbnail {
+    margin-bottom: 0.25rem;
+}
+
 
 .project-card .card-badge-row {
     flex-shrink: 0;
@@ -834,4 +845,3 @@ a.personal-card:hover .personal-cover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px color-mix(in srgb, var(--section-offtheClock) 20%, transparent);
 }
-

@@ -98,6 +98,11 @@
           "displayType": "projects",
           "viewAllUrl": "https://github.com/hedgertronic",
           "viewAllLabel": "View GitHub"
+        },
+        {
+          "title": "Games",
+          "dataFile": "data/lab-games.json",
+          "displayType": "content"
         }
       ]
     },

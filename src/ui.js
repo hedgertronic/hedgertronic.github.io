@@ -390,6 +390,11 @@ export function sortByDate(items) {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
 
+    // Dateless items (game cards) keep their file order, after dated ones.
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+
     const [yearA, monthA, dayA] = a.date.split("-");
     const [yearB, monthB, dayB] = b.date.split("-");
     return (

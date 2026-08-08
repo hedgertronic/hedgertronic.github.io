@@ -126,6 +126,31 @@ export function createProjectCard(project) {
   card.target = "_blank";
   card.rel = "noopener noreferrer";
 
+  // A project may carry its own share card as the visual lead. Keeping the
+  // same thumbnail anatomy as articles gives Games a real preview without
+  // inventing a second image-card system.
+  const thumbnail =
+    project.thumbnailPreview && ["localhost", "127.0.0.1"].includes(location.hostname)
+      ? project.thumbnailPreview
+      : project.thumbnail;
+  if (thumbnail) {
+    const thumbWrapper = document.createElement("div");
+    thumbWrapper.className = "thumbnail-wrapper";
+
+    const thumb = document.createElement("img");
+    thumb.className = "thumbnail";
+    thumb.src = thumbnail;
+    thumb.alt = project.thumbnailAlt || `${project.title} preview`;
+    thumb.loading = "lazy";
+    thumb.referrerPolicy = "no-referrer";
+    thumb.onerror = () => {
+      thumb.style.display = "none";
+      thumbWrapper.classList.add("thumbnail-error");
+    };
+    thumbWrapper.appendChild(thumb);
+    card.appendChild(thumbWrapper);
+  }
+
   // Title at top
   const title = document.createElement("h3");
   title.textContent = project.title;
@@ -341,16 +366,24 @@ export function createContentCard(item) {
   card.target = "_blank";
   card.rel = "noopener noreferrer";
 
-  const isNew = isWithinDays(item.date, 30);
+  // Dateless items (the game cards) are never "new" — same guard the project
+  // card uses; isWithinDays splits the string and throws on undefined.
+  const isNew = item.date ? isWithinDays(item.date, 30) : false;
   const hasBadges = isNew || item.pinned;
 
-  if (item.thumbnail) {
+  // Same localhost substitution the project cards make: an unapproved
+  // candidate image may stand in for the canonical one during local review.
+  const thumbSrc =
+    item.thumbnailPreview && ["localhost", "127.0.0.1"].includes(location.hostname)
+      ? item.thumbnailPreview
+      : item.thumbnail;
+  if (thumbSrc) {
     const thumbWrapper = document.createElement("div");
     thumbWrapper.className = "thumbnail-wrapper";
 
     const thumb = document.createElement("img");
     thumb.className = "thumbnail";
-    thumb.src = item.thumbnail;
+    thumb.src = thumbSrc;
     thumb.alt = item.title;
     thumb.loading = "lazy";
     thumb.referrerPolicy = "no-referrer";
@@ -384,44 +417,46 @@ export function createContentCard(item) {
     card.appendChild(thumbWrapper);
   }
 
-  const metaRow = document.createElement("div");
-  metaRow.className = "card-meta-row";
+  if (item.date || item.source) {
+    const metaRow = document.createElement("div");
+    metaRow.className = "card-meta-row";
 
-  const metaLeft = document.createElement("div");
-  metaLeft.className = "card-meta-left";
+    const metaLeft = document.createElement("div");
+    metaLeft.className = "card-meta-left";
 
-  const date = document.createElement("span");
-  date.className = "date";
-  date.textContent = formatDate(item.date);
-  metaLeft.appendChild(date);
+    const date = document.createElement("span");
+    date.className = "date";
+    date.textContent = formatDate(item.date);
+    metaLeft.appendChild(date);
 
-  // Show badges in meta row only if there's no thumbnail
-  if (!item.thumbnail && hasBadges) {
-    if (item.pinned) {
-      const pinnedBadge = document.createElement("span");
-      pinnedBadge.className = "pinned-badge";
-      pinnedBadge.textContent = "Pinned";
-      metaLeft.appendChild(pinnedBadge);
+    // Show badges in meta row only if there's no thumbnail
+    if (!thumbSrc && hasBadges) {
+      if (item.pinned) {
+        const pinnedBadge = document.createElement("span");
+        pinnedBadge.className = "pinned-badge";
+        pinnedBadge.textContent = "Pinned";
+        metaLeft.appendChild(pinnedBadge);
+      }
+
+      if (isNew) {
+        const newBadge = document.createElement("span");
+        newBadge.className = "new-badge";
+        newBadge.textContent = "New";
+        metaLeft.appendChild(newBadge);
+      }
     }
 
-    if (isNew) {
-      const newBadge = document.createElement("span");
-      newBadge.className = "new-badge";
-      newBadge.textContent = "New";
-      metaLeft.appendChild(newBadge);
+    metaRow.appendChild(metaLeft);
+
+    if (item.source) {
+      const source = document.createElement("span");
+      source.className = "source";
+      source.textContent = item.source;
+      metaRow.appendChild(source);
     }
+
+    card.appendChild(metaRow);
   }
-
-  metaRow.appendChild(metaLeft);
-
-  if (item.source) {
-    const source = document.createElement("span");
-    source.className = "source";
-    source.textContent = item.source;
-    metaRow.appendChild(source);
-  }
-
-  card.appendChild(metaRow);
 
   const title = document.createElement("h3");
   title.textContent = item.title;
