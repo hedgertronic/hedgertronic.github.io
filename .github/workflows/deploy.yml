@@ -103,7 +103,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p _site
-          cp index.html CNAME robots.txt sitemap.xml styles.css script.js script.js.map _site/
+          cp index.html 404.html CNAME robots.txt sitemap.xml styles.css script.js script.js.map _site/
+          cp -R .well-known _site/
           cp -R resume _site/
           cp -R evolution _site/
           cp -R css _site/
