@@ -77,6 +77,7 @@ def generate_favicons(input_path: Path, output_dir: Path) -> None:
     png_sizes = {
         "favicon-16.png": 16,
         "favicon-32.png": 32,
+        "favicon-96.png": 96,  # Google SERP favicon: >=48px required, multiples of 48 preferred
         "favicon-180.png": 180,
         "apple-touch-icon.png": 180,
     }
@@ -172,6 +173,7 @@ def generate_text_favicon(text: str, font_path: Path, output_dir: Path, bg_color
     png_sizes = {
         "favicon-16.png": 16,
         "favicon-32.png": 32,
+        "favicon-96.png": 96,  # Google SERP favicon: >=48px required, multiples of 48 preferred
         "favicon-180.png": 180,
         "apple-touch-icon.png": 180,
     }
@@ -233,6 +235,7 @@ def generate_all(input_path: Path, output_dir: Path) -> None:
     png_sizes = {
         "favicon-16.png": 16,
         "favicon-32.png": 32,
+        "favicon-96.png": 96,  # Google SERP favicon: >=48px required, multiples of 48 preferred
         "favicon-180.png": 180,
         "apple-touch-icon.png": 180,
     }
