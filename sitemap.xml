@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Hand-maintained: hedgertronic.com is a static site with four indexable
-     pages. Hot Stove lives on a Cloudflare Worker under the same domain, so
-     it belongs in this sitemap even though it deploys from another repo.
-     Add a <url> entry here when a new page or game ships. -->
+<!-- Hand-maintained: hedgertronic.com is a static site with three indexable
+     pages. Add a <url> entry here when a new page ships.
+     Hot Stove is deliberately NOT listed. It still serves under
+     /games/hot-stove/ as the save-migration bridge, but every copy of the
+     document names https://hotstove.io/ as its canonical, and hotstove.io
+     carries its own sitemap. Listing a URL here that disclaims itself asks
+     Google to index and de-index the same page. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hedgertronic.com/</loc>
@@ -12,8 +15,5 @@
   </url>
   <url>
     <loc>https://hedgertronic.com/evolution/</loc>
-  </url>
-  <url>
-    <loc>https://hedgertronic.com/games/hot-stove/</loc>
   </url>
 </urlset>

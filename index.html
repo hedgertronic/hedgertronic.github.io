@@ -43,7 +43,12 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-35RY8Y6Q5V');
+      // `config` fires the automatic page_view, and localhost dev sessions must
+      // not count as production traffic. Mirrors the guard in hot-stove's
+      // index.html. Accepted gap: a LAN phone test (192.168.x) still fires.
+      var h = location.hostname;
+      if (h !== 'localhost' && h !== '127.0.0.1' && h !== '')
+        gtag('config', 'G-35RY8Y6Q5V');
     </script>
     <meta name="description" content="Professional pitcher in the Marlins organization and R&D analyst at Driveline Baseball.">
 
