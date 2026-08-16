@@ -13,6 +13,11 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    # Runs on a cron with nobody watching, and fetches from third-party APIs
+    # that can stall a connection rather than refuse it. Finishes in about 40
+    # seconds; the ceiling replaces GitHub's 360-minute default so an
+    # unattended stall surfaces the same morning instead of burning the day.
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v7

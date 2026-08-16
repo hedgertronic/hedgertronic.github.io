@@ -17,8 +17,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Every job carries an explicit ceiling. Without one a job inherits GitHub's
+  # 360-minute default, and `playwright install --with-deps` shells out to apt,
+  # which hangs rather than fails when a package mirror stops responding. These
+  # jobs finish in about a minute each, so the ceiling is pure headroom on a
+  # healthy run and caps a hung one at minutes instead of six hours. It matters
+  # more here than the duration suggests: `concurrency: pages` admits one run at
+  # a time, so a stalled job also holds off every later deploy.
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -63,6 +71,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     needs: test
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
@@ -179,6 +188,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    # Waits on the Pages API rather than a build, so it gets a tighter ceiling.
+    timeout-minutes: 10
     needs: build
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     steps:
