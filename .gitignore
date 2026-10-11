@@ -37,6 +37,8 @@ env/
 # Build outputs
 dist/
 build/
+_site/
+.wrangler/
 *.min.js
 *.min.css
 

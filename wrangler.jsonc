@@ -1,0 +1,14 @@
+// Serves the assembled static site (_site/, built by deploy.yml) from Workers
+// static assets. No Worker script: every request is a file lookup.
+{
+  "name": "hedgertronic",
+  "compatibility_date": "2026-10-01",
+  // The more specific hedgertronic.com/games/hot-stove* route (hot-stove
+  // Worker) wins over this one, so Hot Stove keeps its path.
+  "routes": [{ "pattern": "hedgertronic.com/*", "zone_name": "hedgertronic.com" }],
+  "assets": {
+    "directory": "./_site",
+    // Unknown paths get 404.html with a real 404 status.
+    "not_found_handling": "404-page"
+  }
+}
