@@ -74,7 +74,7 @@ export function displayItems(containerOrId, items, options = {}) {
   initCarouselScrollDetection(container);
 }
 
-// Legacy wrapper functions for backwards compatibility
+// Section entry points used by sections.js
 export function displayProjects(containerOrId, projects) {
   displayItems(containerOrId, projects, {
     type: "projects",

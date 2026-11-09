@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 
 [[package]]
@@ -195,14 +195,12 @@ dependencies = [
     { name = "requests" },
 ]
 
-[package.optional-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
 [package.dev-dependencies]
 build = [
     { name = "playwright" },
+]
+dev = [
+    { name = "pytest" },
 ]
 
 [package.metadata]
@@ -210,13 +208,12 @@ requires-dist = [
     { name = "defusedxml", specifier = ">=0.7" },
     { name = "fpdf2" },
     { name = "pillow", specifier = ">=10.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "requests", specifier = ">=2.31" },
 ]
-provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 build = [{ name = "playwright", specifier = ">=1.40" }]
+dev = [{ name = "pytest", specifier = ">=8.0" }]
 
 [[package]]
 name = "idna"

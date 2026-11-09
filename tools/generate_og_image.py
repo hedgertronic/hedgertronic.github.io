@@ -6,12 +6,11 @@ Uses Playwright to render an HTML template and screenshot it.
 The resulting image matches the site's hero section styling.
 
 Usage:
-    pip install playwright
-    playwright install chromium
-    python generate_og_image.py
+    uv run --group build playwright install chromium   # once per machine
+    uv run --group build python tools/generate_og_image.py
 
 Output:
-    assets/images/og-image.png (1200x630)
+    assets/images/og/og-image.png (1200x630)
 """
 
 import json

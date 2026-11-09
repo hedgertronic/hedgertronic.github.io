@@ -7,7 +7,7 @@ display size (200x200 for 2x retina of 100px hero display), significantly
 reducing file size while maintaining visual quality.
 
 Usage:
-    python tools/optimize_headshots.py
+    uv run python tools/optimize_headshots.py
 
 This script:
 1. Reads source images from assets/images/headshot/
@@ -24,7 +24,7 @@ from pathlib import Path
 try:
     from PIL import Image
 except ImportError:
-    print("Error: Pillow is required. Install with: pip install Pillow")
+    print("Error: Pillow is required. Run with: uv run python tools/optimize_headshots.py")
     sys.exit(1)
 
 
