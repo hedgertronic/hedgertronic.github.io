@@ -79,10 +79,11 @@ export function buildThemeDropdown(container, { trigger, themes, onSelect, getAc
     opts[focusIdx]?.focus();
   }
 
-  function close() {
+  function close({ restoreFocus = true } = {}) {
+    if (menu.hidden) return;
     menu.hidden = true;
     trigger.setAttribute("aria-expanded", "false");
-    trigger.focus();
+    if (restoreFocus) trigger.focus();
     focusIdx = -1;
   }
 
@@ -104,7 +105,9 @@ export function buildThemeDropdown(container, { trigger, themes, onSelect, getAc
 
   menu.addEventListener("keydown", (e) => {
     const opts = getOptions();
+    focusIdx = opts.indexOf(document.activeElement);
     if (e.key === "Escape") {
+      e.preventDefault();
       close();
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -119,16 +122,20 @@ export function buildThemeDropdown(container, { trigger, themes, onSelect, getAc
       focusIdx -= 1;
       opts[focusIdx]?.focus();
     } else if (e.key === "Tab") {
+      // Shift+Tab returns to the trigger; Tab continues to its next tab stop.
+      if (e.shiftKey) e.preventDefault();
       close();
     }
   });
 
-  // Close when focus moves completely outside the container
+  // Outside dismissal preserves the user's new focus target.
+  container.addEventListener("focusout", (e) => {
+    if (!container.contains(e.relatedTarget)) close({ restoreFocus: false });
+  });
+
   document.addEventListener("click", (e) => {
     if (!menu.hidden && !container.contains(e.target)) {
-      menu.hidden = true;
-      trigger.setAttribute("aria-expanded", "false");
-      focusIdx = -1;
+      close({ restoreFocus: false });
     }
   });
 

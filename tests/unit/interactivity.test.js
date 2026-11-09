@@ -3,6 +3,7 @@ import {
   initThemeSwitcher,
   initScrollReveal,
   initHeadshotClickAnimation,
+  initNavigation,
 } from "../../src/interactivity.js";
 import * as dataModule from "../../src/data.js";
 
@@ -213,6 +214,42 @@ describe("initThemeSwitcher", () => {
     trigger.click();
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
   });
+
+  it("closes on outside focus without moving focus back to the trigger", () => {
+    initThemeSwitcher();
+    trigger.click();
+    const outside = document.createElement("button");
+    document.body.appendChild(outside);
+    outside.focus();
+    expect(themeSwitcher.querySelector(".theme-menu").hidden).toBe(true);
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(outside);
+    outside.remove();
+  });
+
+  it("Shift+Tab returns to the trigger and Escape closes without changing selection", () => {
+    initThemeSwitcher();
+    trigger.click();
+    const menu = themeSwitcher.querySelector(".theme-menu");
+    const tab = new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, bubbles: true, cancelable: true });
+    document.activeElement.dispatchEvent(tab);
+    expect(tab.defaultPrevented).toBe(true);
+    expect(menu.hidden).toBe(true);
+    expect(document.activeElement).toBe(trigger);
+    trigger.click();
+    document.activeElement.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(menu.hidden).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("marlins");
+  });
+
+  it("navigates from the actual focused option after pointer focus changes", () => {
+    initThemeSwitcher();
+    trigger.click();
+    const options = themeSwitcher.querySelectorAll(".theme-menu-option");
+    options[1].focus();
+    options[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+    expect(document.activeElement).toBe(options[2]);
+  });
 });
 
 // ────────────────────────────────────────────────────────────
@@ -393,5 +430,71 @@ describe("initHeadshotClickAnimation", () => {
     headshot.click();
 
     expect(headshot.classList.contains("clicked")).toBe(false);
+  });
+
+  it("a rapid second click gets a full bounce without an old callback interrupting it", () => {
+    initHeadshotClickAnimation(0);
+    vi.advanceTimersByTime(0);
+    headshot.click();
+    vi.advanceTimersByTime(250);
+    headshot.click();
+    vi.advanceTimersByTime(100);
+    expect(headshot.classList.contains("clicked")).toBe(true);
+    expect(headshot.classList.contains("transitioning-out")).toBe(false);
+    vi.advanceTimersByTime(600);
+    expect(headshot.classList.contains("clicked")).toBe(false);
+    expect(headshot.classList.contains("transitioning-out")).toBe(false);
+  });
+
+  it("cancels pending animation-frame cleanup when a new bounce starts", () => {
+    initHeadshotClickAnimation(0);
+    vi.advanceTimersByTime(0);
+    headshot.click();
+    vi.advanceTimersByTime(300);
+    headshot.click();
+    vi.advanceTimersByTime(20);
+    expect(headshot.classList.contains("clicked")).toBe(true);
+    expect(headshot.classList.contains("transitioning-out")).toBe(false);
+  });
+
+  it("skips the ready delay and bounce under reduced motion", () => {
+    window.matchMedia = vi.fn(() => ({ matches: true }));
+    initHeadshotClickAnimation(600);
+    headshot.click();
+    expect(headshot.classList.contains("animation-ready")).toBe(true);
+    expect(headshot.classList.contains("clicked")).toBe(false);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("navigation state", () => {
+  it("clears stale selection outside sections and recalculates it on layout changes", () => {
+    vi.useFakeTimers();
+    window.matchMedia = vi.fn(() => ({ matches: false }));
+    document.body.innerHTML = '<header><nav class="nav-links"><a data-section="field" href="#field">Field</a></nav></header><section id="field" class="content-section"></section>';
+    const section = document.getElementById("field");
+    let sectionTop = 500;
+    Object.defineProperty(section, "offsetTop", { get: () => sectionTop });
+    Object.defineProperty(section, "offsetHeight", { value: 500 });
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 500, writable: true });
+    initNavigation();
+    vi.advanceTimersByTime(0);
+    const link = document.querySelector(".nav-links a");
+    expect(link.getAttribute("aria-current")).toBe("location");
+    window.scrollY = 1200;
+    window.dispatchEvent(new Event("scroll"));
+    expect(link.classList.contains("active")).toBe(false);
+    expect(link.hasAttribute("aria-current")).toBe(false);
+    sectionTop = 1200;
+    window.dispatchEvent(new Event("resize"));
+    expect(link.getAttribute("aria-current")).toBe("location");
+    window.scrollY = 0;
+    window.dispatchEvent(new Event("scroll"));
+    expect(link.hasAttribute("aria-current")).toBe(false);
+    expect(document.querySelector("header").classList.contains("visible")).toBe(false);
+    delete window.__recacheLayoutValues;
+    delete window.matchMedia;
+    document.body.innerHTML = "";
+    vi.useRealTimers();
   });
 });

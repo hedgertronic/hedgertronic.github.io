@@ -13,6 +13,7 @@ import {
 import { loadEvolutionConfig, renderEvolutionHeroNav } from "./evolution-components.js";
 import { renderSection } from "./evolution-subsections.js";
 import { createSVGElement } from "./evolution-charts.js";
+import { createModalController, bindModalTrigger } from "./modal.js";
 
 async function initEvolutionPage() {
   try {
@@ -117,6 +118,8 @@ async function initEvolutionPage() {
         imageContainer.appendChild(closeBtn);
 
         const prevBtn = document.createElement("button");
+        prevBtn.type = "button";
+        prevBtn.setAttribute("aria-label", "Previous image");
         prevBtn.className = "comparison-modal-nav comparison-modal-nav--prev";
         prevBtn.textContent = "‹";
         imageContainer.appendChild(prevBtn);
@@ -126,6 +129,8 @@ async function initEvolutionPage() {
         imageContainer.appendChild(modalImg);
 
         const nextBtn = document.createElement("button");
+        nextBtn.type = "button";
+        nextBtn.setAttribute("aria-label", "Next image");
         nextBtn.className = "comparison-modal-nav comparison-modal-nav--next";
         nextBtn.textContent = "›";
         imageContainer.appendChild(nextBtn);
@@ -137,6 +142,10 @@ async function initEvolutionPage() {
         const updateNavButtons = (index) => {
           prevBtn.style.display = index === 0 ? "none" : "flex";
           nextBtn.style.display = index === items.length - 1 ? "none" : "flex";
+          if (document.activeElement === prevBtn && index === 0 ||
+              document.activeElement === nextBtn && index === items.length - 1) {
+            closeBtn.focus();
+          }
         };
 
         const updateModalContent = (index) => {
@@ -168,21 +177,26 @@ async function initEvolutionPage() {
           updateNavButtons(index);
         };
 
+        const { open, close: closeModal } = createModalController({
+          modal,
+          closeButton: closeBtn,
+          label: "Throwing comparison",
+          onKeydown: (e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+              e.preventDefault();
+              const index = currentModalIndex + (e.key === "ArrowLeft" ? -1 : 1);
+              if (index >= 0 && index < items.length) updateModalContent(index);
+            }
+          },
+        });
+
         const openComparisonModal = (index) => {
           updateModalContent(index);
-          modal.classList.add("active");
-          document.documentElement.classList.add("modal-open");
-          document.body.classList.add("modal-open");
-        };
-
-        const closeModal = () => {
-          modal.classList.remove("active");
-          document.documentElement.classList.remove("modal-open");
-          document.body.classList.remove("modal-open");
+          open();
         };
 
         cards.forEach((card, index) => {
-          card.addEventListener("click", () => openComparisonModal(index));
+          bindModalTrigger(card, () => openComparisonModal(index), `View ${items[index].label} comparison`);
         });
 
         prevBtn.addEventListener("click", () => {
@@ -193,19 +207,7 @@ async function initEvolutionPage() {
           if (currentModalIndex < items.length - 1) updateModalContent(currentModalIndex + 1);
         });
 
-        closeBtn.addEventListener("click", closeModal);
-        backdrop.addEventListener("click", closeModal);
-
-        document.addEventListener("keydown", (e) => {
-          if (!modal.classList.contains("active")) return;
-          if (e.key === "Escape") closeModal();
-          if (e.key === "ArrowLeft" && currentModalIndex > 0) {
-            updateModalContent(currentModalIndex - 1);
-          }
-          if (e.key === "ArrowRight" && currentModalIndex < items.length - 1) {
-            updateModalContent(currentModalIndex + 1);
-          }
-        });
+        backdrop.addEventListener("click", () => closeModal());
       }
     }
 

@@ -181,13 +181,14 @@
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
     padding: 1rem;
 }
 
 .comparison-modal.active {
     opacity: 1;
     visibility: visible;
+    transition-delay: 0s;
 }
 
 .comparison-modal-backdrop {
@@ -273,7 +274,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .comparison-modal-nav:hover {
@@ -306,7 +307,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .comparison-modal-close:hover {
@@ -1318,13 +1319,14 @@
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
     padding: 1rem;
 }
 
 .video-modal.active {
     opacity: 1;
     visibility: visible;
+    transition-delay: 0s;
 }
 
 /* Prevent scrolling when modal is open */
@@ -1481,7 +1483,7 @@ body.modal-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     z-index: 10;
 }
 
@@ -1592,7 +1594,7 @@ body.modal-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .video-modal-close:hover {
