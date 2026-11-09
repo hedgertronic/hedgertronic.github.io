@@ -1,7 +1,7 @@
 /* Evolution Page Styles */
 
 .evolution-page {
-    --section-field: #f97316; /* Orange instead of yellow */
+    --section-field: #f97316; /* orange */
     min-height: 100vh;
 }
 
@@ -517,15 +517,6 @@
     max-width: 400px;
 }
 
-/* Text column: description, button (legacy, now in left column) */
-.hero-year-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.25rem;
-    max-width: 480px;
-}
-
 /* Video spans both rows on desktop */
 .hero-year-video {
     grid-column: 2;
@@ -913,10 +904,6 @@
 @media (max-width: 500px) {
     .hero-year-title {
         font-size: clamp(3.5rem, 20vw, 5rem);
-    }
-
-    .hero-year-text {
-        gap: 1rem;
     }
 
     .hero-focus-metrics {

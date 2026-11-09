@@ -4,13 +4,13 @@ Favicon generation tool for hedgertronic.github.io
 
 Usage:
     # Create circular image from square photo
-    uv run --with pillow tools/generate_favicon.py circle assets/images/headshot/headshot.jpg -o circular.png
+    uv run --with pillow tools/generate_favicon.py circle assets/images/headshot/headshot-dl.jpg -o circular.png
 
     # Generate all favicons from a circular image
     uv run --with pillow tools/generate_favicon.py favicons circular.png -o assets/images/favicons/
 
     # Do both in one go (convenience command)
-    uv run --with pillow tools/generate_favicon.py all assets/images/headshot/headshot.jpg -o assets/images/favicons/
+    uv run --with pillow tools/generate_favicon.py all assets/images/headshot/headshot-dl.jpg -o assets/images/favicons/
 """
 
 import argparse

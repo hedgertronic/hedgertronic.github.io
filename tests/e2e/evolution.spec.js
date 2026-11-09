@@ -72,21 +72,8 @@ test.describe("Evolution Page Content Sections", () => {
   });
 
   test("displays content sections", async ({ page }) => {
-    const sections = page.locator("main section, main .evolution-section");
-    await page.waitForTimeout(1000);
-    const count = await sections.count();
-    expect(count).toBeGreaterThanOrEqual(0);
-  });
-
-  test("has hero navigation for sections", async ({ page }) => {
-    const heroNav = page.locator(".hero-nav");
-    const isVisible = await heroNav.isVisible();
-
-    if (isVisible) {
-      const navItems = page.locator(".hero-nav a, .hero-nav-item");
-      const count = await navItems.count();
-      expect(count).toBeGreaterThan(0);
-    }
+    await expect(page.locator("main section.hero")).toBeVisible();
+    await expect(page.locator("main section.content-section").first()).toBeVisible();
   });
 });
 

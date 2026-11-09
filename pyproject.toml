@@ -9,12 +9,10 @@ dependencies = [
     "requests>=2.31",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8.0",
 ]
-
-[dependency-groups]
 build = [
     "playwright>=1.40",
 ]
