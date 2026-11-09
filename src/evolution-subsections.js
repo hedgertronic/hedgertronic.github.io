@@ -7,6 +7,7 @@ import { parseCSV } from "./data.js";
 import { initCarouselScrollDetection, createVideoFacade, createVideoModal, formatDate, sortByDate } from "./ui.js";
 import { buildStatsTable } from "./stats-table.js";
 import { renderCaption } from "./training-card.js";
+import { bindModalTrigger } from "./modal.js";
 import {
   createSVGElement,
   PITCH_CONFIG,
@@ -383,7 +384,7 @@ function renderVideoProgressionSubsection(subsection, container) {
 
       videoWrapper.classList.add("clickable");
       const validIndex = validItems.findIndex((v) => v.image === video.image);
-      videoWrapper.addEventListener("click", () => openModal(validIndex));
+      bindModalTrigger(videoWrapper, () => openModal(validIndex), `View ${video.year} progression`);
     } else if (video.vimeoId && !video.vimeoId.startsWith("PLACEHOLDER")) {
       const iframe = createElement("iframe");
       iframe.src = `https://player.vimeo.com/video/${video.vimeoId}?loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0`;
@@ -406,7 +407,7 @@ function renderVideoProgressionSubsection(subsection, container) {
 
       videoWrapper.classList.add("clickable");
       const validIndex = validItems.findIndex((v) => v.vimeoId === video.vimeoId);
-      videoWrapper.addEventListener("click", () => openModal(validIndex));
+      bindModalTrigger(videoWrapper, () => openModal(validIndex), `Play ${video.year} progression`);
     } else {
       const placeholder = createElement("div", { className: "video-placeholder" });
       placeholder.appendChild(createElement("span", { textContent: "Video coming soon" }));

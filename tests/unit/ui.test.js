@@ -333,10 +333,37 @@ function makeBuildMedia(items) {
 
 describe("createVideoModal", () => {
   afterEach(() => {
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     // Remove any modals appended to body during the test
     document.querySelectorAll(".video-modal").forEach((m) => m.remove());
-    // Remove all keydown listeners by replacing document (jsdom reuses same doc)
-    // Vitest jsdom resets between test files, so inter-test cleanup suffices
+  });
+
+  it("ignores invalid indices and an empty media list without opening", () => {
+    const buildMedia = vi.fn();
+    const empty = createVideoModal({ items: [], buildMedia });
+    empty.open();
+    const viewer = createVideoModal({ items: [makeItem()], buildMedia });
+    for (const index of [-1, 1, 0.5, NaN]) viewer.open(index);
+    expect(buildMedia).not.toHaveBeenCalled();
+    expect(document.querySelector(".video-modal.active")).toBeNull();
+    expect(document.body.classList.contains("modal-open")).toBe(false);
+  });
+
+  it("pauses cached video on navigation and dismissal, then reuses it on reopen", () => {
+    const items = [makeItem("a"), makeItem("b")];
+    const viewer = createVideoModal({ navigable: true, items, buildMedia: makeBuildMedia(items) });
+    viewer.open(0);
+    const first = document.querySelector(".video-modal iframe");
+    const post = vi.spyOn(first.contentWindow, "postMessage");
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+    expect(post).toHaveBeenCalledWith(JSON.stringify({ method: "pause" }), "*");
+    const second = document.querySelectorAll(".video-modal iframe")[1];
+    const secondPost = vi.spyOn(second.contentWindow, "postMessage");
+    viewer.close();
+    expect(secondPost).toHaveBeenCalledWith(JSON.stringify({ method: "pause" }), "*");
+    viewer.open(0);
+    expect(document.querySelectorAll(".video-modal iframe")).toHaveLength(2);
+    expect(post).toHaveBeenCalledWith(JSON.stringify({ method: "play" }), "*");
   });
 
   it("appends a video-modal element to document.body", () => {

@@ -72,6 +72,29 @@ describe("buildStatsTable", () => {
     expect(active.dataset.category).toBe("Minors");
   });
 
+  it("keeps pressed state, rows, highlights, headers, and source link in sync across categories", () => {
+    const header = document.createElement("div");
+    buildStatsTable(container, makeStats(), [
+      { name: "MiLB", url: "https://example.com/minors" },
+      { name: "BBRef", url: "https://example.com/college" },
+    ], { headerEl: header, statsHighlights: ["ERA"], highlightLabels: { ERA: "ERA" } });
+    for (const category of ["Minors", "College", "Independent", "Minors"]) {
+      container.querySelector(`[data-category="${category}"].stats-category-btn span`).click();
+      const pressed = container.querySelectorAll('[aria-pressed="true"]');
+      expect(pressed).toHaveLength(1);
+      expect(pressed[0].dataset.category).toBe(category);
+      expect(pressed[0].classList.contains("active")).toBe(true);
+      for (const row of container.querySelectorAll("tbody tr, tfoot tr")) {
+        expect(row.style.display !== "none").toBe(row.dataset.category === category);
+      }
+      expect(container.querySelector('.stat-value').textContent).toBe(
+        category === "Minors" ? "3.20" : category === "College" ? "2.10" : "-"
+      );
+      expect(container.querySelector('th[data-column="team"]').textContent).toBe(category === "Minors" ? "Org" : "Team");
+      expect(header.querySelector("a").textContent).toBe(category === "Minors" ? "View MiLB" : "View BBRef");
+    }
+  });
+
   it("appends the view link to the provided headerEl", () => {
     const header = document.createElement("div");
     buildStatsTable(container, makeStats(), [], { headerEl: header });

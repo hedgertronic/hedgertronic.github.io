@@ -126,8 +126,10 @@ export function buildStatsTable(container, statsData, statsLinks, options = {}) 
   const categoryOrder = ["College", "Independent", "Minors"];
   categoryOrder.forEach((category) => {
     const btn = createElement("button", {
+      type: "button",
       className: `stats-category-btn${category === "Minors" ? " active" : ""}`,
     });
+    btn.setAttribute("aria-pressed", String(category === "Minors"));
     btn.dataset.category = category;
     btn.appendChild(createElement("span", {
       className: "stats-category-name",
@@ -293,6 +295,7 @@ export function buildStatsTable(container, statsData, statsLinks, options = {}) 
 
     categorySelector.querySelectorAll(".stats-category-btn").forEach((b) => {
       b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-pressed", String(b === btn));
     });
 
     const teamHeader = thead.querySelector('th[data-column="team"]');

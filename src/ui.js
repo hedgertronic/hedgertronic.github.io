@@ -3,6 +3,7 @@
  */
 
 import { createElement, createIconElement } from "./dom.js";
+import { createModalController } from "./modal.js";
 
 /**
  * Builds a single `.hero-nav-item` anchor element.
@@ -233,13 +234,17 @@ export function createVideoModal({
     }
     body = createElement("div", { className: "video-modal-body" });
     prevBtn = createElement("button", {
+      type: "button",
       className: "video-modal-nav video-modal-nav--prev",
       textContent: "‹",
     });
     nextBtn = createElement("button", {
+      type: "button",
       className: "video-modal-nav video-modal-nav--next",
       textContent: "›",
     });
+    prevBtn.setAttribute("aria-label", "Previous media");
+    nextBtn.setAttribute("aria-label", "Next media");
     wrapper.appendChild(closeBtn);
     body.appendChild(prevBtn);
     body.appendChild(wrapper);
@@ -290,6 +295,10 @@ export function createVideoModal({
   const updateNavButtons = (index) => {
     if (prevBtn) prevBtn.style.display = index === 0 ? "none" : "flex";
     if (nextBtn) nextBtn.style.display = index === items.length - 1 ? "none" : "flex";
+    if (document.activeElement === prevBtn && index === 0 ||
+        document.activeElement === nextBtn && index === items.length - 1) {
+      closeBtn.focus();
+    }
   };
 
   const update = (index) => {
@@ -304,15 +313,26 @@ export function createVideoModal({
     updateNavButtons(index);
   };
 
-  const close = () => {
-    modal.classList.remove("active");
-    document.documentElement.classList.remove("modal-open");
-    document.body.classList.remove("modal-open");
-    const m = mediaCache[currentIndex];
-    if (m && m.type === "video") postToFrame(m.element, "pause");
-  };
+  const { open: activate, close } = createModalController({
+    modal,
+    closeButton: closeBtn,
+    label: "Media viewer",
+    onClose: () => {
+      const m = mediaCache[currentIndex];
+      if (m && m.type === "video") postToFrame(m.element, "pause");
+    },
+    onKeydown: (e) => {
+      if (!navigable) return;
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        const index = currentIndex + (e.key === "ArrowLeft" ? -1 : 1);
+        if (index >= 0 && index < items.length) update(index);
+      }
+    },
+  });
 
   const open = (index = 0) => {
+    if (!Number.isInteger(index) || index < 0 || index >= items.length) return;
     currentIndex = index;
     // Pre-create current media before activating the modal
     getOrCreate(index);
@@ -321,14 +341,11 @@ export function createVideoModal({
     } else {
       showAt(index);
     }
-    modal.classList.add("active");
-    document.documentElement.classList.add("modal-open");
-    document.body.classList.add("modal-open");
+    activate();
   };
 
   // Event wiring
-  closeBtn.addEventListener("click", close);
-  backdrop.addEventListener("click", close);
+  backdrop.addEventListener("click", () => close());
 
   if (navigable) {
     // Clicking the content background (outside body/wrapper) also closes
@@ -342,15 +359,6 @@ export function createVideoModal({
       if (currentIndex < items.length - 1) update(currentIndex + 1);
     });
   }
-
-  document.addEventListener("keydown", (e) => {
-    if (!modal.classList.contains("active")) return;
-    if (e.key === "Escape") close();
-    if (navigable) {
-      if (e.key === "ArrowLeft" && currentIndex > 0) update(currentIndex - 1);
-      if (e.key === "ArrowRight" && currentIndex < items.length - 1) update(currentIndex + 1);
-    }
-  });
 
   document.body.appendChild(modal);
 

@@ -146,6 +146,7 @@ export function initNavigation() {
       top: section.offsetTop,
       bottom: section.offsetTop + section.offsetHeight,
     }));
+    updateOnScroll();
   }
 
   function updateOnScroll() {
@@ -160,32 +161,24 @@ export function initNavigation() {
     }
 
     const navOffset = scrollPos + 150;
-    for (const section of sectionPositions) {
-      if (navOffset >= section.top && navOffset < section.bottom) {
-        navLinks.forEach((link) => {
-          link.classList.remove("active");
-          if (link.getAttribute("data-section") === section.id) {
-            link.classList.add("active");
-          }
-        });
-        break;
-      }
-    }
+    const currentSection = sectionPositions.find(
+      (section) => navOffset >= section.top && navOffset < section.bottom
+    );
+    navLinks.forEach((link) => {
+      const active = link.getAttribute("data-section") === currentSection?.id;
+      link.classList.toggle("active", active);
+      if (active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
   }
 
   // Cache values after layout is stable, then on resize
-  window.addEventListener("load", () => {
-    cacheLayoutValues();
-    updateOnScroll();
-  });
+  window.addEventListener("load", cacheLayoutValues);
   window.addEventListener("resize", cacheLayoutValues, { passive: true });
   window.addEventListener("scroll", updateOnScroll, { passive: true });
 
   // Defer initial cache until after paint to avoid forced reflow during load
-  setTimeout(() => {
-    cacheLayoutValues();
-    updateOnScroll();
-  }, 0);
+  setTimeout(cacheLayoutValues, 0);
 }
 
 export function initHeadshotClickAnimation(readyDelay = 600, linkUrl = null) {
@@ -207,6 +200,10 @@ export function initHeadshotClickAnimation(readyDelay = 600, linkUrl = null) {
     headshot.classList.add("animation-ready");
   }, readyDelay);
 
+  let bounceTimer;
+  let settleFrame;
+  let settleTimer;
+
   headshot.addEventListener("click", () => {
     if (!headshot.classList.contains("animation-ready")) return;
 
@@ -216,19 +213,23 @@ export function initHeadshotClickAnimation(readyDelay = 600, linkUrl = null) {
       return;
     }
 
+    // Only the latest click owns the bounce and settling callbacks.
+    clearTimeout(bounceTimer);
+    cancelAnimationFrame(settleFrame);
+    clearTimeout(settleTimer);
     headshot.classList.remove("clicked", "transitioning-out");
     // Force reflow to restart animation
     void headshot.offsetWidth;
     headshot.classList.add("clicked");
 
     // After animation completes, transition smoothly back to base state
-    setTimeout(() => {
+    bounceTimer = setTimeout(() => {
       headshot.classList.add("transitioning-out");
       // Brief moment to disable animation, then remove styles to trigger transition
-      requestAnimationFrame(() => {
+      settleFrame = requestAnimationFrame(() => {
         headshot.classList.remove("clicked");
         // Clean up transitioning-out after transition completes
-        setTimeout(() => {
+        settleTimer = setTimeout(() => {
           headshot.classList.remove("transitioning-out");
         }, 300); // Match transition duration
       });
