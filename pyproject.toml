@@ -14,7 +14,7 @@ dev = [
     "pytest>=8.0",
 ]
 build = [
-    "playwright>=1.40",
+    "playwright>=1.64",
 ]
 
 [tool.pytest.ini_options]
