@@ -57,20 +57,20 @@ test.describe("Resume Page", () => {
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(300);
 
-    const themeButtons = page.locator(".theme-btn");
-    const buttonCount = await themeButtons.count();
+    const initialTheme = await page.evaluate(() =>
+      document.documentElement.getAttribute("data-theme")
+    );
 
-    if (buttonCount > 0) {
-      // Click a theme button
-      const btn = themeButtons.first();
-      await btn.click();
+    await page.locator(".theme-menu-trigger").click();
+    const option = page
+      .locator(`.theme-switcher .theme-menu-option:not([data-theme="${initialTheme}"])`)
+      .first();
+    await expect(option).toBeVisible();
+    const target = await option.getAttribute("data-theme");
+    await option.click();
 
-      // Theme attribute should be set
-      const theme = await page.evaluate(() =>
-        document.documentElement.getAttribute("data-theme")
-      );
-      expect(theme).toBeTruthy();
-    }
+    await expect(page.locator("html")).toHaveAttribute("data-theme", target);
+    expect(target).not.toBe(initialTheme);
   });
 });
 

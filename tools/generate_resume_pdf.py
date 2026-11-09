@@ -7,7 +7,7 @@ from pathlib import Path
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 
-# Project root (one level up from scripts/)
+# Project root (one level up from tools/)
 PROJECT_ROOT = Path(__file__).parent.parent
 
 # Design constants

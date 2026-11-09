@@ -39,7 +39,7 @@ export function renderHeroIntro(container, config, options = {}) {
     heroIntro = createElement("div", { className });
   }
 
-  // Remove inline script if present (was used to set headshot src on homepage)
+  // The homepage's inline script has already set the headshot src; remove it.
   const inlineScript = heroIntro.querySelector("script");
   if (inlineScript) inlineScript.remove();
 
