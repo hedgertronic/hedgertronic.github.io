@@ -15,6 +15,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Pinned to 24.04: the locked Playwright (1.57) has no Chromium build for
+  # ubuntu-latest's 26.04 image. Move to ubuntu-latest after a Playwright bump.
   # Every job carries an explicit ceiling. Without one a job inherits GitHub's
   # 360-minute default, and `playwright install --with-deps` shells out to apt,
   # which hangs rather than fails when a package mirror stops responding. These
@@ -23,7 +25,7 @@ jobs:
   # more here than the duration suggests: `concurrency: deploy` admits one run at
   # a time, so a stalled job also holds off every later deploy.
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -68,7 +70,7 @@ jobs:
           retention-days: 7
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     needs: test
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
